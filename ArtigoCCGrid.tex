@@ -477,16 +477,20 @@
 
 \begin{abstract}
 %\boldmath
-% DC: Mudei para nao dar a impressao de que mais arquiteturas de GPU eh uma coisa ruim
 The use of GPU clusters for scientific applications is becoming more widespread,
-with applications in areas such as physics, chemistry and bioinformatics. As the number of different GPU models increases, 
-these clusters may become more heterogeneous,
-with different types of GPUs and CPUs. To use these machines in an efficient
-manner, it is necessary to perform load-balancing among the GPUs and CPUs,
-minimizing the execution time of the application. We propose an algorithm for
-dynamic load balancing in heterogeneous GPU cluster. We implemented the
-algorithm in the StarPU framework and compared with existing load-balancing
-algorithms.
+with applications in areas such as physics, chemistry and bioinformatics. These
+clusters can be highly heterogenous, composed of several models of CPUs and
+GPUs, that could be used together to execute these applications. To use these
+heterogeneous devices in an efficient manner, it is necessary to load-balance
+the application task sizes among the GPUs and CPUs, minimizing the execution
+time of the application.
+
+We propose an algorithm for dynamic load balancing in heterogeneous GPU clusters
+that determines the execution profile of tasks on each device in runtime. This
+profile is used to find the best distribution of task sizes among devices. We
+implemented the algorithm in the StarPU framework and compared its performance
+with existing load-balancing algorithms, using applications from linear algebra,
+stock markets and bioinformatics.
 
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
@@ -517,73 +521,107 @@ parallel computing, distribuited systems, GPU cluster, GPGPU.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
 %\IEEEPARstart{T}{he} 
-The use of GPUs (Graphics Processing Units) has become popular among
-developers of high-performance applications that can benefit from a
-large degree of parallelism~\cite{gpu2}. Modern GPUs can have
-thousands of simple floating point units (FPUs) that, combined, can be
-several times faster than traditional CPUs. The development of efficient GPU
-applications is, however, more difficult mainly due to difference on
-the amount of available cache memory and on the control logic of the
-application.
 
+% RYC1029: Luis -> colocar referências mais recentes.
+The use of GPUs (Graphics Processing Units) is becoming increasingly popular
+among developers and users of applications that have high computational demands
+and can benefit from a large degree of parallelism~\cite{gpu2}. Among these
+applications we can include fluid mechanics~\cite{fluid2}, visualization
+science~\cite{visualization2}, machine learning~\cite{learning2},
+bioinformatics~\cite{bioinformatica2} and neural networks~\cite{neural}.
 
-Many applications already use the processing power of GPUs. For example,
-applications in fluid mechanics~\cite{fluid2}, visualization science~\cite{visualization2},
-machine learning~\cite{learning2}, bioinformatics~\cite{bioinformatica2} and neural networks~\cite{neural}. However, many complex
-problems require the usage of multiple GPUs hosted on different machines (GPU clusters~\cite{raphael, cluster}).
+% RYC1029: Luis -> incluir referências de bibliotecas, como da nVidia e outras
+Modern GPUs can have thousands of simple floating point units (FPUs) that,
+combined, can have a computational power several times superior to traditional
+CPUs. The main drawback is the difficult in optimizing GPU code, specially
+considering the architectural differences among different GPUs, with changes in
+the distribution of cores, shared memory, presence of cache, among others. But
+libraries for several classes of applications and algorithms are now available,
+facilitating the deevlopment process~\cite{}.
 
+Computationally demanding applications may also benefit from the usage of
+multiple GPUs, normally distributed on several machines, which are called GPU
+clusters~\cite{raphael, cluster}. The development of applications for these
+clusters is more complex, since it requires the management of the multiple
+memory spaces, one for each GPU in the cluster, in addition to the main memory
+of the each node. This management includes transferring data between these
+memory spaces and ensuring the consistency of data. 
 
-The development of distributed application running on a GPU cluster must also take care of the management of the multiple memory spaces of all GPUs on all nodes of the cluster. This memory spaces are memories that have different characteristics like, speed access and capacity. 
+There are several efforts by the scientific community for the creation of new
+programming models~\cite{appCientificas, wave} and frameworks~\cite{snucl, Flat,
+  starpu}, for facilitating the developement of GPU cluster
+applications. However, the combination of CUDA (Compute Unified Device
+Architecture) and MPI (Message Passing Interface) is still the standard choice
+to develop applications for GPU clusters.
 
-This includes transferring data between these spaces of memories and
-ensure the consistency of data. A combination of CUDA (Compute Unified Device
-Architecture) and MPI (Message Passing Interface) is a common choice to develop
-applications for GPU clusters. There are several efforts by the scientific community for
-the creation of new programming models~\cite{appCientificas, wave} for the
-development of efficient applications on clusters GPUs~\cite{snucl, Flat, starpu}.
+High-performance GPU clusters are typically \emph{homogeneous}, containing nodes
+and GPUs with the same configuration. Homogeneity facilitates the development of
+applications, since they can be optimized just for a single
+architecture. Moreover, if the application has exclusive access to the nodes,
+load-balancing is simpler, since the same task size, or number of tasks, can be
+allocateds to each node. But homogeneity can be difficult to maintain in a
+context where a new generation of hardware is launched every couple of years. In
+this case, joining heterogeneous machines can increase the available
+computational power to cluster users.
 
-GPU clusters are still typically \emph{homogeneous}. Homogeneity facilitates the development of
-applications, since they can be optimized just for a single architecture and is more easy to achieve a good load balance among GPUs. But homogeneity is difficult to maintain in a context
-where a new generation of hardware is launched every couple of years.
+Another scenario where heterogeneity is more common is when connecting machines
+from several researchers groups using a standard Ethernet network. This enables
+a large amount of computing power from commodity hardware that could be
+efficiently used by application with low communication demands. These machines
+could be used by these applications outside the work time and the aquisition
+cost and space demand for this commodity-hardware GPU cluster would be almost
+zero.
 
-Developing a load-balancing mechanism that works efficiently for all kinds of applications
-is difficult. With two or more GPUs (or even CPUs), this problem is strictly equivalent to the
-classic problem of minimizing the maximum completion time of all tasks
-(makespan), which is known to be NP-hard \cite{GaJo1979}. An efficient load-balancing scheme must be considered on case by case basis.
+Developing a load-balancing mechanism that works efficiently for all kinds of
+applications is difficult. With two or more GPUs (or CPUs), this problem is
+strictly equivalent to the classic problem of minimizing the maximum completion
+time of all tasks (makespan), which is known to be NP-hard \cite{GaJo1979}. An
+efficient load-balancing scheme must be considered on case by case basis. For
+example, there are several types of data-parallel
+applications~\cite{Gropp:1992uq} that could be divided using domain
+decomposition. Several scientific applications fit into this group, including
+applications in bioinformatics~\cite{bioinformatica2}, neural
+networks~\cite{neural}, chemistry, physics and materials science.
 
-For example, there are several studies on
-data-parallel applications for that can be divided using domain
-decomposition~\cite{Gropp:1992uq} on GPUs. In this case, the data can be easily distributed
-among the available GPUs. The main task of the load-balancing mechanism is to
-devise the best data division amont the GPUs.  Several scientific applications fit
-into this group, including applications in bioinformatics~\cite{bioinformatica2},
-neural networks~\cite{neural}, chemistry, physics and materials science.
+When using homogeneous clusters, data can be distributed among the available
+GPUs using tasks of the same size. However, with heterogeneous GPUs, this
+distribution is more difficult. There are several existing GPU architectures,
+such as \emph{Tesla},​ \emph{Fermi}, \emph{Kepler} and \emph{Maxwell}. These
+architectures have different organizations of FPUs (Floating-point Unit),
+caches, shared memory and memory speeds. Even for GPUs with the same
+architectures, their characteristics can vary considerably.
 
-However, with heterogeneous groups of GPUs, this distribution is more
-difficult. There are currently several types of GPUs with different
-architectures, such as \emph{Tesla},​ \emph{Fermi}, \emph{Kepler} and
-\emph{Maxwell}. These architectures have different organizations of FPUs
-(Floating-point Unit), caches, shared memory and memory speeds. A division of the
-load based on simple heuristics, such as a the number of cores in the GPU, is
-not effective and can be worse than a simple division~\cite{raphael}. Also, 
-different architectures require different low-level optimizations and a code can be better
-optimized for one architecture than the other. Finally, GPUs clusters normally
-have high-end CPUs in addition to the GPUs, and these CPUs may be used by the
-applications; for instance, to execute parts of the code which cannot be coded
-efficiently using the Single Instruction Multiple Thread (SIMT) model of GPUs.
+A division of the load based on simple heuristics, such as a the number of cores
+in the GPU, is not effective and can be worse than a simple homogeneous
+division~\cite{raphael}. Also, different architectures require different
+low-level optimizations and a code could have been better optimized for one
+architecture. Finally, GPUs clusters normally have high-end CPUs in addition to
+the GPUs, and these CPUs can used by the applications.
 
-Another frequent approach is to devise execution time profiles for each GPU type and application task and use it to determine the amount of work given to each GPU. This profiling can be
-done statically~\cite{raphael} or dynamically~\cite{acosta, HDSS}. Another
-solution is to use simple algorithm for task dispatching, such as the greedy
-algorithm from StarPU~\cite{starpu}, where tasks are dispatched to the devices
-as soon as they become available.
+% RYC2910: Comentei o texto abaixo, pois no momento não dmos suporte a múltiplos
+%tipos de tarefas. Acho que o próximo passo natural seria termos suporte a
+%colocar labels nas tarefas e criarmos perfis para cada tipo de tarefa.
+%
+%; for instance, to execute parts of the code which cannot be
+%coded efficiently using the Single Instruction Multiple Thread (SIMT) model of
+%GPUs.
 
-In this work we propose a novel adaptive algorithm for dynamic load
-balancing of data-parallel applications in heterogeneous GPU
-clusters. Based on run-time measures, the algorithm creates a execution
-model to dynamically adjust the size of data blocks depending on the characteristics of the processing units, both CPUs and GPUs. We have compared the algorithm with a static
-approach, which greedily distributes the tasks to every available
-device,  with a dynamic approach and with the HDSS~\cite{HDSS} algorithm.
+The main task of the load-balancing mechanism is to devise the best data
+division amont the GPUs. A possible approach is to determine the performance
+profiles for each GPU type and application task and use it to determine the
+amount of work given to each GPU. This profiling can be done statically, before
+application execution~\cite{raphael}, or dynamically, during application
+execution~\cite{acosta, HDSS}. Another solution is to use simple algorithms for
+task dispatching, such as the greedy algorithm from StarPU~\cite{starpu}, where
+tasks are dispatched to the devices as soon as they become available.
+
+In this work we propose a novel adaptive algorithm for dynamic load balancing of
+data-parallel applications in heterogeneous GPU clusters. The algorithm uses
+runtime task execution time measurements to create a performance model for each
+device (CPU or GPU). The algorithm dynamically adjust the size of data blocks
+allocated to each device based on this model. We compared the proposed algorithm
+with static~\cite{raphael} and dynamic (HDSS)~\cite{HDSS} algorithms and with
+the standard StarPU greedy algorithm.
 
 % The very first letter is a 2 line initial drop letter followed
 % by the rest of the first word in caps.
