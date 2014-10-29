@@ -643,66 +643,106 @@ the standard StarPU greedy algorithm.
 
 \section{Related Work}
 
-A common solution for load balancing in distributed systems is to divide the tasks
-according to a weight factor representing the processing speed of each
-processor. Early approaches used fixed weight factors determined at compile time
-with limited success~\cite{Hummel}. But these weight factors are difficult to
-determine in heterogeneous GPUs, due to the architectural differences that affect
-the performance.
+A proposed solution for load balancing in distributed systems is to divide the
+tasks among CPUs according to a weight factor representing the processing speed
+of each processor. Early approaches used fixed weight factors determined at
+compile time with limited success~\cite{Hummel}. But these weight factors are
+difficult to determine in heterogeneous GPUs, due to the architectural
+differences that affect the performance.
 
 The problem of load balancing in heterogeneous GPUs, began to be studied
-recently. Acosta \emph{et al.}~\cite{acosta} proposed a dynamic load balancing
-algorithm that interactively try finds a good distribution of work between GPUs
-during the execution of the application. A library monitors differences during run-time in each processor. It is a decentralized scheme in which synchronizations are done at each iteration to determine whether there is a need to rebalance the load. Each processor performs a redistribution of workload according to the size of the assigned task and the capabilities of
-the assigned processor. Load balancing is obtained by comparing the execution
-time of the current task for each processor with the redistribution of the
-subsequent task. It this time difference reaches a threshold, a load redistribution is
-triggered. Our algorithm is different because is centralized and it creates curves for each
- processing unit, and based on these curves performs the load balancing.
+recently. One proposal was the usage of a static algorithm that determines the
+distribution before the execution of the application, using profiles from
+previous executions~\cite{raphael}. The algorithm uses these profiles to find
+the distribution of data that minimizes the execution time of the application,
+ensuring that all GPUs to spend same amount of time performing the processing of
+kernels. The algorithm was evaluated using a large-scale neural network
+simulation. Its main drawback is that since it is static, an initial unbalanced
+distribution cannot be djusted in runtime. Another problem is that it require
+preivous executions of the appliction in the target deveices to determine its
+exexuction profiles. Finally, it does not consider the case where application
+behavior changes with the parameters. A dynamic algorithm, like the one that we
+propose, do not have these limitations.
 
-A static algorithm that determines the distribution before starting the
-execution of the application, using the static profiles from previous
-executions, was also proposed~\cite{raphael}. The algorithm was evaluated using
-a large-scale neural network simulation. The algorithm finds the distribution of
-data that minimizes the execution time of the application, based on profiles
-from previous executions, ensuring that all GPUs to spend same amount of time
-performing the processing of kernels. This approach is static and does not allow dynamic
-changes in the data distribution.
+% RYC1029: Luis -> Não está muito claro como é feita a coordenação aqui. Cada
+% processador realiza sua própria distribuição, mas de algum modo os processos
+% precisam chegar num acordo de qual pedaço vai para qual processador. Precisa
+% verificar melhor como funciona o algoritmo. Outro ponto é sobre como a
+% distribuição é feita. Dizer apenas que o tempo de execução é comparado não é
+% suficiente. É preciso dizer como esta diferença é utilizada. Como a descrição
+% do algoritmo não é clara, a comparação com nosso algoritmo está ruim. Por que
+% é melhor ser centralizado e usar as curvas para fazer o load-balancing? Quais
+% são as desvantagens do algoritmo de Acosta? Veja minha comparação com o HDSS.
+Acosta \emph{et al.}~\cite{acosta} proposed a dynamic load balancing algorithm
+that interactively finds a good distribution of work between GPUs during
+application execution. It uses a decentralized scheme in which synchronizations
+are done at each iteration to determine whether there is a need to rebalance the
+load. Each process, representing a single GPU, performs a redistribution of
+workload according to the size of the assigned task and the capabilities of the
+GPU. Load balancing is obtained by comparing the execution time of the current
+task for each GPU with the redistribution of the subsequent task. If this time
+difference reaches a threshold, a load redistribution is triggered. Our
+algorithm is different because is centralized and it creates curves for each
+processing unit, and based on these curves performs the load balancing.
 
-The Heterogeneous Dynamic Self-Scheduler (HDSS)~\cite{HDSS} provides a dynamic
-load-balancing algorithm, divided in two phases. The first is the adaptive
-phase, where it determines weights that reflect the speed of each processor.
-These weights are determined based on fits of logarithmic curves on processing
-speed graphs. These weights are used during the completion phase, where it
-divides the remaining iterations among the GPUs based on the relative weights of
-each GPU. The main differences to our algorithm is that we do not restrict the
-execution models to logarithm curves, which are appropriate for GPUs but not to
-CPUs in the range of interest. Also, our algorithm can perform adjustments until
-the end of the execution.
-
+The Heterogeneous Dynamic Self-Scheduler (HDSS)~\cite{HDSS} is a dynamic
+load-balancing algorithm for heterogenous GPU clusters. It is divided in two
+phases. The first is the adaptive phase, where it determines weights that
+reflect the speed of each GPU, similarly to Hummel \emph{et al.}~\cite{Hummel},
+but performed dynamically and using profiling data. A performance curve with the
+FLOPs per second for each task size is created for each GPU. The weights is
+determined based on logarithmic fits on the curves.  These weights are used
+during the second phase, called completion phase, where it divides the remaining
+iterations among the GPUs based on their relative weights. It starts allocating
+larger block sizes to the GPUs, decreasing their size as the execution
+progresses. An important drawback of HDSS is that the weight model based on
+logarithmic curves is valid only for GPUs, where the number of FLOPs per second
+stabilizes with larger tasks. Also, after the weights are determined they cannot
+be changed. We use an execution model that fits for both GPUs, CPUs and other
+device types. Moreover, we use the complete performance models, instead of a
+single number, resulting in a better load-distribution. Finally, we use the task
+execution time data from all the execution, permiting later adjustments in the
+performance models of the devices.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Proposed Algorithm}
 
-In a typical data-parallel application, the application data
-is divided among the threads in a process called domain
-decomposition~\cite{Gropp:1992uq}. The threads then simultaneously process their
-part of the data. After finishing, the threads merge the processed results, and
-the application terminates or continues to the next phase of computing. The task
-of our load-balancing algorithm is determining the size of the data block
-assigned to each GPU and CPU in the system. We will use the term processor to
-mean a single CPU or GPU.
+In a typical data-parallel application, the application data is divided among
+the threads in a process called domain decomposition~\cite{Gropp:1992uq}. The
+threads then simultaneously process their part of the data and this processing
+can be on single or multiple steps, dependending on the task sizes. After
+finishing, the threads merge the processed results, and the application
+terminates or continues to the next phase of computing. The task of our
+load-balancing algorithm is determining the size of the data block assigned to
+each GPU and CPU in the system. We will use the term processor to mean a single
+CPU or GPU.
 
+%RYC1029: Acho que aqui fica melhor se os paragraph forem alterados para
+%subsection.
 \vspace{0.2cm}
 \paragraph*{Overview} The algorithm has three parts, which are: (1) processor 
-performance model, where an execution model for each processor is determined
-during application execution; (2) optimal block size selection, where, based on
-the performance model, the algorithm selects the best distribution of block size
-among the processors; and (3) re-balancing, where the algorithm recalculates the
-optimal block sizes when the difference in execution time by different
-processors is larger than a threshold.
+performance modeling, where a performance model for each processor is determined
+during application execution based on task execution times; (2) optimal block
+size selection, where, based on the performance model, the algorithm determines
+the best distribution of block size among the processors; and (3) re-balancing,
+where the algorithm recalculates the optimal block sizes when the difference in
+execution time by different processors is larger than a threshold.
+
+% RYC1029: Aqui um figura estilo fluxograma seria interessante
+%
+%         |
+%         v
+% Performance Modeling <------
+%         |                  |
+%         v                  |
+% Block Size Selection   Rebalancing 
+%         |                  |
+%         v                  |
+%  -> Task Execution         |
+%  |      |                  |  
+%  -- Thresholds checking ----
 
 \begin{figure}[!t]
 	\centering
@@ -713,31 +753,65 @@ processors is larger than a threshold.
 
 
 \vspace{0.2cm}
-\paragraph*{Processor performance model} We initially determine a function
-$P_p[x]$, which provides the processing speed for a block of data of size $x$ on
-processor $p$. To construct these curves, a block of size $initialBlockSize$,
-defined by the user, is allocated to each processor. We select the processor
-with the earliest finish time $t_f$ and double the block size for this
-processor. For other processors, with finish times $t_i$, we select blocks of
-size proportional to the ratio $t_f$/$t_i$.
+% RYC1029: Modifiquei toda a seção. Veja se o que escrevi está correto,
+% especialmente a parte do coeficiente de correlação.
+\paragraph*{Processor performance modelling.} In this part, the algorithm 
+constructs a function $P_p[x]$, which represents the execution time of a block
+of data of size $x$ on processor $p$. For this, it executes blocks of different
+sizes on each processor and interpolate the curve that better fits these points.
+
+A block of size $initialBlockSize$, defined by the user, is initially allocated
+and executed on each processor. After executing the first block, the algorithm
+selects the processor with the earliest finish time $t_f$ and double the block
+size for this processor. For other processors, with finish times $t_k$, we
+select blocks of size $initialBlockSize * t_k / t_f$. This procedure is repeated
+until generating four points per curve. This process corresponds to (1) in
+Figure~\ref{fig: algoritmo}, which shows a schematic view of processor
+performance modelling part.
+
+The algorithm then follows the step (2) of Figure~\ref{fig: algoritmo}, where it
+tries to fit a curve in the existing points using the least squares fitting
+method. If the coefficient of determination is greater than 0.7 for all
+processors, the algorithm considers the fit as good enough and finishes this
+phase. Otherwise, it generates more points in the curve following the previous
+procedure.
+ 
+
+% RYC1029: Cade o texto onde você explica os tipos de funções e combinações que
+% usadas no fitting??? Não tínhamos discutido este ponto e você incluído na
+% qualificação?
+We find best fit curves by the method of \textit{least squares}, using a
+function of the form $f(x) = a x - b$.
 
 Figure~\ref{fig: CPUVersusGPU1} shows sample processing time measurements for a
-GPU and a CPU for different block sizes. We can see that the curves can be
-approximated by linear functions. We find best fit curves by the method of
-\textit{least squares}, using a function of the form $f(x) = a x - b$. The
-curve is fitted after generating a few points, for example, four, becoming a
-model for the processor execution times. The curve can be taken from the time that the determination coefficient is greater than 0.7.
-
+GPU and a CPU for different block sizes and two applications. We can see that
+the curves can be approximated by different types of functions. 
+% RYC1029: Colocar as funções que aproximaram cada gráfico.
 
 \begin{figure}[!t]
 	\centering
-			\includegraphics[scale=0.33]{diagramaAlgoritmo.pdf} 				
+	\includegraphics[scale=0.33]{diagramaAlgoritmo.pdf} 
 	\caption{Summary of the algorithm}
 	\label{fig: algoritmo}
 \end{figure}
 
+% RYC1029: A Figura 2 está com erros. Seria melhor ela representar apenas a
+% parte da modelagem de desempenho, dado que ela está nesta seção. Eu juntaria a
+% parte (1) com a (2), que é repetida por 4 vezes e só então que prossegue para
+% a (3) e (4), que eu juntaria em um item só (3) + (4). Se na (4) o erro das
+% funções for menor que um limiar, esta parte termina. Se não for, volta para o
+% passo (2). Além disso, essa figura da parte (1) + (2) não ajuda em muita
+% coisa. Precisaria repensar como deixá-la melhor e de um jeito que ajude o
+% leitor. Passei a descrição da figura para junto do texto explicando o
+% algoritmo.
 
-The Figure \ref{fig: algoritmo} shows a schematic simplified of the execution algorithm . Boxes are numbers indicating the order of execution of the algorithm. At number 1 the work is equally divided among the processors that make up the cluster. This step is elected faster machine indicated by the number 2, it receives o double of size block initial, while the other machines receive size block proportional to their performance in previous step. The values time ​​are recorded for each processor in 3, generating a curve of the block size as a function of time. These curves are approximated by functions, the most common functions. For each curve, a function is generated, which comprise a system of equations showed in 4. Using a search method, a solution is found, with the restriction time. The time requires to be the same for all processors. The result is block of optimum size. If the cluster undergoes a change in behavior, and the time difference among the processors exceeds a threshold, the process and the calculation is redone.
+
+
+%Using a search method, a solution is found, with the restriction time. The time
+%requires to be the same for all processors. The result is block of optimum
+%size. If the cluster undergoes a change in behavior, and the time difference
+%among the processors exceeds a threshold, the process and the calculation is
+%redone.
 
 
 \begin{algorithm}
@@ -752,7 +826,6 @@ The Figure \ref{fig: algoritmo} shows a schematic simplified of the execution al
 \STATE $blockSizeList \leftarrow initialBlockSize;$
 \WHILE{$fitValues.error \geq 0.5$}
 		\STATE $finishTimes$ = executeTasks($blockSizeList$);
-                \STATE synchronize();
 	        \STATE $blockSizeList$ = evaluateNextBlockSizes($finishTimes$);
 		\STATE $fitValues$ = determineCurveProcessor();
 \ENDWHILE
@@ -762,27 +835,31 @@ return $fitValues$;
 \end{algorithmic}
 \end{algorithm}
 
-These steps are shown in Algorithm~\ref{algModel}. Variable $blockListSize$
-contains the size of the blocks assigned to each processor and is initialized
-with $initialBlockSize$, which is defined by the user. Variable $fitValues$
-contains results from the last least square fitting, including the $error$ in
-the fitting, which is initialized as $+\infty$.
+% RYC1029: O erro é 0.5 ou 0.7? No texto anterior estava 0.7 e no algoritmo está
+% 0.5
 
-In the main loop, while the error is larger than a predefined value, the
-function send a chunk of data for each processor and obtain the finish time for
-each processor. After waiting for all processor to finish, it determine the
-block sizes for the next iteration, based on their finish times. Finally, it
-tries to fit model curves to each processor and receives the fitting results.
+The steps of this phase are shown in Algorithm~\ref{algModel}, which is executed
+in a single node, called master node. Variable $blockListSize$ contains the size
+of the blocks assigned to each processor and is initialized with
+$initialBlockSize$, which is defined by the user. Variable $fitValues$ contains
+results from the last least square fitting, including the $error$ in the
+fitting, which is initialized as $+\infty$. In the main loop, while the error is
+larger than a predefined value, the function sends a chunk of data for each
+processor and obtains the finish time for each processor. After all processors
+finish their executions, it determine the block sizes for the next iteration,
+based on their finish times. Finally, it tries to fit model curves to each
+processor and receives the fitting results.
 
 \vspace{0.2cm}
-\paragraph*{Optimal block size selection} Our algorithm determines the optimal
-block size for each processor with the objective of minimizing the total time of
-the application. Consider we have $n$ processors and a input data size $Z$. The
-algorithm assigns a data chunk of size $x^g$ for each processor $g=1,...,n$,
-corresponding a fraction of input data, such that $\sum_{g=1}^n x^g = Z$. We
-denote as $E^g(x^g)$ the execution time of task $E$ in the processor $g$, for
-input of size $x^g$. To distribute the work among the processors, we find a set
-of values
+\paragraph*{Optimal block size selection} In this part our algorithm determines 
+the optimal block size for each processor with the objective of providing blocks
+with the same execution time on each processor.
+
+Consider we have $n$ processors and a input data size $Z$. The algorithm assigns
+a data chunk of size $x^g$ for each processor $g=1,...,n$, corresponding a
+fraction of input data, such that $\sum_{g=1}^n x^g = Z$. We denote as
+$E^g(x^g)$ the execution time of task $E$ in the processor $g$, for input of
+size $x^g$. To distribute the work among the processors, we find a set of values
 	
 \begin{equation}
 	X = \{ x^g \in \mathbb{R}:[0,1] / \sum_{g=1}^n x^g = Z \}
@@ -798,7 +875,8 @@ that minimizes $E_1(x_1)$ while satisfying the constraint
 
 which represents that all processors should spend the same amount of time
 performing the processing. To determine the set of values $x$, we solve the
-system of fitted curves for all processors, given by:
+system of fitted curves for all processors, determined in the performance
+modelling part, and given by:
 
 \begin{equation}
 	\left\lbrace
@@ -811,36 +889,70 @@ system of fitted curves for all processors, given by:
 	\right.
 \end{equation}
 
-The equations system is solved applying the interior point line search filter
-method~\cite{point}. The algorithm seeks to minimize the functions in a search space. Determining the value of $x$ such that the time is minimal.
+The equations system is solved applying an interior point line search filter
+method~\cite{point}, which finds the minimum solution of a convex equation set,
+subject to a set of constraints, by transversing the interior points of its
+feasible region.
 
+% RYC1029: Temos no começo uma grande quantidade de dados, pegamos uma parte
+% destes dados Z e distribuimos entre os processadores. Como este Z é
+% determinado? Pegamos uma porcentagem do total de dados? Usa-se valores que
+% estão dentro dos valores medidos na parte de performance modelling?
 
 \vspace{0.2cm}
-\paragraph*{Rebalancing} After solving the system of equations the scheduler keeps
-sending tasks of size $x_i$ for each processor $i$, as soon as the processor
-finishes the previous task. It also monitors the finish time of each task. If
-the difference in finishing times $x_i$ and $x_j$ of any two tasks $i$ and $j$
-goes above a threshold, the balancing process is re-executed. In this case, the
-algorithm applies the processor performance model and optimal block size
-selection routines again. The scheduler then synchronizes the tasks and start
-using the new $x_i$ values. The threshold needs to be determined empirically through some tests. If the threshold is a value too small, happen unnecessary balancing, which will increase the total time of the application. If the threshold is too large imbalances may arise which will cause threads are idle.
+\paragraph*{Execution and Rebalancing}  
+
+After determining the task sizes, the scheduler sends a block of the selected
+size $x_i$ for each processor $i$. When a processor finishes executing a task,
+it requests another task of the same size. The processors then continue the
+execution asynchronously, until completing all the tasks.
+
+% RYC1029: Luis -> completar o XXX abaixo.
+The scheduler also monitors the finish time of each task. If the difference in
+finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
+goes above a threshold, the rebalancing process is executed. Small thresholds
+may cause excessive rebalancing while large thresholds may tolerate larger
+imbalances that will cause processor idlenesses. The threshold is determined
+empirically, but values of about XXX\% of the execution time of a single value
+resulted in a good tradeoff.
+
+During the rebalancing, the scheduler synchronizes the processors and apply the
+processor performance modelling algorithm to fit the best curves for the
+functions $P_p[x]$ updated with the execution times. The optimal block size
+selection routine is then applied to determine new block sizes $x_i$ for each
+processor $i$.
 
 \begin{figure}[!t]
 	\centering
 			\includegraphics[scale=0.24]{DiagramaArtigo.eps}
-	\caption{Threads execution with threshold}
+	\caption{Execution of tasks by four processors. The finish time
+          difference of two tasks was above a threshold, which caused a
+          rebalancing of the task sizes.}
 	\label{fig:Diagrama}
 \end{figure}
 
-Figure~\ref{fig:Diagrama} shows a diagram of execution of four threads and the unbalance of a thread. The boxes represent the threshold, the lines represent the threads and the circle represents the unbalance. The threads start synchronized, receive load, but in the second step one thread takes longer than the threshold value, this causes an unbalance. Detected unbalance, all threads are synchronized, and the partitions are recalculated for each thread, causing the threads back to stay synchronized. 
+% RYC1029: A figura ainda está toda torta, com as tarefas demorando tempos
+% aleatórios para executar. Capriche mais na figura, fazendo os tempos de
+% execução de cada tarefa proporcional, assim como o aumento do erro. Também
+% precisa colocar uma seta no início de cada linha e uma logo depois da
+% sincronização. Também precisa incluir onde o algoritmo de rebalancemanto é
+% executado.
 
+Figure~\ref{fig:Diagrama} shows a diagram of execution of four processors, where
+each arrow indicates the start of a task execution. The tasks start
+synchronized, but their finishes times start to diverge until the differences
+reaches a threshold. In this case, all threads are synchronized, and the new
+task sizes are recalculated for each processors. The task executions then
+restart.
 
 \vspace{0.2cm}
-\paragraph*{Complete algorithm} Algorithm~\ref{alg1} shows the pseudo-code of 
-the scheduling algorithm. The $determineModel$ function, shown in
-Algorithm~\ref{algModel} returns the performance model for each processor. It
-then solve the system of equations to determine the best distribution $X$ of
-chunk sizes for each processor. 
+\paragraph*{Complete algorithm} 
+
+Algorithm~\ref{alg1} shows the pseudo-code of the scheduling algorithm. The
+$determineModel$ function, shown in Algorithm~\ref{algModel} returns the
+performance model for each processor into variable $fitValues$. The algorithm
+then solves the system of equations contained in $fitValues$ to determine the
+best distribution $X$ of task sizes for each processor.
 
 \begin{algorithm}
 
@@ -867,23 +979,18 @@ chunk sizes for each processor.
 \end{algorithmic}
 \end{algorithm}
 
-The main loop repeats while there is still data for processing. It distributed
-chunks of data for each processor in the system, obtaining the finish times for
-each task execution. It then checks if the maximum difference between the finish
-tasks is above a threshold, obtained empirically. If threshold is reached, the
-algorithm fits new model curves and solve the system of equations for these new
-curves to determine a new distribution of chunk sizes.
+% RYC1029: Este algoritmo está errado, pois ele considera que a execução das
+% tarefas é síncrona. O algoritmo que você implementou provavelmente é baseado
+% em eventos (término de tarefas). Você precisa fazer o mesmo aqui. Em seguida,
+% é preciso alterar o texto para refletir estas mudanças.
 
-In the figure \ref{fig:GeneBlocos} we compare the behavior in relation to submission of blocks among machines. It analyzed the block size for the HDSS and our algorithm. In this case three machines were used, it is possible to notice the difference between runs. Our algorithm in step 400 suffered a re-balancing, causing it to change the size of the block. In HDSS, a decrease of the block size remains over the iterations.
-
-\begin{figure}[htb]
-	\begin{center}
-	\centering
-			\includegraphics[scale=0.4]{BlocosComportamento_Fabrizio.eps}
-	\caption{Difference in runtime with different numbers of genes for gene regulatory network inference}
-	\label{fig:GeneBlocos}
-	\end{center}
-\end{figure}
+The main loop repeats while there is still data for processing. It distributes
+tasks of different sizes for each processor in the system, obtaining the finish
+times for each task execution. It then checks if the maximum difference between
+the finish tasks is above a defined threshold. If the threshold is reached, the
+algorithm fits new curves for each processor performance model and solve the
+system of equations to determine a new distribution of tasks sizes for each
+processor.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1186,6 +1293,24 @@ Like the other experiments, the maximum difference among the threads followed th
 			\includegraphics[scale=0.4]{Maxima_Diferenca_Fabrizio.eps}
 	\caption{Difference in runtime with different numbers of genes for gene regulatory network inference}
 	\label{fig:GeneDiferenca}
+	\end{center}
+\end{figure}
+
+\subsection{Block size evolution}
+
+In the figure \ref{fig:GeneBlocos} we compare the behavior in relation to
+submission of blocks among machines. It analyzed the block size for the HDSS and
+our algorithm. In this case three machines were used, it is possible to notice
+the difference between runs. Our algorithm in step 400 suffered a re-balancing,
+causing it to change the size of the block. In HDSS, a decrease of the block
+size remains over the iterations.
+
+\begin{figure}[htb]
+	\begin{center}
+	\centering
+			\includegraphics[scale=0.4]{BlocosComportamento_Fabrizio.eps}
+	\caption{Difference in runtime with different numbers of genes for gene regulatory network inference}
+	\label{fig:GeneBlocos}
 	\end{center}
 \end{figure}
 
