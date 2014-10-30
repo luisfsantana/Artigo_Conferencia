@@ -418,9 +418,9 @@
         Daniel~Cordeiro,~\IEEEmembership{DCC-USP}
         and~Raphael~Camargo,~\IEEEmembership{CMCC-UFABC}% <-this % stops a space
 
-\thanks{Luis Sant'Ana is with the Center Mathematics, Computation and Cognition, Federal Uniersity of ABC, Santo Andr\'{e}, SP, Brazil e-mail: luis.ana@ufabc.edu.br}% <-this % stops a space
+\thanks{Luis Sant'Ana is with the Center Mathematics, Computation and Cognition, Federal University of ABC, Santo Andr\'{e}, SP, Brazil e-mail: luis.ana@ufabc.edu.br}% <-this % stops a space
 \thanks{Daniel Cordeiro is with the Department of Computer Science, University of S\~{a}o Paulo, S\~{a}o Paulo, SP, Brazil e-mail: danielc@ime.usp.br }% <-this % stops a space
-\thanks{Raphael Carmargo is with the Center Mathematics, Computation and Cognition, Federal Uniersity of ABC, Santo Andr\'{e}, SP, Brazil e-mail: raphael.camargo@ufabc.edu.br}}
+\thanks{Raphael Carmargo is with the Center Mathematics, Computation and Cognition, Federal University of ABC, Santo Andr\'{e}, SP, Brazil e-mail: raphael.camargo@ufabc.edu.br}}
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -479,7 +479,7 @@
 %\boldmath
 The use of GPU clusters for scientific applications is becoming more widespread,
 with applications in areas such as physics, chemistry and bioinformatics. These
-clusters can be highly heterogenous, composed of several models of CPUs and
+clusters can be highly heterogeneous, composed of several models of CPUs and
 GPUs, that could be used together to execute these applications. To use these
 heterogeneous devices in an efficient manner, it is necessary to load-balance
 the application task sizes among the GPUs and CPUs, minimizing the execution
@@ -502,7 +502,7 @@ stock markets and bioinformatics.
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-parallel computing, distribuited systems, GPU cluster, GPGPU.
+parallel computing, distributed systems, GPU cluster, GPGPU.
 \end{IEEEkeywords}
 
 
@@ -537,7 +537,7 @@ CPUs. The main drawback is the difficult in optimizing GPU code, specially
 considering the architectural differences among different GPUs, with changes in
 the distribution of cores, shared memory, presence of cache, among others. But
 libraries for several classes of applications and algorithms are now available,
-facilitating the deevlopment process~\cite{}.
+facilitating the development process~\cite{}.
 
 Computationally demanding applications may also benefit from the usage of
 multiple GPUs, normally distributed on several machines, which are called GPU
@@ -549,7 +549,7 @@ memory spaces and ensuring the consistency of data.
 
 There are several efforts by the scientific community for the creation of new
 programming models~\cite{appCientificas, wave} and frameworks~\cite{snucl, Flat,
-  starpu}, for facilitating the developement of GPU cluster
+  starpu}, for facilitating the development of GPU cluster
 applications. However, the combination of CUDA (Compute Unified Device
 Architecture) and MPI (Message Passing Interface) is still the standard choice
 to develop applications for GPU clusters.
@@ -559,7 +559,7 @@ and GPUs with the same configuration. Homogeneity facilitates the development of
 applications, since they can be optimized just for a single
 architecture. Moreover, if the application has exclusive access to the nodes,
 load-balancing is simpler, since the same task size, or number of tasks, can be
-allocateds to each node. But homogeneity can be difficult to maintain in a
+allocated to each node. But homogeneity can be difficult to maintain in a
 context where a new generation of hardware is launched every couple of years. In
 this case, joining heterogeneous machines can increase the available
 computational power to cluster users.
@@ -568,7 +568,7 @@ Another scenario where heterogeneity is more common is when connecting machines
 from several researchers groups using a standard Ethernet network. This enables
 a large amount of computing power from commodity hardware that could be
 efficiently used by application with low communication demands. These machines
-could be used by these applications outside the work time and the aquisition
+could be used by these applications outside the work time and the acquisition
 cost and space demand for this commodity-hardware GPU cluster would be almost
 zero.
 
@@ -607,7 +607,7 @@ the GPUs, and these CPUs can used by the applications.
 %GPUs.
 
 The main task of the load-balancing mechanism is to devise the best data
-division amont the GPUs. A possible approach is to determine the performance
+division amount the GPUs. A possible approach is to determine the performance
 profiles for each GPU type and application task and use it to determine the
 amount of work given to each GPU. This profiling can be done statically, before
 application execution~\cite{raphael}, or dynamically, during application
@@ -658,9 +658,9 @@ the distribution of data that minimizes the execution time of the application,
 ensuring that all GPUs to spend same amount of time performing the processing of
 kernels. The algorithm was evaluated using a large-scale neural network
 simulation. Its main drawback is that since it is static, an initial unbalanced
-distribution cannot be djusted in runtime. Another problem is that it require
-preivous executions of the appliction in the target deveices to determine its
-exexuction profiles. Finally, it does not consider the case where application
+distribution cannot be adjusted in runtime. Another problem is that it require
+previous executions of the applications in the target devices to determine its
+execution profiles. Finally, it does not consider the case where application
 behavior changes with the parameters. A dynamic algorithm, like the one that we
 propose, do not have these limitations.
 
@@ -686,7 +686,7 @@ algorithm is different because is centralized and it creates curves for each
 processing unit, and based on these curves performs the load balancing.
 
 The Heterogeneous Dynamic Self-Scheduler (HDSS)~\cite{HDSS} is a dynamic
-load-balancing algorithm for heterogenous GPU clusters. It is divided in two
+load-balancing algorithm for heterogeneous GPU clusters. It is divided in two
 phases. The first is the adaptive phase, where it determines weights that
 reflect the speed of each GPU, similarly to Hummel \emph{et al.}~\cite{Hummel},
 but performed dynamically and using profiling data. A performance curve with the
@@ -701,7 +701,7 @@ stabilizes with larger tasks. Also, after the weights are determined they cannot
 be changed. We use an execution model that fits for both GPUs, CPUs and other
 device types. Moreover, we use the complete performance models, instead of a
 single number, resulting in a better load-distribution. Finally, we use the task
-execution time data from all the execution, permiting later adjustments in the
+execution time data from all the execution, permitting later adjustments in the
 performance models of the devices.
 
 
@@ -712,7 +712,7 @@ performance models of the devices.
 In a typical data-parallel application, the application data is divided among
 the threads in a process called domain decomposition~\cite{Gropp:1992uq}. The
 threads then simultaneously process their part of the data and this processing
-can be on single or multiple steps, dependending on the task sizes. After
+can be on single or multiple steps, depending on the task sizes. After
 finishing, the threads merge the processed results, and the application
 terminates or continues to the next phase of computing. The task of our
 load-balancing algorithm is determining the size of the data block assigned to
@@ -755,7 +755,7 @@ execution time by different processors is larger than a threshold.
 \vspace{0.2cm}
 % RYC1029: Modifiquei toda a seção. Veja se o que escrevi está correto,
 % especialmente a parte do coeficiente de correlação.
-\paragraph*{Processor performance modelling.} In this part, the algorithm 
+\paragraph*{Processor performance modeling.} In this part, the algorithm 
 constructs a function $P_p[x]$, which represents the execution time of a block
 of data of size $x$ on processor $p$. For this, it executes blocks of different
 sizes on each processor and interpolate the curve that better fits these points.
@@ -767,7 +767,7 @@ size for this processor. For other processors, with finish times $t_k$, we
 select blocks of size $initialBlockSize * t_k / t_f$. This procedure is repeated
 until generating four points per curve. This process corresponds to (1) in
 Figure~\ref{fig: algoritmo}, which shows a schematic view of processor
-performance modelling part.
+performance modeling part.
 
 The algorithm then follows the step (2) of Figure~\ref{fig: algoritmo}, where it
 tries to fit a curve in the existing points using the least squares fitting
@@ -876,7 +876,7 @@ that minimizes $E_1(x_1)$ while satisfying the constraint
 which represents that all processors should spend the same amount of time
 performing the processing. To determine the set of values $x$, we solve the
 system of fitted curves for all processors, determined in the performance
-modelling part, and given by:
+modeling part, and given by:
 
 \begin{equation}
 	\left\lbrace
@@ -912,12 +912,12 @@ The scheduler also monitors the finish time of each task. If the difference in
 finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
 goes above a threshold, the rebalancing process is executed. Small thresholds
 may cause excessive rebalancing while large thresholds may tolerate larger
-imbalances that will cause processor idlenesses. The threshold is determined
+imbalances that will cause processor idleness. The threshold is determined
 empirically, but values of about XXX\% of the execution time of a single value
-resulted in a good tradeoff.
+resulted in a good trade-off.
 
 During the rebalancing, the scheduler synchronizes the processors and apply the
-processor performance modelling algorithm to fit the best curves for the
+processor performance modeling algorithm to fit the best curves for the
 functions $P_p[x]$ updated with the execution times. The optimal block size
 selection routine is then applied to determine new block sizes $x_i$ for each
 processor $i$.
@@ -1157,7 +1157,7 @@ For matrices 4096 elements and four machines, the proposed algorithm spent 23.11
 
 
 
-The results obtained shows that in more heterogeneous environment the advantage  using our proposed algorithm is largest than the other. This advantage is due to a better distribution of the data along the execution. Figure~\ref{fig:diferencaThreads} shows the time difference among the earliest and latest finishing threads, in the scenario with three machines and the size matrix fized with 65535 elements. 
+The results obtained shows that in more heterogeneous environment the advantage  using our proposed algorithm is largest than the other. This advantage is due to a better distribution of the data along the execution. Figure~\ref{fig:diferencaThreads} shows the time difference among the earliest and latest finishing threads, in the scenario with three machines and the size matrix fixed with 65535 elements. 
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1177,7 +1177,7 @@ consequently, receive more tasks. The static algorithm had the worst performance
 HDSS uses the beginning of the execution to estimate the best block size
 distribution and uses this distribution through the complete
 execution. Moreover, larger blocks are used in the beginning of the execution,
-causing a larger delay due to disbalance when use different types of devices,
+causing a larger delay due to unbalance when use different types of devices,
 such as GPUs and CPUs. Finally, HDSS uses a crude approximation to the device
 capabilities.
 
@@ -1236,7 +1236,7 @@ problem to determine the best data distribution is small and the obtained gains
 outweighs the cost of the calculations. For applications tested in a few
 iterations around 6, it was possible to obtain the solution of the system in a
 few milliseconds. The total cost of calculating the distribution of the blocks is 201.32 
-milliseconds and standard deviation of 0.34 miliseconds
+milliseconds and standard deviation of 0.34 milliseconds
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1267,7 +1267,7 @@ As in previous applications, we compare the execution time in four different env
 
 The table \ref{table: gene} shows the extreme values​​, for 100,000 and 2,000,000 genes. 
 To the environment with 3 and 4 machines the performance were similar due to limitation in data transfer, in the case of four machines the communication cost limited the gain. The total cost of calculating the distribution of the blocks is 821.54
-milliseconds and standard deviation of 142.23 miliseconds.
+milliseconds and standard deviation of 142.23 milliseconds.
 
 \begin{table*}[htb]
 \centering
@@ -1333,7 +1333,7 @@ during execution, and the addition of the execution time difference threshold
 permits readjustments in data distributions. We can also consider the scenario
 with added fault-tolerance, where machines may become unavailable during
 execution. In this scenario, a simple redistribution of the data among the
-remaining devices would permit the application to readapt to this scenario.
+remaining devices would permit the application to re-adapt to this scenario.
 
 As ongoing work, we are including the cost of communication in the scheduling
 algorithm, which is essential for applications where the time spent with
