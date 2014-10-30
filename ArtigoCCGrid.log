@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.7.24)  30 OCT 2014 00:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.7.24)  30 OCT 2014 04:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -647,107 +647,13 @@ Underfull \hbox (badness 3323) in paragraph at lines 475--475
 a-tion and
  []
 
-
-LaTeX Warning: Citation `gpu2' on page 1 undefined on input line 528.
-
-
-LaTeX Warning: Citation `fluid2' on page 1 undefined on input line 529.
-
-
-LaTeX Warning: Citation `visualization2' on page 1 undefined on input line 530.
-
-
-
-LaTeX Warning: Citation `learning2' on page 1 undefined on input line 530.
-
-
-LaTeX Warning: Citation `bioinformatica2' on page 1 undefined on input line 531
-.
-
-
-LaTeX Warning: Citation `neural' on page 1 undefined on input line 531.
-
-
-LaTeX Warning: Citation `raphael' on page 1 undefined on input line 544.
-
-
-LaTeX Warning: Citation `cluster' on page 1 undefined on input line 544.
-
-
-LaTeX Warning: Citation `appCientificas' on page 1 undefined on input line 551.
-
-
-
-LaTeX Warning: Citation `wave' on page 1 undefined on input line 551.
-
-
-LaTeX Warning: Citation `snucl' on page 1 undefined on input line 552.
-
-
-LaTeX Warning: Citation `Flat' on page 1 undefined on input line 552.
-
-
-LaTeX Warning: Citation `starpu' on page 1 undefined on input line 552.
-
-
-LaTeX Warning: Citation `GaJo1979' on page 1 undefined on input line 578.
-
-
-LaTeX Warning: Citation `Gropp:1992uq' on page 1 undefined on input line 581.
-
-
-LaTeX Warning: Citation `bioinformatica2' on page 1 undefined on input line 583
-.
-
-
-LaTeX Warning: Citation `neural' on page 1 undefined on input line 584.
-
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ‹ in font ptmr7t!
-
-LaTeX Warning: Citation `raphael' on page 1 undefined on input line 596.
-
 [1{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-
-LaTeX Warning: Citation `raphael' on page 2 undefined on input line 613.
-
-
-LaTeX Warning: Citation `acosta' on page 2 undefined on input line 614.
-
-
-LaTeX Warning: Citation `HDSS' on page 2 undefined on input line 614.
-
-
-LaTeX Warning: Citation `starpu' on page 2 undefined on input line 615.
-
-
-LaTeX Warning: Citation `raphael' on page 2 undefined on input line 623.
-
-
-LaTeX Warning: Citation `HDSS' on page 2 undefined on input line 623.
-
-
-LaTeX Warning: Citation `Hummel' on page 2 undefined on input line 649.
-
-
-LaTeX Warning: Citation `raphael' on page 2 undefined on input line 656.
-
-
-LaTeX Warning: Citation `acosta' on page 2 undefined on input line 676.
-
-
-LaTeX Warning: Citation `HDSS' on page 2 undefined on input line 688.
-
-
-LaTeX Warning: Citation `Hummel' on page 2 undefined on input line 691.
-
-
-LaTeX Warning: Citation `Gropp:1992uq' on page 2 undefined on input line 713.
-
 <./images/CPUVersusGPULinear2.pdf, id=13, 845.1575pt x 598.235pt>
 File: ./images/CPUVersusGPULinear2.pdf Graphic file (type pdf)
 
@@ -772,20 +678,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 759.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: Reference `fig: algoritmo' on page 2 undefined on input line 769
-.
-
-[2]
-
-LaTeX Warning: Reference `fig: algoritmo' on page 3 undefined on input line 772
-.
-
-
-LaTeX Warning: Reference `fig: CPUVersusGPU1' on page 3 undefined on input line
- 786.
-
+) [2]
 <./images/diagramaAlgoritmo.pdf, id=20, 766.66914pt x 715.82599pt>
 File: ./images/diagramaAlgoritmo.pdf Graphic file (type pdf)
 
@@ -799,13 +692,7 @@ Overfull \hbox (2.47137pt too wide) in paragraph at lines 829--830
 $\OML/cmm/m/it/10 finishTimes$\OT1/ptm/m/n/10 ); 
  []
 
-
-LaTeX Warning: Reference `algModel' on page 3 undefined on input line 841.
-
 [3 <./images/CPUVersusGPULinear2.pdf> <./images/diagramaAlgoritmo.pdf>]
-
-LaTeX Warning: Citation `point' on page 4 undefined on input line 893.
-
 Package epstopdf Info: Source file: <./images/DiagramaArtigo.eps>
 (epstopdf)                    date: 2014-10-23 21:03:17
 (epstopdf)                    size: 65344 bytes
@@ -830,42 +717,7 @@ Overfull \hbox (5.44112pt too wide) in paragraph at lines 927--930
  [][] 
  []
 
-
-LaTeX Warning: Reference `fig:Diagrama' on page 4 undefined on input line 941.
-
-
-LaTeX Warning: Reference `alg1' on page 4 undefined on input line 951.
-
-
-LaTeX Warning: Reference `algModel' on page 4 undefined on input line 952.
-
-
-LaTeX Warning: Citation `starpu' on page 4 undefined on input line 1000.
-
 [4 <./images/DiagramaArtigo-eps-converted-to.pdf>]
-
-LaTeX Warning: Citation `raphael' on page 5 undefined on input line 1028.
-
-
-LaTeX Warning: Citation `HDSS' on page 5 undefined on input line 1030.
-
-
-LaTeX Warning: Reference `eq: system' on page 5 undefined on input line 1034.
-
-
-LaTeX Warning: Citation `point' on page 5 undefined on input line 1034.
-
-
-LaTeX Warning: Citation `cuda' on page 5 undefined on input line 1040.
-
-
-LaTeX Warning: Citation `borelli2013gene' on page 5 undefined on input line 104
-1.
-
-
-LaTeX Warning: Citation `borelli2013gene' on page 5 undefined on input line 106
-2.
-
 
 LaTeX Warning: Reference `table: machines' on page 5 undefined on input line 10
 73.
@@ -876,30 +728,34 @@ Missing character: There is no ‹ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ‹ in font ptmr7t!
-<./images/TesteMatrizes.pdf, id=51, 561.09625pt x 513.92pt>
-File: ./images/TesteMatrizes.pdf Graphic file (type pdf)
+<./images/1machine.pdf, id=51, 783.92876pt x 325.215pt>
+File: ./images/1machine.pdf Graphic file (type pdf)
 
-<use ./images/TesteMatrizes.pdf>
-Package pdftex.def Info: ./images/TesteMatrizes.pdf used on input line 1117.
-(pdftex.def)             Requested size: 263.71527pt x 241.54242pt.
+<use ./images/1machine.pdf>
+Package pdftex.def Info: ./images/1machine.pdf used on input line 1118.
+(pdftex.def)             Requested size: 235.18044pt x 97.56525pt.
 
-Overfull \hbox (10.6654pt too wide) in paragraph at lines 1117--1118
- [] 
- []
+<./images/2machines.pdf, id=52, 785.93625pt x 325.215pt>
+File: ./images/2machines.pdf Graphic file (type pdf)
 
+<use ./images/2machines.pdf>
+Package pdftex.def Info: ./images/2machines.pdf used on input line 1119.
+(pdftex.def)             Requested size: 235.78268pt x 97.56525pt.
 
-LaTeX Warning: Reference `fig:todosJuntos' on page 5 undefined on input line 11
-24.
+<./images/3machines.pdf, id=53, 785.93625pt x 325.215pt>
+File: ./images/3machines.pdf Graphic file (type pdf)
 
+<use ./images/3machines.pdf>
+Package pdftex.def Info: ./images/3machines.pdf used on input line 1120.
+(pdftex.def)             Requested size: 235.78268pt x 97.56525pt.
 
-LaTeX Warning: Reference `table: comparativo' on page 5 undefined on input line
- 1135.
+<./images/4machines.pdf, id=54, 785.93625pt x 325.215pt>
+File: ./images/4machines.pdf Graphic file (type pdf)
 
-[5]
-
-LaTeX Warning: Reference `fig:diferencaThreads' on page 6 undefined on input li
-ne 1160.
-
+<use ./images/4machines.pdf>
+Package pdftex.def Info: ./images/4machines.pdf used on input line 1121.
+(pdftex.def)             Requested size: 235.78268pt x 97.56525pt.
+ [5]
 Package epstopdf Info: Source file: <./images/Maxima_Diferenca_Matrix.eps>
 (epstopdf)                    date: 2014-10-29 04:57:57
 (epstopdf)                    size: 6844 bytes
@@ -909,7 +765,7 @@ rted-to.pdf>
 (epstopdf)                    size: 10278 bytes
 (epstopdf)             Command: <repstopdf --outfile=./images/Maxima_Diferenca_
 Matrix-eps-converted-to.pdf ./images/Maxima_Diferenca_Matrix.eps>
-(epstopdf)             \includegraphics on input line 1165.
+(epstopdf)             \includegraphics on input line 1169.
 runsystem(repstopdf --outfile=./images/Maxima_Diferenca_Matrix-eps-converted-to
 .pdf ./images/Maxima_Diferenca_Matrix.eps)...executed safely (allowed).
 
@@ -918,42 +774,33 @@ rted-to.pdf>
 (epstopdf)                    date: 2014-10-13 08:29:11
 (epstopdf)                    size: 10278 bytes.
 
-<./images/Maxima_Diferenca_Matrix-eps-converted-to.pdf, id=55, 561.09625pt x 51
+<./images/Maxima_Diferenca_Matrix-eps-converted-to.pdf, id=58, 561.09625pt x 51
 3.92pt>
 File: ./images/Maxima_Diferenca_Matrix-eps-converted-to.pdf Graphic file (type 
 pdf)
  <use ./images/Maxima_Diferenca_Matrix-eps-converted-to.pdf>
 Package pdftex.def Info: ./images/Maxima_Diferenca_Matrix-eps-converted-to.pdf 
-used on input line 1165.
+used on input line 1169.
 (pdftex.def)             Requested size: 224.43452pt x 205.56435pt.
 
+Underfull \vbox (badness 1983) has occurred while \output is active []
 
-LaTeX Warning: Reference `fig:diferencaThreads' on page 6 undefined on input li
-ne 1175.
-
-<./images/BlackScholes4MachinesNOVO.pdf, id=56, 561.09625pt x 513.92pt>
+ [6 <./images/1machine.pdf> <./images/2machines.pdf> <./images/3machines.pdf> <
+./images/4machines.pdf> <./images/Maxima_Diferenca_Matrix-eps-converted-to.pdf>
+]
+<./images/BlackScholes4MachinesNOVO.pdf, id=283, 561.09625pt x 513.92pt>
 File: ./images/BlackScholes4MachinesNOVO.pdf Graphic file (type pdf)
 
 <use ./images/BlackScholes4MachinesNOVO.pdf>
 Package pdftex.def Info: ./images/BlackScholes4MachinesNOVO.pdf used on input l
-ine 1197.
+ine 1201.
 (pdftex.def)             Requested size: 252.49098pt x 231.26186pt.
-
-
-LaTeX Warning: Reference `fig:black' on page 6 undefined on input line 1204.
-
-
-LaTeX Warning: Reference `table: black' on page 6 undefined on input line 1211.
-
-
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ‹ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ‹ in font ptmr7t!
-[6 <./images/TesteMatrizes.pdf> <./images/Maxima_Diferenca_Matrix-eps-converted
--to.pdf>]
 Package epstopdf Info: Source file: <./images/Maxima_Diferenca_BlackScholes.eps
 >
 (epstopdf)                    date: 2014-10-13 08:19:12
@@ -964,49 +811,32 @@ Package epstopdf Info: Source file: <./images/Maxima_Diferenca_BlackScholes.eps
 (epstopdf)                    size: 10304 bytes
 (epstopdf)             Command: <repstopdf --outfile=./images/Maxima_Diferenca_
 BlackScholes-eps-converted-to.pdf ./images/Maxima_Diferenca_BlackScholes.eps>
-(epstopdf)             \includegraphics on input line 1244.
+(epstopdf)             \includegraphics on input line 1248.
 Package epstopdf Info: Output file is already uptodate.
 
-<./images/Maxima_Diferenca_BlackScholes-eps-converted-to.pdf, id=81, 437.635pt 
-x 436.63126pt>
+<./images/Maxima_Diferenca_BlackScholes-eps-converted-to.pdf, id=284, 437.635pt
+ x 436.63126pt>
 File: ./images/Maxima_Diferenca_BlackScholes-eps-converted-to.pdf Graphic file 
 (type pdf)
 
 <use ./images/Maxima_Diferenca_BlackScholes-eps-converted-to.pdf>
 Package pdftex.def Info: ./images/Maxima_Diferenca_BlackScholes-eps-converted-t
-o.pdf used on input line 1244.
+o.pdf used on input line 1248.
 (pdftex.def)             Requested size: 175.05089pt x 174.6494pt.
 
-
-LaTeX Warning: Reference `fig:diferencaThreadsBlack' on page 7 undefined on inp
-ut line 1250.
-
-
-LaTeX Warning: Reference `fig:Gene' on page 7 undefined on input line 1257.
-
-<./images/GraficoFabrizio4maquinasNOVO.pdf, id=82, 561.09625pt x 513.92pt>
+<./images/GraficoFabrizio4maquinasNOVO.pdf, id=285, 561.09625pt x 513.92pt>
 File: ./images/GraficoFabrizio4maquinasNOVO.pdf Graphic file (type pdf)
 
 <use ./images/GraficoFabrizio4maquinasNOVO.pdf>
 Package pdftex.def Info: ./images/GraficoFabrizio4maquinasNOVO.pdf used on inpu
-t line 1262.
+t line 1266.
 (pdftex.def)             Requested size: 224.43452pt x 205.56435pt.
-
-
-LaTeX Warning: Reference `table: gene' on page 7 undefined on input line 1268.
-
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ‹ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ‹ in font ptmr7t!
-[7 <./images/BlackScholes4MachinesNOVO.pdf> <./images/Maxima_Diferenca_BlackSch
-oles-eps-converted-to.pdf> <./images/GraficoFabrizio4maquinasNOVO.pdf>]
-
-LaTeX Warning: Reference `fig:GeneDiferenca' on page 8 undefined on input line 
-1288.
-
 Package epstopdf Info: Source file: <./images/Maxima_Diferenca_Fabrizio.eps>
 (epstopdf)                    date: 2014-10-13 08:19:41
 (epstopdf)                    size: 6857 bytes
@@ -1016,22 +846,20 @@ verted-to.pdf>
 (epstopdf)                    size: 10408 bytes
 (epstopdf)             Command: <repstopdf --outfile=./images/Maxima_Diferenca_
 Fabrizio-eps-converted-to.pdf ./images/Maxima_Diferenca_Fabrizio.eps>
-(epstopdf)             \includegraphics on input line 1293.
+(epstopdf)             \includegraphics on input line 1297.
 Package epstopdf Info: Output file is already uptodate.
 
-<./images/Maxima_Diferenca_Fabrizio-eps-converted-to.pdf, id=121, 561.09625pt x
+<./images/Maxima_Diferenca_Fabrizio-eps-converted-to.pdf, id=286, 561.09625pt x
  513.92pt>
 File: ./images/Maxima_Diferenca_Fabrizio-eps-converted-to.pdf Graphic file (typ
 e pdf)
  <use ./images/Maxima_Diferenca_Fabrizio-eps-converted-to.pdf>
 Package pdftex.def Info: ./images/Maxima_Diferenca_Fabrizio-eps-converted-to.pd
-f used on input line 1293.
+f used on input line 1297.
 (pdftex.def)             Requested size: 224.43452pt x 205.56435pt.
 
-
-LaTeX Warning: Reference `fig:GeneBlocos' on page 8 undefined on input line 130
-1.
-
+[7 <./images/BlackScholes4MachinesNOVO.pdf> <./images/Maxima_Diferenca_BlackSch
+oles-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <./images/BlocosComportamento_Fabrizio.eps>
 
 (epstopdf)                    date: 2014-10-13 08:07:14
@@ -1042,25 +870,25 @@ converted-to.pdf>
 (epstopdf)                    size: 12811 bytes
 (epstopdf)             Command: <repstopdf --outfile=./images/BlocosComportamen
 to_Fabrizio-eps-converted-to.pdf ./images/BlocosComportamento_Fabrizio.eps>
-(epstopdf)             \includegraphics on input line 1311.
+(epstopdf)             \includegraphics on input line 1315.
 Package epstopdf Info: Output file is already uptodate.
 
-<./images/BlocosComportamento_Fabrizio-eps-converted-to.pdf, id=122, 561.09625p
+<./images/BlocosComportamento_Fabrizio-eps-converted-to.pdf, id=312, 561.09625p
 t x 513.92pt>
 File: ./images/BlocosComportamento_Fabrizio-eps-converted-to.pdf Graphic file (
 type pdf)
  <use ./images/BlocosComportamento_Fabrizio-eps-converted-to.pdf>
 Package pdftex.def Info: ./images/BlocosComportamento_Fabrizio-eps-converted-to
-.pdf used on input line 1311.
+.pdf used on input line 1315.
 (pdftex.def)             Requested size: 224.43452pt x 205.56435pt.
 
-Underfull \hbox (badness 2221) in paragraph at lines 1346--1347
+Underfull \hbox (badness 2221) in paragraph at lines 1350--1351
 []\OT1/ptm/m/n/10 The au-thors would like to thank FAPESP (Proc. n.
  []
 
-(./ArtigoCCGrid.bbl [8 <./images/Maxima_Diferenca_Fabrizio-eps-converted-to.pdf
-> <./images/BlocosComportamento_Fabrizio-eps-converted-to.pdf>]) [9]
-(./ArtigoCCGrid.aux)
+(./ArtigoCCGrid.bbl [8 <./images/GraficoFabrizio4maquinasNOVO.pdf> <./images/Ma
+xima_Diferenca_Fabrizio-eps-converted-to.pdf>]) [9 <./images/BlocosComportament
+o_Fabrizio-eps-converted-to.pdf>] (./ArtigoCCGrid.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1069,10 +897,10 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 13940 strings out of 493117
- 273299 string characters out of 6135433
- 407252 words of memory out of 5000000
- 17094 multiletter control sequences out of 15000+600000
+ 13955 strings out of 493117
+ 273634 string characters out of 6135433
+ 408476 words of memory out of 5000000
+ 17106 multiletter control sequences out of 15000+600000
  41767 words of font info for 76 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
  62i,10n,56p,720b,477s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1088,10 +916,10 @@ ve/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive
 f-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist/fo
 nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/
 urw/times/utmri8a.pfb>
-Output written on ArtigoCCGrid.pdf (9 pages, 510424 bytes).
+Output written on ArtigoCCGrid.pdf (9 pages, 634171 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 128 compressed objects within 2 object streams
+ 386 PDF objects out of 1000 (max. 8388607)
+ 257 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
- 63 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 78 words of extra memory for PDF output out of 10000 (max. 10000000)
 
