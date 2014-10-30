@@ -481,8 +481,8 @@ The use of GPU clusters for scientific applications is becoming more widespread,
 with applications in areas such as physics, chemistry and bioinformatics. These
 clusters can be highly heterogeneous, composed of several models of CPUs and
 GPUs, that could be used together to execute these applications. To use these
-heterogeneous devices in an efficient manner, it is necessary to load-balance
-the application task sizes among the GPUs and CPUs, minimizing the execution
+heterogeneous devices in an efficient manner, it is necessary to balance the computational load
+among the GPUs and CPUs according to the tasks' sizes, minimizing the execution
 time of the application.
 
 We propose an algorithm for dynamic load balancing in heterogeneous GPU clusters
@@ -533,11 +533,11 @@ bioinformatics~\cite{bioinformatica2} and neural networks~\cite{neural}.
 % RYC1029: Luis -> incluir referências de bibliotecas, como da nVidia e outras
 Modern GPUs can have thousands of simple floating point units (FPUs) that,
 combined, can have a computational power several times superior to traditional
-CPUs. The main drawback is the difficult in optimizing GPU code, specially
+CPUs. The main drawback is the difficulty in optimizing GPU code, specially
 considering the architectural differences among different GPUs, with changes in
 the distribution of cores, shared memory, presence of cache, among others. But
 libraries for several classes of applications and algorithms are now available,
-facilitating the development process~\cite{}.
+facilitating the development process~\cite{FIXME}.
 
 Computationally demanding applications may also benefit from the usage of
 multiple GPUs, normally distributed on several machines, which are called GPU
@@ -557,10 +557,11 @@ to develop applications for GPU clusters.
 High-performance GPU clusters are typically \emph{homogeneous}, containing nodes
 and GPUs with the same configuration. Homogeneity facilitates the development of
 applications, since they can be optimized just for a single
-architecture. Moreover, if the application has exclusive access to the nodes,
-load-balancing is simpler, since the same task size, or number of tasks, can be
-allocated to each node. But homogeneity can be difficult to maintain in a
-context where a new generation of hardware is launched every couple of years. In
+architecture. % Moreover, if the application has exclusive access to the nodes,
+% load-balancing is simpler, since the same task size, or number of tasks, can be
+% allocated to each node.  -> tiro no pe, nossos testes usam acesso exclusivo.
+However, homogeneity can be hard to maintain in the current scenario,
+where a new generation of hardware is launched every couple of years. In
 this case, joining heterogeneous machines can increase the available
 computational power to cluster users.
 
@@ -576,7 +577,7 @@ Developing a load-balancing mechanism that works efficiently for all kinds of
 applications is difficult. With two or more GPUs (or CPUs), this problem is
 strictly equivalent to the classic problem of minimizing the maximum completion
 time of all tasks (makespan), which is known to be NP-hard \cite{GaJo1979}. An
-efficient load-balancing scheme must be considered on case by case basis. For
+efficient load-balancing scheme must be considered on case-by-case basis. For
 example, there are several types of data-parallel
 applications~\cite{Gropp:1992uq} that could be divided using domain
 decomposition. Several scientific applications fit into this group, including
@@ -585,8 +586,7 @@ networks~\cite{neural}, chemistry, physics and materials science.
 
 When using homogeneous clusters, data can be distributed among the available
 GPUs using tasks of the same size. However, with heterogeneous GPUs, this
-distribution is more difficult. There are several existing GPU architectures,
-such as \emph{Tesla},​ \emph{Fermi}, \emph{Kepler} and \emph{Maxwell}. These
+distribution is more difficult. At the time of writing, the major GPU vendor offers GPU processors with more than four different microarchitectures: \emph{Tesla},​ \emph{Fermi}, \emph{Kepler} and \emph{Maxwell}. These
 architectures have different organizations of FPUs (Floating-point Unit),
 caches, shared memory and memory speeds. Even for GPUs with the same
 architectures, their characteristics can vary considerably.
@@ -617,7 +617,7 @@ tasks are dispatched to the devices as soon as they become available.
 
 In this work we propose a novel adaptive algorithm for dynamic load balancing of
 data-parallel applications in heterogeneous GPU clusters. The algorithm uses
-runtime task execution time measurements to create a performance model for each
+performance information gathered at runtime in order to create a performance model for each
 device (CPU or GPU). The algorithm dynamically adjust the size of data blocks
 allocated to each device based on this model. We compared the proposed algorithm
 with static~\cite{raphael} and dynamic (HDSS)~\cite{HDSS} algorithms and with
@@ -716,8 +716,8 @@ can be on single or multiple steps, depending on the task sizes. After
 finishing, the threads merge the processed results, and the application
 terminates or continues to the next phase of computing. The task of our
 load-balancing algorithm is determining the size of the data block assigned to
-each GPU and CPU in the system. We will use the term processor to mean a single
-CPU or GPU.
+each GPU and CPU in the system. We will use the term ``processor'' to refer to
+both CPUs and GPUs.
 
 %RYC1029: Acho que aqui fica melhor se os paragraph forem alterados para
 %subsection.
@@ -772,7 +772,7 @@ performance modeling part.
 The algorithm then follows the step (2) of Figure~\ref{fig: algoritmo}, where it
 tries to fit a curve in the existing points using the least squares fitting
 method. If the coefficient of determination is greater than 0.7 for all
-processors, the algorithm considers the fit as good enough and finishes this
+processors, the algorithm considers the fit as a ``good enough'' approximation and finishes this
 phase. Otherwise, it generates more points in the curve following the previous
 procedure.
  
@@ -840,15 +840,10 @@ return $fitValues$;
 
 The steps of this phase are shown in Algorithm~\ref{algModel}, which is executed
 in a single node, called master node. Variable $blockListSize$ contains the size
-of the blocks assigned to each processor and is initialized with
-$initialBlockSize$, which is defined by the user. Variable $fitValues$ contains
+of the blocks assigned to each processor and is initialized with an estimation
+($initialBlockSize$) given by the user. Variable $fitValues$ contains
 results from the last least square fitting, including the $error$ in the
-fitting, which is initialized as $+\infty$. In the main loop, while the error is
-larger than a predefined value, the function sends a chunk of data for each
-processor and obtains the finish time for each processor. After all processors
-finish their executions, it determine the block sizes for the next iteration,
-based on their finish times. Finally, it tries to fit model curves to each
-processor and receives the fitting results.
+fitting, which is initialized as $+\infty$. Iteratively, the algorithm sends chunks of data to each processor and measures the time that each one spent to process them.  These results are used to determine the block size for each processor in the next iteration and to calibrate the model. The loop stops when the computed model have a bounded (``good enough'') error.
 
 \vspace{0.2cm}
 \paragraph*{Optimal block size selection} In this part our algorithm determines 
@@ -862,7 +857,7 @@ $E^g(x^g)$ the execution time of task $E$ in the processor $g$, for input of
 size $x^g$. To distribute the work among the processors, we find a set of values
 	
 \begin{equation}
-	X = \{ x^g \in \mathbb{R}:[0,1] / \sum_{g=1}^n x^g = Z \}
+	X = \{ x^g \in \mathbb{R}:[0,1] \mid \sum_{g=1}^n x^g = Z \}
 	\label{eq: totalResultado}
 \end{equation}
 
@@ -891,7 +886,7 @@ modeling part, and given by:
 
 The equations system is solved applying an interior point line search filter
 method~\cite{point}, which finds the minimum solution of a convex equation set,
-subject to a set of constraints, by transversing the interior points of its
+subject to a set of constraints, by traversing the interior of its
 feasible region.
 
 % RYC1029: Temos no começo uma grande quantidade de dados, pegamos uma parte
@@ -938,9 +933,9 @@ processor $i$.
 % sincronização. Também precisa incluir onde o algoritmo de rebalancemanto é
 % executado.
 
-Figure~\ref{fig:Diagrama} shows a diagram of execution of four processors, where
+Figure~\ref{fig:Diagrama} depicts the execution of four processors, where
 each arrow indicates the start of a task execution. The tasks start
-synchronized, but their finishes times start to diverge until the differences
+synchronized, but their finish times start to diverge until the differences
 reaches a threshold. In this case, all threads are synchronized, and the new
 task sizes are recalculated for each processors. The task executions then
 restart.
@@ -996,7 +991,7 @@ processor.
 
 \section{Implementation}
 
-The implementation was done in the C language with the framework StarPU.
+The algorithms were implemented in the C language, using the StarPU framework.
 StarPU~\cite{starpu} is a tool for parallel programming that supports hybrid
 architectures like multicore CPUs and accelerators. The StarPU proposes an
 approach of independent tasks based architecture. Codelets are defined as an
@@ -1006,11 +1001,11 @@ for each architecture in which codelet can be performed using specific languages
 and libraries for the target architecture. A StarPU application is described as
 a set of codelets with data dependencies.
 
-The tool has a set of scheduling policies implemented that the programmer can
-choose according to the characteristics of the application. The main one is the
-use of static scheduling algorithm HEFT (Heterogeneous Earliest Finish Time) to
-schedule tasks based on cost models of task execution.
+The tool offers a set of scheduling policies that the programmer can
+choose according to the characteristics of the application. The most used is the static scheduling algorithm HEFT (Heterogeneous Earliest Finish Time), that
+schedule the tasks based on cost models of task execution.
 
+% DC: o que eh um kernel? O conceito nao foi definido antes.
 For each device one codelet has been programmed with the characteristics of the
 devices. A codelet is a structure that represents a computational kernel. Such a
 codelet may contain an implementation of the same kernel on different
@@ -1020,10 +1015,16 @@ independent, with each task receiving a part of the input set proportional to
 the processor weight. Two codelets were implemented one for GPU/CUDA and one for
 CPU architecture.
 
-To evaluate our load-balancing algorithm, we implemented it by modify the default StarPU balancing algorithm. The modification of the load balancing algorithm is realized by changing the STARPU\_SCHED variable. The STARPU framework has an API that allows modifying the scheduling policies. There are data structures and functions that speed up the process of development. For example the function "double starpu\_timing\_now (void)"  return the current date in micro seconds, which makes it easier for the determination of measures runtime. In StarPU there is a data structure called "starpu\_sched\_policy" This structure contains all the methods que Implement a scheduling policy. 
-
-Three other algorithms were implemented for comparison: the greedy, static and
-HDSS. The greedy consisted in dividing the input set in pieces and assigning
+We have evaluated our load-balancing algorithm using the StarPU framework.
+The StarPU framework offers a rich API that allows one to modify and develop new scheduling policies.
+%
+% DC: acho que a descricao abaixo eh muito baixo nivel e nao auxilia na compreencao do algoritmo.
+%
+% There are data structures and functions that speed up the process of development. For example the function "double starpu\_timing\_now (void)"  return the current date in micro seconds, which makes it easier for the determination of measures runtime. In StarPU there is a data structure called "starpu\_sched\_policy" This structure contains all the methods que Implement a scheduling policy. 
+%
+For comparisons sake, we have implemented three other algorithms:
+\emph{greedy}, \emph{static} and
+\emph{HDSS}. The greedy consisted in dividing the input set in pieces and assigning
 each piece of input to any idle processor, without any priority assignment. The
 static~\cite{raphael}, measures processing speeds before the execution and set
 static block sizes per processor at the beginning of the execution, with the
@@ -1031,19 +1032,20 @@ block size proportional to the processor speed. Finally, The HDSS~\cite{HDSS}
 was implemented using minimum square estimation to estimate the weights and
 divided into two phases: adaptation phase and completion phase.
 
-The library used for solve the equation system like \ref{eq: system} was the IPOPT \cite{point}. IPOPT (Interior Point Optimize) is an open source software package for large-scale nonlinear optimization. It can be used to solve general nonlinear programming problems.
+We have used the IPOPT~\cite{point} library to solve the equations systems produced by Equation~\ref{eq: system}. IPOPT (Interior Point Optimize) is an open source software package for large-scale nonlinear optimization. It can be used to solve general nonlinear programming problems.
 
+% DC: cuidado ao usar o termo blackscholes (aplicacao de exemplo) e Black-Scholes (o nome do algoritmo) 
 %=========================================================
 \subsection{Applications}
 
 For evaluating our algorithm, we adapted two applications from the CUDA
-SDK~\cite{cuda} to execute using the StarPU framework, the blackscholes and matrix
-multiplication applications. And we adapted a application to gene regulatory networks (GRN) inference~\cite{borelli2013gene}.
+SDK~\cite{cuda} to execute using the StarPU framework, the \emph{blackscholes} and \emph{matrix
+multiplication} applications. We have also evaluated the algorithms using a (more complex) gene regulatory networks (GRN) inference~\cite{borelli2013gene} application.
 
  A copy of the matrix A was distributed to all processing units and matrix B was divided according to
 the load-balancing scheme, the matrix multiplication version use the shared memory. Matrix multiplication has complexity $O(n^{3/2})$.
 
-Blackscholes is a popular financial analysis algorithm for calculating prices
+Black-Scholes is a popular financial analysis algorithm for calculating prices
 for European style options. The Black-Scholes equation is a differential
 equation that describes how, under a certain set of assumptions, the value of an
 option changes as the price of the underlying asset changes. More precisely, it
@@ -1052,14 +1054,14 @@ models the random fluctuation of the price of the underlying asset over time.
 The Black-Scholes equation implies that the value of a European call option.
 
 
-The cumulative normal distribution function, gives us the probability that a
+The cumulative normal distribution function gives us the probability that a
 normally distributed random variable will have a value less than $x$. There is no
 closed-form expression for this function, and as such it must be evaluated
 numerically. It is typically approximated using a polynomial function. The idea is to calculate the Black-Scholes the greatest amount of possible options. Thus, the input is a vector of data that the options should be calculated by applying a differential equation. The division of the task is given a position of providing input vector to each thread. The complexity of the algorithm is $O(n)$.
 
 
 Gene regulatory networks (GRN) inference is an important bioinformatics problem in which the gene interactions need to be deduced from gene expression data, such as $microarray$ data. Feature selection methods can be applied to this problem. A feature selection technique is composed by two parts: a search algorithm and a criterion function. Among the search algorithms already proposed, there is the exhaustive search where the best
-feature subset is returned, although its computational complexity is unfeasible in almost all situations. The objective of work is the development of a low cost parallel solution based on GPU architectures for exhaustive search with a viable cost-benefit. The complexity of the algorithm is $O(n^3)$. The division of labor consisted in distributing genes between processors, and certain steps to synchronize the information search in the solution space, more details of the algorithm in ~\cite{borelli2013gene}.
+feature subset is returned, although its computational complexity is unfeasible in almost all situations. This application was developed as a low cost parallel solution based on GPU architectures for exhaustive search with a viable cost-benefit. The complexity of the algorithm is known to be $O(n^3)$. The division of work consisted in distributing genes between processors, and certain steps to synchronize the information search in the solution space, more details of the algorithm can be found in~\cite{borelli2013gene}.
 
 
 
@@ -1070,7 +1072,9 @@ feature subset is returned, although its computational complexity is unfeasible 
 
 \subsection{System Configuration}
 
-We used three different machines to evaluate our algorithm, presented in table \ref{table: machines}. We performed the experiments with four settings, with one machine (A), with two machines (A, B), with three machines (A, B, C) and four machines (A, B, C and D). The machine A has a CPU with 4 cores and two GPUs with 280 cores. The machine B has 1 CPU with 6 cores and two GPUs with 1536 cores. The machine C has 1 CPU with 6 cores and 1 GPU with 2688 cores and finally the machine D has 1 CPU with 14 cores and 2 GPUs with X cores. 
+% DC: corrigir as referências quebradas.
+% DC: 3 ou 4 maquinas foram usadas? Ou foram 3 arquiteturas?
+We used three different machines to evaluate our algorithm, presented in Table~\ref{table: machines}. We performed the experiments using four scenarios: with one machine (A), with two machines (A, B), with three machines (A, B, C) and four machines (A, B, C and D). The machine A has a CPU with 4 cores and two GPUs with 280 cores. The machine B has 1 CPU with 6 cores and two GPUs with 1536 cores. The machine C has 1 CPU with 6 cores and 1 GPU with 2688 cores and finally the machine D has 1 CPU with 14 cores and 2 GPUs with X cores. 
 
 
 \begin{table*}[t]
@@ -1132,7 +1136,7 @@ perform better, especially for larger matrices, which is explained by the fact
 that the execution time of the matrix multiplication increases quickly as we
 increase the matrix size. With the increasing size of the matrix there is a trend of increasing performance gap among algorithms. As the environment is heterogeneous the behavior is not well defined.
 
-For matrices 4096 elements and four machines, the proposed algorithm spent 23.11 seconds while the HDSS spent 29.91 seconds, which results in 26.09\% faster. And for matrices 65536, the algorithm proposed spent 428.01 seconds while the HDSS 488.22, which results in  14.02\% faster,  the summary is table \ref{table: comparativo}. The total cost of calculating the distribution of the blocks is 664.87 milliseconds and standard deviation of 98.3 mili seconds. 
+For matrices with order 4096, the proposed algorithm used four machines during 23.11 seconds, while the HDSS spent 29.91 seconds. Thus, in this case, our algorithm was 26.09\% faster. For matrices with order 65536, the proposed algorithm spent 428.01 seconds, while the HDSS 488.22; resulting, this, a improvement of 14.02\%.  Table~\ref{table: comparativo} presents a summary of the results. The total cost of calculating the distribution of the blocks is 664.87 milliseconds, with standard deviation of 98.3 milliseconds. 
 
 \begin{table*}[htb]
 \centering
