@@ -1195,14 +1195,18 @@ distribution.
 %----------------------------------------------------------------------------------------------------------
 \subsection{Blackscholes}
 
-\begin{figure}[htb]
+\begin{figure*}[htb]
 	\begin{center}
 	\centering
-			\includegraphics[scale=0.45]{BlackScholes4MachinesNOVO.pdf}
+			%\includegraphics[scale=0.45]{BlackScholes4MachinesNOVO.pdf}
+		\includegraphics[scale=0.3]{1machineBlack.pdf} \quad
+		\includegraphics[scale=0.3]{2machineBlack.pdf} \quad
+		\includegraphics[scale=0.3]{3machineBlack.pdf} \quad
+		\includegraphics[scale=0.3]{4machineBlack.pdf} 
 	\caption{Difference in runtime with different number options}
 	\label{fig:black}
 	\end{center}
-\end{figure}
+\end{figure*}
 
 We evaluate the execution time of the Blackscholes application using different
 machine configurations. Figure~\ref{fig:black} shows the execution times, where
@@ -1260,14 +1264,18 @@ scenario with four machines is always smaller for our proposed algorithm.
 
 As in previous applications, we compare the execution time in four different environments: with  one machine, two machines, three machines and four machines. The results are shown in \ref{fig:Gene}. We can notice that our algorithm outperformed in four cases. Especially in the case that three and four machines were used. 
 
-\begin{figure}[htb]
+\begin{figure*}[htb]
 	\begin{center}
 	\centering
-			\includegraphics[scale=0.4]{GraficoFabrizio4maquinasNOVO.pdf}
+			%\includegraphics[scale=0.4]{GraficoFabrizio4maquinasNOVO.pdf}
+		\includegraphics[scale=0.3]{1machineGenes.pdf} \quad
+		\includegraphics[scale=0.3]{2machineGenes.pdf} \quad
+		\includegraphics[scale=0.3]{3machineGenes.pdf} \quad
+		\includegraphics[scale=0.3]{4machineGenes.pdf} 
 	\caption{Difference in runtime with different numbers of genes for gene regulatory network inference}
 	\label{fig:Gene}
 	\end{center}
-\end{figure}
+\end{figure*}
 
 The table \ref{table: gene} shows the extreme values​​, for 100,000 and 2,000,000 genes. 
 To the environment with 3 and 4 machines the performance were similar due to limitation in data transfer, in the case of four machines the communication cost limited the gain. The total cost of calculating the distribution of the blocks is 821.54
