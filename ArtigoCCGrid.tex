@@ -1077,42 +1077,53 @@ feature subset is returned, although its computational complexity is unfeasible 
 \subsection{System Configuration}
 
 % DC: corrigir as referências quebradas.
-% DC: 3 ou 4 maquinas foram usadas? Ou foram 3 arquiteturas?
-We used three different machines to evaluate our algorithm, presented in Table~\ref{table:machines}. We performed the experiments using four scenarios: with one machine (A), with two machines (A, B), with three machines (A, B, C) and four machines (A, B, C and D). The machine A has a CPU with 4 cores and two GPUs with 280 cores. The machine B has 1 CPU with 6 cores and two GPUs with 1536 cores. The machine C has 1 CPU with 6 cores and 1 GPU with 2688 cores and finally the machine D has 1 CPU with 14 cores and 2 GPUs with X cores. 
+We used four machines with different configurations (shown in
+Table~\ref{table:machines}), to evaluate our algorithm. We performed the
+experiments using four scenarios: with one machine (A), two machines (A, B),
+three machines (A, B, C) and four machines (A, B, C and D). Note that some
+boards, such as GTX 295 and GTX 680 have two GPU processors on each.
 
+%Machine A has a CPU
+%with 4 cores and two GPUs with 280 cores each. Machine B has 1 CPU with 6 cores
+%and two GPUs with 1536 cores each. The machine C has 1 CPU with 6 cores and 1
+%GPU with 2688 cores and finally the machine D has 1 CPU with 14 cores and 2 GPUs
+%with X cores.  
 
 %DC: corrigir última linha da tabela
 \begin{table*}[t]
 \begin{scriptsize}
 \caption{Machines configuration.\label{table:machines}}
-\begin{tabular}{|c|l|l|l|l|l|l|l|} \hline
-\multicolumn{1}{|l|}{Machine} & \multicolumn{7}{|c|}{\textbf{Description}}                                                                                                                \\ \hline
-\multirow{2}{*}{A}          & \textbf{CPU Info} & Intel i7 a20         & 4 cores    & 2.67 GHz                    & 8192 MB cache   & 8 GB RAM             & 1 processor  \\ \cline{2-8}
-                            & \textbf{GPU Info} & GTX 295              & 280 cores  & 223.8 GB/s Memory Bandwidth & 896 MB          & 999 MHz Memory Clock & 2 processors \\ \hline
-\multirow{2}{*}{B}          & \textbf{CPU Info} & Intel i7 4930K       & 6 cores    & 3.4 GHz                     & 12,288 KB       & 32 GB RAM            & 1 processor  \\  \cline{2-8}
-                            & \textbf{GPU Info} & GTX 680              & 1536 cores & 192.2 GB/s Memory Bandwidth & 2 GB            & 6 GHz Memory Clock   & 2 processors \\ \hline
-\multirow{2}{*}{C}          & \textbf{CPU Info} & Intel i7 3939K       & 6 cores    & 3.2 GHz                     & 12,288 KB cache & 32 GB RAM            & 1 processor  \\  \cline{2-8}
-                            & \textbf{GPU Info} & GTX Titan            & 2688 cores & 223.8 GB/s Memory Bandwidth & 6 GB            & 6 GHz Memory Clock   & 1 processor  \\ \hline
-\multirow{2}{*}{D}          & \textbf{CPU Info} & Intel Xeon E5-2695V3 & 14 cores   & 2.3 GHz                     & 35 MB           & 32 GB RAM            & 1 processor  \\  \cline{2-8}
-                            & \textbf{GPU Info} & ?                    & ?          & ?                           & ?               & ?                    &            \\ \hline 
+\begin{center}
+
+\begin{tabular}{|c|l|l|l|l|l|l|} \hline
+\multicolumn{1}{|l|}{Machine} & \multicolumn{6}{|c|}{\textbf{Description}}                                                           \\ \hline
+\multirow{2}{*}{A}          & \textbf{CPU Info} & Intel i7 a20   & 4 cores  @ 2.67 GHz  &   8 MB cache   & 8 GB RAM   & 1 processor  \\ \cline{2-7}
+                            & \textbf{GPU Info} & 2 x GTX 295    & 240 cores / 30 SMs      & 223.8 GB/s  & 896 MB          & 2 processors \\ \hline
+\multirow{2}{*}{B}          & \textbf{CPU Info} & Intel i7 4930K & 6 cores    @ 3.4 GHz & 12 MB cache       & 32 GB RAM        & 1 processor  \\  \cline{2-7}
+                            & \textbf{GPU Info} & GTX 680        & 1536 cores / 8 SMs & 192.2 GB/s  & 2 GB       & 2 processors \\ \hline
+\multirow{2}{*}{C}          & \textbf{CPU Info} & Intel i7 3939K & 6 cores    @ 3.2 GHz & 12 MB cache & 32 GB RAM            & 1 processor  \\  \cline{2-7}
+                            & \textbf{GPU Info} & GTX Titan      & 2688 cores / 14 SMs & 223.8 GB/s  & 6 GB       & 1 processor  \\ \hline
+\multirow{2}{*}{D}          & \textbf{CPU Info} & Intel Xeon E5-2695V3 & 14 cores   @ 2.3 GHz &            35 MB cache           & 32 GB RAM            & 1 processor  \\  \cline{2-7}
+                            & \textbf{GPU Info} & 4 x Tesla K20c & 2496 / 13 SMs       & 205 GB/s     & 6 GB                      & 1 processor           \\ \hline 
 \end{tabular}
+\end{center}
+
 \end{scriptsize}
 \end{table*}
 
 
-% DC: "$k$ blocks per with 1024 threads for each block" -> não entendi e não sei como arrumar a frase. :P
-To use all the $n$ multiprocessors from a GPU, it is necessary to create at least
-$n$ blocks. Moreover, each multiprocessor simultaneously executes groups (called
-warps) of $m$ threads from a single block, and several warps should be present
-on each GPU for efficient usage of its cores.
 
-In all tests, we used all the SM(Stream Multiprocessor) of the GPUs, launching kernels with
-$k$ blocks per with 1024 threads for each block, where $k$ is the number of
-processor in the GPU. For the used GPUs, $k$ is \textbf{14, 8 and 30} in GTX
-Titan, GTX 680 and GTX 295 respectively. For the CPUs, we used all the CPU
-cores, launching one task per core.
+To use all the $k$ SMs (Stream Multiprocessors) from a GPU, it is necessary to
+create at least $n$ blocks. Moreover, each multiprocessor simultaneously
+executes groups (called warps) of $m$ threads from a single block, and several
+warps should be present on each GPU for efficient usage of its cores. In all
+tests, we used all the SMs of the GPUs, launching kernels with $k$ blocks and
+1024 threads per block. For the used GPUs, $k$ is \textbf{13, 14, 8, 30} in
+Tesla K20c, GTX Titan, GTX 680 and GTX 295 respectively. For the CPUs, we used
+all the CPU cores, launching one task per core.
 
 % DC: não entendi esse parágrafo. Quais valores foram obtidos com experimentos? O que significa um valor ser "melhor"?
+% RYC: também não entendi. E a linguagem a lot of values were tesed não é apropriada. É preciso ser mais claro e específico. Talvez você possa descrever os parâmetros usados em cada uma das aplicações nas suas respectivas seções.
 The parameters used for each algorithm were obtained via experiments. A lot of values ​​were tested. The best parameters were obtained specifically for each application.
 
 %---------------------------------------------------------------------------
@@ -1120,7 +1131,9 @@ The parameters used for each algorithm were obtained via experiments. A lot of v
 \subsection{Matrix Multiplication}
 
 
-We have evaluated all four scheduling algorithms --- (1) our algorithm, (2) static, (3) HDSS, and (4) Greedy --- varying the number of machines.
+We used the matrix multiplication application to evaluate the execution time
+using different matrix sizes and number of machines of the following scheduling
+algorithms: (1) our algorithm, (2) static, (3) HDSS, and (4) Greedy
 
 \begin{figure*}[htb]
 	\begin{center}
@@ -1130,24 +1143,48 @@ We have evaluated all four scheduling algorithms --- (1) our algorithm, (2) stat
 		\includegraphics[scale=0.3]{2machines.pdf} \quad
 		\includegraphics[scale=0.3]{3machines.pdf} \quad
 		\includegraphics[scale=0.3]{4machines.pdf} 
-	\caption{Difference in runtime with different sizes of matrices for matrices multiplication}
+	\caption{Execution time using different matrix sizes and number of
+          machines with the matrix multiplication application.}
 	\label{fig:todosJuntos}
 	\end{center}
 \end{figure*}
 
 
-Figure~\ref{fig:todosJuntos} shows the results for matrices with sizes from
-4096 x 4096 to 65536 x 65536 elements. In all scenarios, our scheduling algorithms
-obtained the best results, with the HDSS algorithm in second. The static and
-greedy algorithm constantly presented the worst performance.
 
-With one machine the difference was smaller because there are few types of
-devices for the scheduler to select. With two machines our algorithm starts to
-perform better, especially for larger matrices, which is explained by the fact
-that the execution time of the matrix multiplication increases quickly as we
-increase the matrix size. With the increasing size of the matrix there is a trend of increasing performance gap among algorithms. As the environment is heterogeneous the behavior is not well defined.
+% RYC: Você rodou quantas vezes cada experimento? Qual o desvio padrão?
 
-For matrices with order 4096, the proposed algorithm used four machines during 23.11 seconds, while the HDSS spent 29.91 seconds. Thus, in this case, our algorithm was 26.09\% faster. For matrices with order 65536, the proposed algorithm spent 428.01 seconds, while the HDSS 488.22; resulting, this, a improvement of 14.02\%.  Table~\ref{table: comparativo} presents a summary of the results. The total cost of calculating the distribution of the blocks is 664.87 milliseconds, with standard deviation of 98.3 milliseconds. 
+Figure~\ref{fig:todosJuntos} shows the results for matrices with sizes from 4096
+x 4096 to 65536 x 65536 elements, and with different number of machines. With
+one machine the difference was small because there is only the selection between
+one CPU and GPU type and, consequently, the impact of the scheduler is smaller.
+With two or more machines our algorithm starts to produce significantly better
+results, since the number of GPU and CPUs types increases. But it is interesting
+to see that the proposed algorithm perform better than the other algorithm unver
+all scenarios.
+
+Table~\ref{table: comparativo} shows a more detailed comparison between the
+proposed and the HDSS algorithm for smaller and larger matrix sizes. The
+difference in execution time varies depending on the matrix size and number of
+machines, but with 2 or more machines it was always above 9\% and up to
+28\%. This variance in the difference can occur due to the variations in the
+selection quality of task sizes in different configurations.
+
+% RYC: Luis, veja se o parágrafo está certo, pois eu alterei seu conteúdo
+%
+% RYC: Aqui este tempo de 664 ms foi para quais cenários (tamanho de matriz e de
+% máquinas)? 
+We should also emphasize that presented execution times include the time spent
+calculating the size of the task sizes for each processor using the interior
+point method. The mean time spent on this calculation was 664.9 ms, with
+standard deviation of 98.3 ms. Although not negligeble, the gains obtained with
+the better distribution of tasks sizes compensates this calculation time.
+
+%For matrices with order 4096, the proposed algorithm used four machines during
+%23.11 seconds, while the HDSS spent 29.91 seconds. Thus, in this case, our
+%algorithm was 26.09\% faster. For matrices with order 65536, the proposed
+%algorithm spent 428.01 seconds, while the HDSS 488.22; resulting, this, a
+%improvement of 14.02\%.  The total cost of calculating the distribution of the
+%blocks is 664.87 milliseconds, with standard deviation of 98.3 milliseconds. 
 
 \begin{table*}[htb]
 \centering
@@ -1169,41 +1206,50 @@ For matrices with order 4096, the proposed algorithm used four machines during 2
 \label{table: comparativo}
 \end{table*}
 
-
-
-
-The results obtained shows that in more heterogeneous environment the advantage  using our proposed algorithm is largest than the other. This advantage is due to a better distribution of the data along the execution. Figure~\ref{fig:diferencaThreads} shows the time difference among the earliest and latest finishing threads, in the scenario with three machines and the size matrix fixed with 65535 elements. 
-
 \begin{figure}[htb]
 	\begin{center}
 	\centering
 			\includegraphics[scale=0.4]{Maxima_Diferenca_Matrix.eps}
-	\caption{Time differences between the earliest and latest finishing threads}
+	\caption{Time differences between the earliest and latest finishing
+          threads with the matrix multiplication algorithm and four machines.}
 	\label{fig:diferencaThreads}
 	\end{center}
 \end{figure}
+% RYC: cada figura com os tempos finais das threads está com um tamanho diferente
+% RYC: retirar os títulos dos gráficos
+
+% RYC: aqui não está muito claro também. Precisa explicar o que são essas
+% threads (1 a 60), como elas são distribuídas entre as máquinas e por que este
+% experimento foi realizado. 
+%
+% RYC: Além disso, o que são estes earliest and latest finishing tasks? Por que
+% pegar só as threads no final? Existem barreiras de sincronização nos
+% algoritmos? Nestes casos, não seria melhor medir os atrasos em cada barreira
+% de sincronização?
+To better understand these results, we evaluated the time difference between the
+earliest and latest finishing threads, in the scenario with four machines and
+the matrices with 65535 x 65535 elements. Figure~\ref{fig:diferencaThreads}
+shows the results for different number of threads for each algorithms.
 
 % DC: "There are big differences among end of threads." Quais?!
-The greedy algorithm performed well, even considering that it does not directly
-use information on the processing speeds of the devices. Actually, the algorithm uses this
-information indirectly, since faster devices finish their tasks earlier and,
-consequently, receive more tasks. The static algorithm had the worst performance because it keeps the thread idle for long periods of time, as we can see in Figure \ref{fig:diferencaThreads}. There are big differences among end of threads.
+The greedy algorithm does not directly use information on the processing speeds
+of the devices and simply provides the tasks to free processors and had worse
+performance than the our algorithm and HDSS. But was better than the static one,
+where incorrect preditions are maintained during the entire execution.
 
 HDSS uses the beginning of the execution to estimate the best block size
-distribution and uses this distribution through the complete
-execution. Moreover, larger blocks are used in the beginning of the execution,
-causing a larger delay due to unbalance when use different types of devices,
-such as GPUs and CPUs. Finally, HDSS uses a crude approximation to the device
-capabilities.
+distribution and uses this distribution through the complete execution. Its
+cruder approximation generate larger unbalances between the threads than our
+algorithm, which is reflected in the difference in the finishing time between
+the threads.
 
-Our algorithm accurately estimate the amount of data that should be
-provided to each processing unit, solving an optimization problem with the
-restriction that all units should finish the execution of the tasks at the same
-time. When the difference between finishing the execution of threads for certain
-data partition exceeds a certain threshold, the algorithm re-balances the data
-distribution.
+% RYC: Na sua simulações houve alguma reconfiguração devido à ultrapassagem do limiar?
+Our algorithm obtained the most accurate data distribution estimation, solving
+an optimization problem with the restriction that all units should finish the
+execution of the tasks at the same time. Also, if the selected distribution has
+an unbalance above a threshold, it can rebalance the task sizes.
 
-%----------------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
 \subsection{Blackscholes}
 
 \begin{figure*}[htb]
@@ -1219,15 +1265,29 @@ distribution.
 	\end{center}
 \end{figure*}
 
-We evaluate the execution time of the \emph{Blackscholes} application using different
-machine configurations. Figure~\ref{fig:black} shows the execution times, where
-we varied the number of options on each execution and obtained the
-runtimes. Similarly to the matrix multiplication experiments, the performance
-gains were better with bigger problem sizes (number of options) and more
-heterogeneous environments, and the results can be explained using the same
-arguments. Interestingly, the Blackscholes application has linear complexity
-with the number of options, showing that our scheduling algorithm is also useful
-with this class of applications. Table~\ref{table: black} shows the extreme values ​​of 10,000 and 500,000 options, the best result was obtained with four machines, and with the largest number of options.
+We evaluate the execution time of the \emph{Blackscholes} application using
+different machine configurations. Figure~\ref{fig:black} shows the execution
+times using different number of machines and load-balancing algorithms, for
+different number of stock options. Similarly to the matrix multiplication
+experiments, the performance differences were larger in the more heterogeneous
+environments. The Blackscholes application has linear complexity in relation to
+the number of options, showing that our scheduling algorithm is also useful with
+this class of applications.
+
+Table~\ref{table: black} compares the execution times of our algorithm and HDSS,
+for the execution with 10,000 and 500,000 options. The larger gains were
+obtained with three and four machines, with values between 5\% and 11\%.
+
+% RYC: Aqui este tempo de 201 ms foi para quais cenários (número de opções e de
+% máquinas)? Para o caso em que a aplicação executou em 1 segundo não está
+% grande demais? Por que deu diferente da multiplicação de matrizes?
+For this application, the mean overhead caused by solving the optimization
+problem to calculate the distribution of the blocks was 201.32 milliseconds,
+with standard deviation of 0.34 milliseconds. Although this value is not
+neglegile compared to a total execution time of a few seconds, the best
+distribution of tasks sizes found compasates this time.
+
+
 
 
 \begin{table*}[htb]
@@ -1236,7 +1296,7 @@ with this class of applications. Table~\ref{table: black} shows the extreme valu
 \begin{tabular}{c|c|c|c|c|c|c|}
 \cline{2-7}
 \multicolumn{1}{l|}{}                 & \multicolumn{3}{c|}{10,000 Options}                              & \multicolumn{3}{c|}{500,000 Options}                                                  \\ \hline
-\multicolumn{1}{|l|}{Num. Machines} & HDSS (s) & Our algorithm (s) & \multicolumn{1}{l|}{Diff. (s)} & \multicolumn{1}{l|}{HDSS (\%)} & Our algorithm (s) & \multicolumn{1}{l|}{Diff. (\%)} \\ \hline
+\multicolumn{1}{|l|}{Num. Machines} & HDSS (s) & Our algorithm (s) & \multicolumn{1}{l|}{Diff. (\%)} & \multicolumn{1}{l|}{HDSS (s)} & Our algorithm (s) & \multicolumn{1}{l|}{Diff. (\%)} \\ \hline
 \multicolumn{1}{|c|}{1 }       & 6.52     & 6.56              &    -0.61                       
 			 & 8.61                          & 8.59              &   0.23                         \\ \hline
 \multicolumn{1}{|c|}{2 }      & 4.65     & 4.41              &    5.44                         
@@ -1249,15 +1309,6 @@ with this class of applications. Table~\ref{table: black} shows the extreme valu
 \label{table: black}
 \end{table*}
 
-Also, considering that the application finishes in less than 4 seconds, for the
-scenario with 4 machines, we also see that the overhead caused by solving the optimization
-problem
-%to determine the best data distribution
-is small and the obtained gains
-outweighs the cost of the calculations. For applications tested in a few
-iterations around 6, it was possible to obtain the solution of the system in a
-few milliseconds. The total cost of calculating the distribution of the blocks is 201.32 
-milliseconds, with standard deviation of 0.34 milliseconds
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1273,9 +1324,38 @@ time difference among the earliest and latest finishing threads in the
 scenario with four machines is always smaller for our proposed algorithm.
 
 
+%------------------------------------------------------------------------------------------------
 \subsection{Gene regulatory networks inference}
 
-As in previous applications, we compare the execution time in four different environments: with  one machine, two machines, three machines and four machines. The results are shown in \ref{fig:Gene}. We can notice that our algorithm outperformed the others in all cases. Especially in the case that three and four machines were used. 
+We compare the execution time of the Gene Regulatory Network (GRN) inference
+application in four different environments: with one machine, two machines,
+three machines and four machines. The results are shown in
+Figure~\ref{fig:Gene}. We consider the GRN application with different number of
+genes.
+
+
+% RYC: Luís, você consegue explicar por que os ganhos para redes menores são
+% maiores? Não está meio estranho? Precisa averiguar o que ocorreu?
+As for the other applications, our algorithm resulted in the fastest execution
+times, with larger differences with two or more machines. Table~\ref{table:
+  gene} shows the execution times for 100,000 and 2,000,000 genes using our
+algorithm and HDSS. In this application, the gains with smaller networks were
+larger.
+
+% RYC: Comentei por que esta explicação não me parecer boa. A limitação é mesmo
+% a transferência de dados? Eu acho que não...
+%
+%To the environment with 3 and 4 machines the performance
+%were similar due to limitation in data transfer, in the case of four machines
+%the communication cost limited the gain. 
+
+The total cost of calculating the distribution of the blocks using our algorithm
+was 821.54 milliseconds with a standard deviation of 142.23 milliseconds. Again,
+this overhead was compensated by the better distribution of load among
+processors.
+
+% RYC: Em cada gŕafico você está usando uma cor diferente para os algoritmos. É
+% preciso ser consistente!
 
 \begin{figure*}[htb]
 	\begin{center}
@@ -1290,9 +1370,6 @@ As in previous applications, we compare the execution time in four different env
 	\end{center}
 \end{figure*}
 
-Table~\ref{table: gene} shows the extreme values​​, for 100,000 and 2,000,000 genes. 
-To the environment with 3 and 4 machines the performance were similar due to limitation in data transfer, in the case of four machines the communication cost limited the gain. The total cost of calculating the distribution of the blocks is 821.54
-milliseconds and standard deviation of 142.23 milliseconds.
 
 \begin{table*}[htb]
 \centering
@@ -1310,7 +1387,9 @@ milliseconds and standard deviation of 142.23 milliseconds.
 \label{table: gene}
 \end{table*}
 
-Like the other experiments, the maximum performance difference among the threads followed the same principle. Our algorithm produced the smallest difference among the threads, as shown in Figure~\ref{fig:GeneDiferenca}.
+When analyzing the differences with thread finishing time, shown in
+Figure~\ref{fig:GeneDiferenca}, we see that again our algorithm has the smalles
+differences, due to its more precise task size definition procedure.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1321,15 +1400,34 @@ Like the other experiments, the maximum performance difference among the threads
 	\end{center}
 \end{figure}
 
+%--------------------------------------------------------------------------
 \subsection{Block size evolution}
 
-% DC: the behavior do quê?
-In Figure~\ref{fig:GeneBlocos} we compare the behavior in relation to
-submission of blocks among machines. We analyzed the block size for the HDSS and
-our algorithm. In the case where three machines were used, it is possible to notice
-the difference between runs. During step 400, our algorithm triggered a re-balancing process,
-causing it to change the size of the block. In HDSS, a decrease of the block
-size remains over the iterations.
+To better understand the differences in performance between our algorithm and
+HDSS, we evaluated the block sizes generated by each algorithm when executing
+the GRN inference application using three machines (A, B and C).
+
+% RYC: Quantas tarefas foram geradas? É uma tarefa por ponto?
+
+% RYC: Aqui você colocou apenas os blocos das GPUs? E das CPUs?
+
+The topmost graph in Figure~\ref{fig:GeneBlocos} shows the block sizes generated
+by our algorithm after the processor performance modelling phase. We can see
+that the algorithm initially finds a distribution of blocks that favors machine
+C but, in a later moment (400ms) detects that the difference in the task
+finishing times was above the defined threshold. In this case, it triggered a
+re-balancing process of tasks sizes, which are maintained until the end of the
+execution.
+
+% RYC: Por que é vantajoso para o HDSS diminuir o tamanho das tarefas? Explicar no texto.
+In HDSS, we see the the block sizes decrease during the execution until the last
+iteration. But even though there is this decrease in block size, the proportion
+of the sizes allocated to different processors is maintained. In this case, a
+sub-optimal distribution of block sizes is maintained during the entire
+execution.
+
+% RYC: Usar machine A, B and C nas figuras, para ficar de acordo com as
+% descrições das máquinas.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1368,9 +1466,9 @@ information exchange among the tasks cannot be ignored.
 % use section* for acknowledgement
 \section*{Acknowledgment}
 
-
-The authors would like to thank FAPESP (Proc. n. 2012/03778-0 and Proc. n.  2013/14603-9) for the financial support.
-
+The authors would like to thank FAPESP (Proc. n. 2012/03778-0 and Proc. n.
+2013/14603-9) for the financial support and Fabrizio Borelli for providing the
+gene regulatory network application.
 
 \ifCLASSOPTIONcaptionsoff
   \newpage
