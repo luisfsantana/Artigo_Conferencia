@@ -58,6 +58,12 @@ J.~Liu and L.~Guo, ``Implementation of neural network backpropagation in
   0.5em minus 0.4em\relax Springer Berlin Heidelberg, 2013, vol. 180, pp.
   1021--1027.
 
+\bibitem{cuNN}
+``Nvidia{\textregistered} cudnn -- gpu accelerated machine learning.''
+
+\bibitem{cuMath}
+``Cuda math library.''
+
 \bibitem{raphael}
 R.~de~Camargo, ``A load distribution algorithm based on profiling for
   heterogeneous gpu clusters,'' in \emph{Applications for Multi-Core

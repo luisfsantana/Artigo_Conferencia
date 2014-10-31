@@ -522,7 +522,7 @@ parallel computing, distribuited systems, GPU cluster, GPGPU.
 % (should never be an issue)
 %\IEEEPARstart{T}{he} 
 
-% RYC1029: Luis -> colocar referências mais recentes.
+% RYC1029: Luis -> colocar referências mais recentes. -> Alguém parece que atualizou deste parágrafo (LFS)
 The use of GPUs (Graphics Processing Units) is becoming increasingly popular
 among developers and users of applications that have high computational demands
 and can benefit from a large degree of parallelism~\cite{gpu2}. Among these
@@ -537,7 +537,7 @@ CPUs. The main drawback is the difficult in optimizing GPU code, specially
 considering the architectural differences among different GPUs, with changes in
 the distribution of cores, shared memory, presence of cache, among others. But
 libraries for several classes of applications and algorithms are now available,
-facilitating the deevlopment process~\cite{}.
+facilitating the deevlopment process~\cite{cuNN, cuMath}.
 
 Computationally demanding applications may also benefit from the usage of
 multiple GPUs, normally distributed on several machines, which are called GPU
@@ -600,7 +600,7 @@ the GPUs, and these CPUs can used by the applications.
 
 % RYC2910: Comentei o texto abaixo, pois no momento não dmos suporte a múltiplos
 %tipos de tarefas. Acho que o próximo passo natural seria termos suporte a
-%colocar labels nas tarefas e criarmos perfis para cada tipo de tarefa.
+%colocar labels nas tarefas e criarmos perfis para cada tipo de tarefa. OK (LFS)
 %
 %; for instance, to execute parts of the code which cannot be
 %coded efficiently using the Single Instruction Multiple Thread (SIMT) model of
@@ -679,11 +679,7 @@ application execution. It uses a decentralized scheme in which synchronizations
 are done at each iteration to determine whether there is a need to rebalance the
 load. Each process, representing a single GPU, performs a redistribution of
 workload according to the size of the assigned task and the capabilities of the
-GPU. Load balancing is obtained by comparing the execution time of the current
-task for each GPU with the redistribution of the subsequent task. If this time
-difference reaches a threshold, a load redistribution is triggered. Our
-algorithm is different because is centralized and it creates curves for each
-processing unit, and based on these curves performs the load balancing.
+GPU. A vector of time is shared among all processors. Each processor processes the load itself and records the time this vector. The first step of the algorithm is to check whether the threshold defined by user is not being exceeded. If not the processors need not recalculate the load, otherwise the balancing is performed. The algorithm computes a vector called RP (Relative Power), which corresponds to the relationship between time spent to process a certain load versus versus the time taken for a computational unit as a function of the problem size. The processors calculate the SRP (Sum Relative Power) which is the sum of all RP vector calculated for each processor. Finally, each processor calculates the load itself, taking into account the size of the problem, the RP and the SRP. The disadvantage of this algorithm is that the function that calculates the load of each processor does not provide the precision, that generates unnecessary balancing. Our algorithm for generating a curve of execution is able to determine with certain accuracy the optimal size of the load assigned to each processor, preventing balancing unnecessary.
 
 The Heterogeneous Dynamic Self-Scheduler (HDSS)~\cite{HDSS} is a dynamic
 load-balancing algorithm for heterogenous GPU clusters. It is divided in two
@@ -743,6 +739,12 @@ execution time by different processors is larger than a threshold.
 %  -> Task Execution         |
 %  |      |                  |  
 %  -- Thresholds checking ----
+\begin{figure}[!t]
+	\centering
+			\includegraphics[scale=0.36]{fluxo.pdf} 				
+	\caption{Flowchart of the algorithm}
+	\label{fig: fluxo1}
+\end{figure}
 
 \begin{figure}[!t]
 	\centering
@@ -913,7 +915,7 @@ finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
 goes above a threshold, the rebalancing process is executed. Small thresholds
 may cause excessive rebalancing while large thresholds may tolerate larger
 imbalances that will cause processor idlenesses. The threshold is determined
-empirically, but values of about XXX\% of the execution time of a single value
+empirically, but values of about 5\% of the execution time of a single value
 resulted in a good tradeoff.
 
 During the rebalancing, the scheduler synchronizes the processors and apply the

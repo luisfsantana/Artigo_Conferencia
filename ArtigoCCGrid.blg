@@ -8,54 +8,58 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: article.bib
+Warning--entry type for "cuMath" isn't style-file defined
+--line 12 of file article.bib
+Warning--entry type for "cuNN" isn't style-file defined
+--line 24 of file article.bib
 Warning--string name "january" is undefined
---line 50 of file article.bib
+--line 74 of file article.bib
 Warning--string name "january" is undefined
---line 233 of file article.bib
+--line 257 of file article.bib
 -- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 21 entries,
+You've used 23 entries,
             4039 wiz_defined-function locations,
-            952 strings with 12030 characters,
-and the built_in function-call counts, 18294 in all, are:
-= -- 1447
-> -- 457
+            958 strings with 12132 characters,
+and the built_in function-call counts, 18760 in all, are:
+= -- 1467
+> -- 459
 < -- 160
-+ -- 243
++ -- 245
 - -- 78
-* -- 901
-:= -- 2659
-add.period$ -- 48
-call.type$ -- 21
-change.case$ -- 24
+* -- 909
+:= -- 2719
+add.period$ -- 52
+call.type$ -- 23
+change.case$ -- 26
 chr.to.int$ -- 381
-cite$ -- 21
-duplicate$ -- 1284
-empty$ -- 1501
+cite$ -- 23
+duplicate$ -- 1338
+empty$ -- 1567
 format.name$ -- 96
-if$ -- 4265
+if$ -- 4369
 int.to.chr$ -- 0
-int.to.str$ -- 21
-missing$ -- 234
-newline$ -- 90
+int.to.str$ -- 23
+missing$ -- 246
+newline$ -- 96
 num.names$ -- 23
-pop$ -- 541
+pop$ -- 581
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1405
+skip$ -- 1449
 stack$ -- 0
-substring$ -- 911
-swap$ -- 1080
+substring$ -- 913
+swap$ -- 1100
 text.length$ -- 33
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 21
+type$ -- 23
 warning$ -- 0
 while$ -- 81
-width$ -- 23
-write$ -- 237
-(There were 2 warnings)
+width$ -- 25
+write$ -- 247
+(There were 4 warnings)
