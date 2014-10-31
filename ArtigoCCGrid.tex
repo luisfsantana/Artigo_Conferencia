@@ -1081,18 +1081,19 @@ feature subset is returned, although its computational complexity is unfeasible 
 We used three different machines to evaluate our algorithm, presented in Table~\ref{table:machines}. We performed the experiments using four scenarios: with one machine (A), with two machines (A, B), with three machines (A, B, C) and four machines (A, B, C and D). The machine A has a CPU with 4 cores and two GPUs with 280 cores. The machine B has 1 CPU with 6 cores and two GPUs with 1536 cores. The machine C has 1 CPU with 6 cores and 1 GPU with 2688 cores and finally the machine D has 1 CPU with 14 cores and 2 GPUs with X cores. 
 
 
+%DC: corrigir última linha da tabela
 \begin{table*}[t]
 \begin{scriptsize}
 \caption{Machines configuration.\label{table:machines}}
 \begin{tabular}{|c|l|l|l|l|l|l|l|} \hline
 \multicolumn{1}{|l|}{Machine} & \multicolumn{7}{|c|}{\textbf{Description}}                                                                                                                \\ \hline
-\multirow{2}{*}{A}          & \textbf{CPU Info} & intel i7 a20         & 4 cores    & 2.67 GHz                    & 8192 MB cache   & 8 GB RAM             & 1 processor  \\ \cline{2-8}
+\multirow{2}{*}{A}          & \textbf{CPU Info} & Intel i7 a20         & 4 cores    & 2.67 GHz                    & 8192 MB cache   & 8 GB RAM             & 1 processor  \\ \cline{2-8}
                             & \textbf{GPU Info} & GTX 295              & 280 cores  & 223.8 GB/s Memory Bandwidth & 896 MB          & 999 MHz Memory Clock & 2 processors \\ \hline
-\multirow{2}{*}{B}          & \textbf{CPU Info} & intel i7 4930K       & 6 cores    & 3.4 GHz                     & 12,288 KB       & 32 GB RAM            & 1 processor  \\  \cline{2-8}
+\multirow{2}{*}{B}          & \textbf{CPU Info} & Intel i7 4930K       & 6 cores    & 3.4 GHz                     & 12,288 KB       & 32 GB RAM            & 1 processor  \\  \cline{2-8}
                             & \textbf{GPU Info} & GTX 680              & 1536 cores & 192.2 GB/s Memory Bandwidth & 2 GB            & 6 GHz Memory Clock   & 2 processors \\ \hline
-\multirow{2}{*}{C}          & \textbf{CPU Info} & intel i7 3939K       & 6 cores    & 3.2 GHz                     & 12,288 KB cache & 32 GB RAM            & 1 processor  \\  \cline{2-8}
+\multirow{2}{*}{C}          & \textbf{CPU Info} & Intel i7 3939K       & 6 cores    & 3.2 GHz                     & 12,288 KB cache & 32 GB RAM            & 1 processor  \\  \cline{2-8}
                             & \textbf{GPU Info} & GTX Titan            & 2688 cores & 223.8 GB/s Memory Bandwidth & 6 GB            & 6 GHz Memory Clock   & 1 processor  \\ \hline
-\multirow{2}{*}{D}          & \textbf{CPU Info} & intel Xeon E5-2695V3 & 14 cores   & 2.3 GHz                     & 35 MB           & 32 GB RAM            & 1 processor  \\  \cline{2-8}
+\multirow{2}{*}{D}          & \textbf{CPU Info} & Intel Xeon E5-2695V3 & 14 cores   & 2.3 GHz                     & 35 MB           & 32 GB RAM            & 1 processor  \\  \cline{2-8}
                             & \textbf{GPU Info} & ?                    & ?          & ?                           & ?               & ?                    &            \\ \hline 
 \end{tabular}
 \end{scriptsize}
