@@ -782,9 +782,16 @@ procedure.
 
 % RYC1029: Cade o texto onde você explica os tipos de funções e combinações que
 % usadas no fitting??? Não tínhamos discutido este ponto e você incluído na
-% qualificação?
+% qualificação? -> adicionado
 We find best fit curves by the method of \textit{least squares}, using a
-function of the form $f(x) = a x - b$.
+function of the form:
+
+\begin{equation}
+ y(x) = a_{1} f_{1}(x) +  a_{2} f_{2}(x) + ... + a_{n} f_{n}(x) 
+\label{eq: least}
+\end{equation} 
+
+where $ f_i (x) $ corresponds to the following set of functions $x$, $x^2$, $x^3$,  $e^x$, $x$. And the following combinations $xe^x$, $xlnx$. If the model does not fit into one of the functions described, the function that approximates the model is used. The values ​​of $a_i$ are given by the least squares method itself, as set value. The method of least squares tests for each function and the one with the smallest error is selected.
 
 Figure~\ref{fig: CPUVersusGPU1} shows sample processing time measurements for a
 GPU and a CPU for different block sizes and two applications. We can see that
@@ -827,7 +834,7 @@ the curves can be approximated by different types of functions.
 \STATE \textbf{function}~determineModel()
 
 \STATE $blockSizeList \leftarrow initialBlockSize;$
-\WHILE{$fitValues.error \geq 0.5$}
+\WHILE{$fitValues.error \geq 0.7$}
 		\STATE $finishTimes$ = executeTasks($blockSizeList$);
 	        \STATE $blockSizeList$ = evaluateNextBlockSizes($finishTimes$);
 		\STATE $fitValues$ = determineCurveProcessor();
@@ -839,7 +846,7 @@ return $fitValues$;
 \end{algorithm}
 
 % RYC1029: O erro é 0.5 ou 0.7? No texto anterior estava 0.7 e no algoritmo está
-% 0.5
+% 0.5 -> 0.7
 
 The steps of this phase are shown in Algorithm~\ref{algModel}, which is executed
 in a single node, called master node. Variable $blockListSize$ contains the size
@@ -1087,7 +1094,8 @@ boards, such as GTX 295 and GTX 680 have two GPU processors on each.
 %with 4 cores and two GPUs with 280 cores each. Machine B has 1 CPU with 6 cores
 %and two GPUs with 1536 cores each. The machine C has 1 CPU with 6 cores and 1
 %GPU with 2688 cores and finally the machine D has 1 CPU with 14 cores and 2 GPUs
-%with X cores.  
+%with X cores. 
+ 
 
 %DC: corrigir última linha da tabela
 \begin{table*}[t]
