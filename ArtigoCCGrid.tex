@@ -717,17 +717,19 @@ each GPU and CPU in the system. We will use the term ``processor'' to refer to
 both CPUs and GPUs.
 
 %RYC1029: Acho que aqui fica melhor se os paragraph forem alterados para
-%subsection.
+%subsection -> Alterado, ficou melhor?
 \vspace{0.2cm}
-\paragraph*{Overview} The algorithm has three parts, which are: (1) processor 
+\subsection{Overview}
+%\paragraph*{Overview} 
+The algorithm has three parts, which are: (1) processor 
 performance modeling, where a performance model for each processor is determined
 during application execution based on task execution times; (2) optimal block
 size selection, where, based on the performance model, the algorithm determines
 the best distribution of block size among the processors; and (3) re-balancing,
 where the algorithm recalculates the optimal block sizes when the difference in
-execution time by different processors is larger than a threshold.
+execution time by different processors is larger than a threshold, the flowchart~\ref{fig: fluxo1} summarizes the layout of the algorithm.
 
-% RYC1029: Aqui um figura estilo fluxograma seria interessante
+% RYC1029: Aqui um figura estilo fluxograma seria interessante -> Adicionado, ficou bom?
 %
 %         |
 %         v
@@ -757,8 +759,10 @@ execution time by different processors is larger than a threshold.
 
 \vspace{0.2cm}
 % RYC1029: Modifiquei toda a seção. Veja se o que escrevi está correto,
-% especialmente a parte do coeficiente de correlação.
-\paragraph*{Processor performance modeling.} In this part, the algorithm 
+% especialmente a parte do coeficiente de correlação -> está correto :-)
+%\paragraph*{Processor performance modeling.} 
+\subsection{Processor performance modeling.}
+In this part, the algorithm 
 constructs a function $P_p[x]$, which represents the execution time of a block
 of data of size $x$ on processor $p$. For this, it executes blocks of different
 sizes on each processor and interpolate the curve that better fits these points.
@@ -795,7 +799,7 @@ where $ f_i (x) $ corresponds to the following set of functions $x$, $x^2$, $x^3
 
 Figure~\ref{fig: CPUVersusGPU1} shows sample processing time measurements for a
 GPU and a CPU for different block sizes and two applications. We can see that
-the curves can be approximated by different types of functions. 
+the curves can be approximated by different types of functions.
 % RYC1029: Colocar as funções que aproximaram cada gráfico.
 
 \begin{figure}[!t]
@@ -813,7 +817,7 @@ the curves can be approximated by different types of functions.
 % passo (2). Além disso, essa figura da parte (1) + (2) não ajuda em muita
 % coisa. Precisaria repensar como deixá-la melhor e de um jeito que ajude o
 % leitor. Passei a descrição da figura para junto do texto explicando o
-% algoritmo.
+% algoritmo. -> Mexi na figura, melhorou?
 
 
 
@@ -846,17 +850,19 @@ return $fitValues$;
 \end{algorithm}
 
 % RYC1029: O erro é 0.5 ou 0.7? No texto anterior estava 0.7 e no algoritmo está
-% 0.5 -> 0.7
+% 0.5 -> 0.7, acertei o valor
 
 The steps of this phase are shown in Algorithm~\ref{algModel}, which is executed
 in a single node, called master node. Variable $blockListSize$ contains the size
 of the blocks assigned to each processor and is initialized with an estimation
 ($initialBlockSize$) given by the user. Variable $fitValues$ contains
 results from the last least square fitting, including the $error$ in the
-fitting, which is initialized as $+\infty$. Iteratively, the algorithm sends chunks of data to each processor and measures the time that each one spent to process them.  These results are used to determine the block size for each processor in the next iteration and to calibrate the model. The loop stops when the computed model have a bounded (``good enough'') error.
+fitting, which is initialized as $+\infty$. Iteratively, the algorithm sends chunks of data to each processor and measures the time that each one spent to process them.  These results are used to determine the block size for each processor in the next iteration and to calibrate the model. The loop stops when the computed model have a bounded (``good enough'') error. If a function template does not meet the required threshold was established can not exceed 20\% of total application data.
 
 \vspace{0.2cm}
-\paragraph*{Optimal block size selection} In this part our algorithm determines 
+%\paragraph*{Optimal block size selection} 
+\subsection{Optimal block size selection}
+In this part our algorithm determines 
 the optimal block size for each processor with the objective of providing blocks
 with the same execution time on each processor.
 
@@ -904,9 +910,11 @@ feasible region.
 % determinado? Pegamos uma porcentagem do total de dados? Usa-se valores que
 % estão dentro dos valores medidos na parte de performance modelling?
 
-\vspace{0.2cm}
-\paragraph*{Execution and Rebalancing}  
+%Isso eu tive que definir, baseei-me no algoritmo HDSS. O Z não pode exceder 20\% do tamanho total do problema. 
 
+\vspace{0.2cm}
+%\paragraph*{Execution and Rebalancing}  
+\subsection{Execution and Rebalancing}
 After determining the task sizes, the scheduler sends a block of the selected
 size $x_i$ for each processor $i$. When a processor finishes executing a task,
 it requests another task of the same size. The processors then continue the
@@ -918,7 +926,7 @@ finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
 goes above a threshold, the rebalancing process is executed. Small thresholds
 may cause excessive rebalancing while large thresholds may tolerate larger
 imbalances that will cause processor idlenesses. The threshold is determined
-empirically, but values of about 5\% of the execution time of a single value
+empirically, but values of about 10\% of the execution time of a single value
 resulted in a good trade-off.
 
 
@@ -942,7 +950,7 @@ processor $i$.
 % execução de cada tarefa proporcional, assim como o aumento do erro. Também
 % precisa colocar uma seta no início de cada linha e uma logo depois da
 % sincronização. Também precisa incluir onde o algoritmo de rebalancemanto é
-% executado.
+% executado. -> Arrumei a figura, tem mais algum problema?
 
 Figure~\ref{fig:Diagrama} depicts the execution of four processors, where
 each arrow indicates the start of a task execution. The tasks start
@@ -952,8 +960,8 @@ task sizes are recalculated for each processors. The task executions then
 restart.
 
 \vspace{0.2cm}
-\paragraph*{Complete algorithm} 
-
+%\paragraph*{Complete algorithm} 
+\subsection{Complete algorithm}
 Algorithm~\ref{alg1} shows the pseudo-code of the scheduling algorithm. The
 $determineModel$ function, shown in Algorithm~\ref{algModel} returns the
 performance model for each processor into variable $fitValues$. The algorithm
@@ -962,12 +970,12 @@ best distribution $X$ of task sizes for each processor.
 
 \begin{algorithm}
 
-\caption{Complete dynamic algorithm}
+\caption{Complete our algorithm}
 \label{alg1}
 
 \begin{algorithmic}		
 
-\STATE \textbf{function} dynamic()
+\STATE \textbf{function} OurAlgorithm()
 
 \STATE $fitValues$ = determineModel()
 \STATE $X$ = solveEquationSystem($fitValues$);
@@ -976,9 +984,9 @@ best distribution $X$ of task sizes for each processor.
 
 	\STATE $finishTimes$ = executeTasks($X$);
 	\IF {$ $maxDifference($finishTimes$)$ \geq threshold$}
+		\STATE synchronize();
 		\STATE $fitValues$ = determineCurveProcessor();
                 \STATE $X$ = solveEquationSystem($fitValues$);
-                \STATE synchronize();
     	\ENDIF
 \ENDWHILE
 
@@ -989,6 +997,10 @@ best distribution $X$ of task sizes for each processor.
 % tarefas é síncrona. O algoritmo que você implementou provavelmente é baseado
 % em eventos (término de tarefas). Você precisa fazer o mesmo aqui. Em seguida,
 % é preciso alterar o texto para refletir estas mudanças.
+
+%Não sei como podemos alterar para eventos, o algoritmo dá a entender que é
+% baseado a eventos, assim que a tarefa termina, é registrado o tempo no 
+%vetor finishTime, e com base neste vetor é decidido se precisamos rebalancear.
 
 The main loop repeats while there is still data for processing. It distributes
 tasks of different sizes for each processor in the system, obtaining the finish
