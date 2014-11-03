@@ -418,9 +418,9 @@
         Daniel~Cordeiro,~\IEEEmembership{DCC-USP}
         and~Raphael~Camargo,~\IEEEmembership{CMCC-UFABC}% <-this % stops a space
 
-\thanks{Luis Sant'Ana is with the Center Mathematics, Computation and Cognition, Federal University of ABC, Santo Andr\'{e}, SP, Brazil e-mail: luis.ana@ufabc.edu.br}% <-this % stops a space
+\thanks{Luis Sant'Ana is with the Center for Mathematics, Computation and Cognition, Federal University of ABC, Santo Andr\'{e}, SP, Brazil e-mail: luis.ana@ufabc.edu.br}% <-this % stops a space
 \thanks{Daniel Cordeiro is with the Department of Computer Science, University of S\~{a}o Paulo, S\~{a}o Paulo, SP, Brazil e-mail: danielc@ime.usp.br }% <-this % stops a space
-\thanks{Raphael Carmargo is with the Center Mathematics, Computation and Cognition, Federal University of ABC, Santo Andr\'{e}, SP, Brazil e-mail: raphael.camargo@ufabc.edu.br}}
+\thanks{Raphael Carmargo is with the Center for Mathematics, Computation and Cognition, Federal University of ABC, Santo Andr\'{e}, SP, Brazil e-mail: raphael.camargo@ufabc.edu.br}}
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -687,9 +687,23 @@ Acosta \textit{et al.}~\cite{acosta} proposed a dynamic load balancing algorithm
 that interactively finds a good distribution of work between GPUs during
 application execution. It uses a decentralized scheme in which synchronizations
 are done at each iteration to determine if there is a need to rebalance the
-load. Each process, representing a single GPU, performs a redistribution of
-workload according to the size of the assigned task and the capabilities of the
-GPU. A vector of time is shared among all processors. Each processor processes the load itself and records the time on this vector. The first step of the algorithm is to check whether the threshold defined by user is not being exceeded. If not the processors need not recalculate the load, otherwise the balancing is performed. The algorithm computes a vector called RP (Relative Power), which corresponds to the relationship between time spent to process a certain load versus versus the time taken for a computational unit as a function of the problem size. The processors calculate the SRP (Sum Relative Power) which is the sum of all RP vector calculated for each processor. Finally, each processor calculates the load itself, taking into account the size of the problem, the RP and the SRP. The disadvantage of this algorithm is that the function that calculates the load of each processor does not provide the precision, which in turn generates unnecessary balancing. Our algorithm for generating a curve of execution is able to determine with certain accuracy the optimal size of the load assigned to each processor, preventing balancing unnecessary.
+load. A vector of time is shared among all processors. Each processor records
+the time spent on the last task in this vector. The first step of the algorithm
+is to check whether the maximum time difference among threads are above a
+threshold defined by user. If true, the algorithm computes a vector called RP
+(Relative Power), which relates the time spent to process a certain load versus
+versus the time taken for a computational unit as a function of the problem
+size. The processors calculate the SRP (Sum Relative Power) which is the sum of
+all RP vector calculated for each processor. Finally, each processor calculates
+its next attributed load itself, taking into account the size of the problem,
+the RP and the SRP. The disadvantage of this algorithm is that the load
+equlibrium is achieved asymptotically, as the definition of the load on each
+processor is based on on a simple weighted average of the measured relative
+power (RP) in the last iteration. This may cause suboptimal load distributing in
+several iterations, resulting in poor peformance and the need for several
+rebalancing processes. Our algorithm generates a curve of execution times for
+each processor and is able to determine the distribution of load with more
+accurracy, preventing these unnecessary rebalancing.
 
 The Heterogeneous Dynamic Self-Scheduler (HDSS)~\cite{HDSS} is a dynamic
 load-balancing algorithm for heterogeneous GPU clusters. It is divided in two
@@ -797,15 +811,15 @@ procedure.
 % RYC1029: Cade o texto onde você explica os tipos de funções e combinações que
 % usadas no fitting??? Não tínhamos discutido este ponto e você incluído na
 % qualificação? -> adicionado
-We devise the fit curves using the well-known method of \textit{least squares}, with a
-function of the form:
+We devise the best fit curves using the well-known method of \textit{least
+  squares}, using a function of the form:
 
 \begin{equation}
  y(x) = a_{1} f_{1}(x) +  a_{2} f_{2}(x) + ... + a_{n} f_{n}(x) 
 \label{eq: least}
 \end{equation} 
 
-where $ f_i (x) $ corresponds to the following set of functions $x$, $x^2$, $x^3$,  $e^x$, $x$ and the combinations $xe^x$ and $xlnx$.
+where $ f_i (x) $ corresponds to the following set of functions $x$, $x^2$, $x^3$, $e^x$, $x$ and the combinations $x \cdot e^x$ and $x \cdot lnx$.
  % If the model does not fit into one of the functions described, the function that approximates the model is used.
  % The values ​​of $a_i$ are given by the least squares method itself, as set value. The method of least squares tests for each function and the one with the smallest error is selected.
 
@@ -864,12 +878,18 @@ return $fitValues$;
 % RYC1029: O erro é 0.5 ou 0.7? No texto anterior estava 0.7 e no algoritmo está
 % 0.5 -> 0.7, acertei o valor
 
-The pseudo-code for this phase is shown in Algorithm~\ref{algModel}. This code is executed
-in a single node, called \emph{master node}. Variable $blockListSize$ contains the size
-of the blocks assigned to each processor and is initialized with an estimation
-($initialBlockSize$) given by the user. Variable $fitValues$ contains
-results from the last least square fitting, including the $error$ in the
-fitting, which is initialized as $+\infty$. Iteratively, the algorithm sends chunks of data to each processor and measures the time that each one spent to process them.  These results are used to determine the block size for each processor in the next iteration and to calibrate the model. The loop stops when the computed model have a bounded (``good enough'') error. If a function template does not meet the required threshold was established can not exceed 20\% of total application data.
+The pseudo-code for this phase is shown in Algorithm~\ref{algModel}. This code
+is executed in a single node, called \emph{master node}. Variable
+$blockListSize$ contains the size of the blocks assigned to each processor and
+is initialized with an estimation ($initialBlockSize$) given by the
+user. Variable $fitValues$ contains results from the last least square fitting,
+including the $error$ in the fitting, which is initialized as
+$+\infty$. Iteratively, the algorithm sends chunks of data to each processor and
+measures the time that each one spent to process them.  These results are used
+to determine the block size for each processor in the next iteration and to
+calibrate the model. The loop stops when the computed model have a bounded
+(``good enough'') error or when the submitted block sizes reaches 20\% of the
+total application data.
 
 %\vspace{0.2cm}
 %\paragraph*{Optimal block size selection} 
@@ -937,9 +957,9 @@ The scheduler also monitors the finish time of each task. If the difference in
 finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
 goes above a threshold, the rebalancing process is executed. Small thresholds
 may cause excessive rebalancing while large thresholds may tolerate larger
-imbalances that will cause processor idlenesses. The threshold must be determined
-empirically; values of about 10\% of the execution time of a single value
-resulted in a good trade-off in practice.
+imbalances that will cause processor idlenesses. The threshold must be
+determined empirically; values of about 10\% of the execution time of a single
+block resulted in a good trade-off in practice.
 
 
 During the rebalancing, the scheduler synchronizes the processors and apply the
@@ -982,12 +1002,12 @@ best distribution $X$ of task sizes for each processor.
 
 \begin{algorithm}
 
-\caption{Complete our algorithm}
+\caption{Complete algorithm}
 \label{alg1}
 
 \begin{algorithmic}		
 
-\STATE \textbf{function} OurAlgorithm()
+\STATE \textbf{function} LoadBalancingAlgorithm()
 
 \STATE $fitValues$ = determineModel()
 \STATE $X$ = solveEquationSystem($fitValues$);
@@ -1055,7 +1075,8 @@ The StarPU framework offers a rich API that allows one to modify and develop new
 % DC: acho que a descricao abaixo eh muito baixo nivel e nao auxilia na compreencao do algoritmo.
 %
 % There are data structures and functions that speed up the process of development. For example the function "double starpu\_timing\_now (void)"  return the current date in micro seconds, which makes it easier for the determination of measures runtime. In StarPU there is a data structure called "starpu\_sched\_policy" This structure contains all the methods que Implement a scheduling policy. 
-%
+
+
 For comparisons sake, we have implemented three other algorithms:
 \emph{greedy}, \emph{static} and
 \emph{HDSS}. The greedy consisted in dividing the input set in pieces and assigning
@@ -1265,28 +1286,34 @@ the better distribution of tasks sizes compensates the overhead caused by the sc
 
 To better understand these results, we evaluated the time difference between the
 earliest and latest finishing threads, in the scenario with four machines and
-matrices with size $65535 \times 65535$.
-Figure~\ref{fig:diferencaThreads}
-shows the results for different number of threads for each algorithms. On the X axis are distributed threads of the same way among machines, including threads on the GPU and CPU. For two threads was used only the CPU for other cases CPU and GPU was used. In the y axis, we presented the maximum difference between the end of the performances of each algorithm for the same scenario. Our algorithm have the smallest amount of difference among all the algorithms implying almost perfect load balancing of processors. Other algorithms show considerable differences mostly because of the idle GPU at the end of execution. 
+matrices with size $65535 \times 65535$.  Figure~\ref{fig:diferencaThreads}
+shows the results for different number of threads for each algorithm. The
+threads were distributed equally among machines, including threads on the GPU
+and CPU. For two threads we used only the CPUs. In the y axis, we presented the
+maximum difference between the end of the performances of each algorithm for the
+same scenario. Our algorithm have the smallest amount of difference among all
+the algorithms implying a better load balance among processors. Other algorithms
+show considerable differences mostly because of idle GPUs at the end of
+executions.
 
 % DC: "There are big differences among end of threads." Quais?! Escrevi errado.
 The greedy algorithm does not directly use information on the processing speeds
-of the devices and simply provides the tasks to free processors and had worse
-performance than the our algorithm and HDSS. But was better than the static one,
-where incorrect predictions are maintained during the entire execution.
-
-HDSS uses the beginning of the execution to estimate the best block size
-distribution and uses this distribution through the complete execution. Its
-cruder approximation generate larger unbalances between the threads than our
-algorithm, which is reflected in the difference in the finishing time between
-the threads.
+of the devices and simply provides the tasks to free processors and the
+differences in finish times was larger than for our algorithm and HDSS. But was
+better than the static one, where incorrect predictions are maintained during
+the entire execution. HDSS uses the beginning of the execution to estimate the
+best block size distribution and uses this distribution through the complete
+execution. Its cruder approximation generate larger unbalances between the
+threads than our algorithm, which is reflected in the difference in the
+finishing time between the threads.
 
 % RYC: Na sua simulações houve alguma reconfiguração devido à ultrapassagem do limiar?
 % Sim, em alguns casos, mas foi considerado a média dos casos.
 Our algorithm obtained the most accurate data distribution estimation, solving
 an optimization problem with the restriction that all units should finish the
-execution of the tasks at the same time. Also, if the selected distribution has
-an unbalance above a threshold, it can rebalance the task sizes.
+execution of the tasks at the same time. Also, in the instances where the
+selected distribution had an unbalance above a threshold, it was rebalanced by
+the algorithm.
 
 %------------------------------------------------------------------------------------------------
 \subsection{Blackscholes}
@@ -1384,8 +1411,9 @@ genes. Our algorithm was configured with a threshold of 10\% of the execution ti
 As for the other applications, our algorithm resulted in the fastest execution
 times, with larger differences with two or more machines. Table~\ref{table:
   gene} shows the execution times for 100,000 and 2,000,000 genes using our
-algorithm and HDSS. In this application, the gains with smaller networks were
-larger.
+algorithm and HDSS. In this application, we obtained more gains with smaller
+networks, due to larger amounts of data transfer between machines and in the
+CPU/GPU interface in larger networks.
 
 % RYC: Comentei por que esta explicação não me parecer boa. A limitação é mesmo
 % a transferência de dados? Eu acho que não...
@@ -1468,10 +1496,12 @@ execution.
 
 % RYC: Por que é vantajoso para o HDSS diminuir o tamanho das tarefas? Explicar no texto, Ok.
 In HDSS, we see the the block sizes decrease during the execution until the last
-iteration, for all units complete execution at nearly the same time. This prevents that processors receive large portions data and other no, which causes some units to become idle. But even though there is this decrease in block size, the proportion
-of the sizes allocated to different processors is maintained. In this case, a
-sub-optimal distribution of block sizes is maintained during the entire
-execution.
+iteration, for all units complete execution at nearly the same time. This
+prevents that unbalances in the final of the execution cause some processors to
+receive large portions data while other remains idle. This decrease in block
+size reduces length of this idleness period. But the proportion of block sizes
+allocated to different processors is maintained, resulting that a sub-optimal
+distribution of block sizes is maintained during the entire execution.
 
 % RYC: Usar machine A, B and C nas figuras, para ficar de acordo com as
 % descrições das máquinas. ->OK
@@ -1481,7 +1511,7 @@ execution.
 	\centering
 			\includegraphics[scale=0.345]{Block_Comportamento_Nosso.pdf}\quad
 			\includegraphics[scale=0.345]{Block_Comportamento_Deles.pdf}
-	\caption{Block size evolution for GRN}
+	\caption{Block size evolution for GRN application.}
 	\label{fig:GeneBlocos}
 	\end{center}
 \end{figure}
@@ -1514,9 +1544,9 @@ information exchange among the tasks cannot be ignored.
 % use section* for acknowledgement
 \section*{Acknowledgment}
 
-The authors would like to thank FAPESP (Proc. n. 2012/03778-0 and Proc. n.
-2013/14603-9) for the financial support and Fabrizio Borelli for providing the
-gene regulatory network application.
+The authors would like to thank UFABC and FAPESP (Proc. n. 2012/03778-0 and
+Proc. n.  2013/26644-1) for the financial support and Fabrizio Borelli for
+providing the gene regulatory network application.
 
 \ifCLASSOPTIONcaptionsoff
   \newpage
