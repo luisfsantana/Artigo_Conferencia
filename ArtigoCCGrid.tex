@@ -522,7 +522,7 @@ parallel computing, distributed systems, GPU cluster, GPGPU.
 % (should never be an issue)
 %\IEEEPARstart{T}{he} 
 
-% RYC1029: Luis -> colocar referências mais recentes. -> Alguém parece que atualizou deste parágrafo (LFS)
+% RYC1029: Luis -> colocar referências mais recentes. -> Alguém parece que atualizou este parágrafo (LFS)
 The use of GPUs (Graphics Processing Units) is becoming increasingly popular
 among developers and users of applications that have high computational demands
 and can benefit from a large degree of parallelism~\cite{gpu2}. Among these
@@ -938,7 +938,7 @@ processor $i$.
 
 \begin{figure}[!t]
 	\centering
-			\includegraphics[scale=0.24]{DiagramaArtigo.eps}
+			\includegraphics[scale=0.25]{DiagramaArtigo.eps}
 	\caption{Execution of tasks by four processors. The finish time
           difference of two tasks was above a threshold, which caused a
           rebalancing of the task sizes.}
@@ -1155,16 +1155,16 @@ all the CPU cores, launching one task per core.
 
 We used the matrix multiplication application to evaluate the execution time
 using different matrix sizes and number of machines of the following scheduling
-algorithms: (1) our algorithm, (2) static, (3) HDSS, and (4) Greedy
+algorithms: (1) our algorithm, (2) static, (3) HDSS, and (4) Greedy. Our algorithm was configured with a threshold of 10\% of the execution time and initial block size of 2048 elements. The initial block size of HDSS algorithm was 1024 elements.
 
 \begin{figure*}[htb]
 	\begin{center}
 	\centering
 			%\includegraphics[scale=0.3]{SaidaMatriz.pdf}
-		\includegraphics[scale=0.3]{1machine.pdf} \quad
-		\includegraphics[scale=0.3]{2machines.pdf} \quad
-		\includegraphics[scale=0.3]{3machines.pdf} \quad
-		\includegraphics[scale=0.3]{4machines.pdf} 
+		\includegraphics[scale=0.32]{1machine.pdf} \quad
+		\includegraphics[scale=0.32]{2machines.pdf} \quad
+		\includegraphics[scale=0.32]{3machines.pdf} \quad
+		\includegraphics[scale=0.32]{4machines.pdf} 
 	\caption{Execution time using different matrix sizes and number of
           machines with the matrix multiplication application.}
 	\label{fig:todosJuntos}
@@ -1251,7 +1251,7 @@ the better distribution of tasks sizes compensates this calculation time.
 % algoritmos?  
 %Nestes casos, não seria melhor medir os atrasos em cada barreira
 % de sincronização?
-%Nao existe barreira de sincronizaçao nos algoritmos, por isso a comparacao é justa. O que pode ocorrer sincronizacão é o nosso, mas aqui eu tirei o teste de sincronizacao.
+%Nao existe barreira de sincronizaçao nos algoritmos, por isso a comparacao é justa. O que pode ocorrer sincronizacão é o nosso, mas aqui eu tirei o teste de sincronizacao, apenas para comparar o atraso no fim das threads. 
 
 To better understand these results, we evaluated the time difference between the
 earliest and latest finishing threads, in the scenario with four machines and
@@ -1284,10 +1284,10 @@ an unbalance above a threshold, it can rebalance the task sizes.
 	\begin{center}
 	\centering
 			%\includegraphics[scale=0.45]{BlackScholes4MachinesNOVO.pdf}
-		\includegraphics[scale=0.3]{1machineBlack.pdf} \quad
-		\includegraphics[scale=0.3]{2machineBlack.pdf} \quad
-		\includegraphics[scale=0.3]{3machineBlack.pdf} \quad
-		\includegraphics[scale=0.3]{4machineBlack.pdf} 
+		\includegraphics[scale=0.32]{1machineBlack.pdf} \quad
+		\includegraphics[scale=0.32]{2machineBlack.pdf} \quad
+		\includegraphics[scale=0.32]{3machineBlack.pdf} \quad
+		\includegraphics[scale=0.32]{4machineBlack.pdf} 
 	\caption{Difference in runtime with different number options}
 	\label{fig:black}
 	\end{center}
@@ -1300,7 +1300,7 @@ different number of stock options. Similarly to the matrix multiplication
 experiments, the performance differences were larger in the more heterogeneous
 environments. The blackscholes application has linear complexity in relation to
 the number of options, showing that our scheduling algorithm is also useful with
-this class of applications.
+this class of applications. Our algorithm was configured with a threshold of 10\% of the execution time and initial block size of 2048 elements. The initial block size of HDSS algorithm was 1024 elements.
 
 Table~\ref{table: black} compares the execution times of our algorithm and HDSS,
 for the execution with 10,000 and 500,000 options. The larger gains were
@@ -1362,13 +1362,13 @@ We compare the execution time of the Gene Regulatory Network (GRN) inference
 application in four different environments: with one machine, two machines,
 three machines and four machines. The results are shown in
 Figure~\ref{fig:Gene}. We consider the GRN application with different number of
-genes.
+genes. Our algorithm was configured with a threshold of 10\% of the execution time and initial block size of 2048 elements. The initial block size of HDSS algorithm was 1024 elements.
 
 
 % RYC: Luís, você consegue explicar por que os ganhos para redes menores são
 % maiores? Não está meio estranho? Precisa averiguar o que ocorreu?
 
-%Eu rodei mais de uma vez para analisar os resultados e parece mesmo que para redes menores o ganho é maior. Eu notei que com redes grandes, há muita comunicacao, diferente das redes pequenas, entao se copia da memoria da GPU para CPU os resultados e transfere, algumas vezes para redes grandes. Entao as minhas ideias para o ganho ser maior com pequenas é a diminuição de cópias GPU/CPU, menor tráfico na rede e diminuição de sincronizações.
+%Eu rodei mais de uma vez para analisar os resultados e parece mesmo que para redes menores o ganho é maior. Eu notei que com redes grandes, há muita comunicacao, diferente das redes pequenas, entao se copia da memoria da GPU para CPU os resultados e transfere entre máquinas, algumas vezes para redes grandes. Entao as minhas ideias para o ganho ser maior com redes pequenas é a diminuição de cópias GPU/CPU, menor tráfico na rede e diminuição de sincronizações. Mas precisávamos de mais tempo para ter certeza do motivo.
 
 As for the other applications, our algorithm resulted in the fastest execution
 times, with larger differences with two or more machines. Table~\ref{table:
@@ -1395,10 +1395,10 @@ processors.
 	\begin{center}
 	\centering
 			%\includegraphics[scale=0.4]{GraficoFabrizio4maquinasNOVO.pdf}
-		\includegraphics[scale=0.3]{1machineGenes.pdf} \quad
-		\includegraphics[scale=0.3]{2machineGenes.pdf} \quad
-		\includegraphics[scale=0.3]{3machineGenes.pdf} \quad
-		\includegraphics[scale=0.3]{4machineGenes.pdf} 
+		\includegraphics[scale=0.32]{1machineGenes.pdf} \quad
+		\includegraphics[scale=0.32]{2machineGenes.pdf} \quad
+		\includegraphics[scale=0.32]{3machineGenes.pdf} \quad
+		\includegraphics[scale=0.32]{4machineGenes.pdf} 
 	\caption{Difference in runtime with different numbers of genes for gene regulatory network inference}
 	\label{fig:Gene}
 	\end{center}
@@ -1442,7 +1442,7 @@ HDSS, we evaluated the block sizes generated by each algorithm when executing
 the GRN inference application using three machines (A, B and C).
 
 % RYC: Quantas tarefas foram geradas? É uma tarefa por ponto? 
-%Tentei fazer a anlise independente das tarefas, apenas somei a quantidade de dados de cada tarefa.
+%Tentei fazer a análise independente das tarefas, apenas somei a quantidade de dados de cada tarefa.
 
 % RYC: Aqui você colocou apenas os blocos das GPUs? E das CPUs?
 % Eu dividi por máquina. Independe de GPU e CPU.
@@ -1510,6 +1510,14 @@ gene regulatory network application.
 \ifCLASSOPTIONcaptionsoff
   \newpage
 \fi
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+\IEEEtriggeratref{14}  % REAJUSTAR DEPOIS DE TODAS AS MODIFICACOES!
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
 
 % can use a bibliography generated by BibTeX as a .bbl file
 % BibTeX documentation can be easily obtained at:
