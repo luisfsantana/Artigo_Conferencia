@@ -1013,8 +1013,9 @@ best distribution $X$ of task sizes for each processor.
 \STATE $X$ = solveEquationSystem($fitValues$);
 
 \WHILE{there is data}
-
-	\STATE $finishTimes$ = executeTasks($X$);
+	\IF {processorIdle()}
+		\STATE $finishTimes$  = distributeTasks(X);
+	\ENDIF	
 	\IF {$ $maxDifference($finishTimes$)$ \geq threshold$}
 		\STATE synchronize();
 		\STATE $fitValues$ = determineCurveProcessor();
@@ -1276,7 +1277,7 @@ the better distribution of tasks sizes compensates the overhead caused by the sc
 % RYC: aqui não está muito claro também. Precisa explicar o que são essas
 % threads (1 a 60), como elas são distribuídas entre as máquinas e por que este
 % experimento foi realizado. 
-%
+%	
 % RYC: Além disso, o que são estes earliest and latest finishing tasks? Por que
 % pegar só as threads no final? %Existem barreiras de sincronização nos
 % algoritmos?  
@@ -1291,7 +1292,7 @@ shows the results for different number of threads for each algorithm. The
 threads were distributed equally among machines, including threads on the GPU
 and CPU. For two threads we used only the CPUs. In the y axis, we presented the
 maximum difference between the end of the performances of each algorithm for the
-same scenario. Our algorithm have the smallest amount of difference among all
+same scenario in only execution. Our algorithm have the smallest amount of difference among all
 the algorithms implying a better load balance among processors. Other algorithms
 show considerable differences mostly because of idle GPUs at the end of
 executions.
@@ -1491,8 +1492,10 @@ by our algorithm after the processor performance modeling phase. We can see
 that the algorithm initially finds a distribution of blocks that favors machine
 C but, in a later moment (400ms) detects that the difference in the task
 finishing times was above the defined threshold. In this case, it triggered a
-re-balancing process of tasks sizes, which are maintained until the end of the
-execution. 
+rebalancing process of tasks sizes, which are maintained until the end of the
+execution. In this example, the three machines were running a graphical application on the GPU,
+ and at the time 400 ms  was canceled the graphical application on machine C, 
+causing rebalancing.
 
 % RYC: Por que é vantajoso para o HDSS diminuir o tamanho das tarefas? Explicar no texto, Ok.
 In HDSS, we see the the block sizes decrease during the execution until the last
