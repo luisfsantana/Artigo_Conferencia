@@ -524,25 +524,24 @@ parallel computing, distributed systems, GPU cluster, GPGPU.
 
 % RYC1029: Luis -> colocar referências mais recentes. -> Alguém parece que atualizou este parágrafo (LFS)
 The use of GPUs (Graphics Processing Units) is becoming increasingly popular
-among developers and users of applications that have high computational demands
-and can benefit from a large degree of parallelism~\cite{gpu2}. Among these
-applications we can include fluid mechanics~\cite{fluid2}, visualization
+among developers and HPC practitioners. The use of GPUs can benefit applications that have high computational demands
+and large degrees of parallelism~\cite{gpu2}. Among these
+applications, we can include fluid mechanics~\cite{fluid2}, visualization
 science~\cite{visualization2}, machine learning~\cite{learning2},
 bioinformatics~\cite{bioinformatica2} and neural networks~\cite{neural}.
 
 % RYC1029: Luis -> incluir referências de bibliotecas, como da nVidia e outras
-Modern GPUs can have thousands of simple floating point units (FPUs) that,
-combined, can have a computational power several times superior to traditional
+Modern GPUs are composed of thousands of simple floating point units (FPUs) that,
+combined, can provide a computational power several times superior to traditional
 CPUs. The main drawback is the difficulty in optimizing GPU code, specially
 considering the architectural differences among different GPUs, with changes in
-the distribution of cores, shared memory, presence of cache, among others. But
-libraries for several classes of applications and algorithms are now available,
-facilitating the development process~\cite{cuNN, cuMath}.
+the distribution of cores, shared memory, presence of cache, etc. There is a clear effort (by both academy and industry) to ease the development of optimized code on such hardware~\cite{cuNN, cuMath}.
 
 
-Computationally demanding applications may also benefit from the usage of
-multiple GPUs, normally distributed on several machines, which are called GPU
-clusters~\cite{raphael, cluster}. The development of applications for these
+CPU bound applications can hugely benefit from the usage of
+more than one GPU. Multiple GPUs are usually offered on GPU
+clusters~\cite{raphael, cluster}, with the GPUs distributed on different machines.
+The development of applications for these
 clusters is more complex, since it requires the management of the multiple
 memory spaces, one for each GPU in the cluster, in addition to the main memory
 of the each node. This management includes transferring data between these
@@ -550,7 +549,7 @@ memory spaces and ensuring the consistency of data.
 
 There are several efforts by the scientific community for the creation of new
 programming models~\cite{appCientificas, wave} and frameworks~\cite{snucl, Flat,
-  starpu}, for facilitating the development of GPU cluster
+  starpu} to simplify the development of GPU cluster
 applications. However, the combination of CUDA (Compute Unified Device
 Architecture) and MPI (Message Passing Interface) is still the standard choice
 to develop applications for GPU clusters.
@@ -567,12 +566,12 @@ this case, joining heterogeneous machines can increase the available
 computational power to cluster users.
 
 Another scenario where heterogeneity is more common is when connecting machines
-from several researchers groups using a standard Ethernet network. This enables
-a large amount of computing power from commodity hardware that could be
-efficiently used by application with low communication demands. These machines
-could be used by these applications outside the work time and the acquisition
-cost and space demand for this commodity-hardware GPU cluster would be almost
-zero.
+from different research groups (in a grid-like fashion). This enables the use of
+a large amount of computing power from commodity hardware 
+by applications with low communication demands.%  These machines
+% could be used by these applications outside the work time and the acquisition
+% cost and space demand for this commodity-hardware GPU cluster would be almost
+% zero.
 
 Developing a load-balancing mechanism that works efficiently for all kinds of
 applications is difficult. With two or more GPUs (or CPUs), this problem is
@@ -586,11 +585,11 @@ applications in bioinformatics~\cite{bioinformatica2}, neural
 networks~\cite{neural}, chemistry, physics and materials science.
 
 When using homogeneous clusters, data can be distributed among the available
-GPUs using tasks of the same size. However, with heterogeneous GPUs, this
+GPUs using tasks of the same size, i.e., that take approximately the same amount of time to be executed. With heterogeneous GPUs, however, this
 distribution is more difficult. At the time of writing, the major GPU vendor offers GPU processors with more than four different microarchitectures: \emph{Tesla},​ \emph{Fermi}, \emph{Kepler} and \emph{Maxwell}. These
 architectures have different organizations of FPUs (Floating-point Unit),
 caches, shared memory and memory speeds. Even for GPUs with the same
-architectures, their characteristics can vary considerably.
+architectures, their characteristics can vary considerably. These differences increase the complexity of determining the division of tasks among the available GPUs that will result in the best performance.
 
 A division of the load based on simple heuristics, such as a the number of cores
 in the GPU, is not effective and can be worse than a simple homogeneous
@@ -610,11 +609,10 @@ the GPUs, and these CPUs can used by the applications.
 The main task of the load-balancing mechanism is to devise the best data
 division amount the GPUs. A possible approach is to determine the performance
 profiles for each GPU type and application task and use it to determine the
-amount of work given to each GPU. This profiling can be done statically, before
-application execution~\cite{raphael}, or dynamically, during application
-execution~\cite{acosta, HDSS}. Another solution is to use simple algorithms for
+amount of work given to each GPU. This profiling can be statically computed, before the
+execution of the application~\cite{raphael}, or dynamically, at runtime~\cite{acosta, HDSS}. Another solution is to use simple algorithms for
 task dispatching, such as the greedy algorithm from StarPU~\cite{starpu}, where
-tasks are dispatched to the devices as soon as they become available.
+tasks are dispatched to the devices as soon as they become available. These approaches allow a low schedule overhead, but results on suboptimal results.
 
 In this work we propose a novel adaptive algorithm for dynamic load balancing of
 data-parallel applications in heterogeneous GPU clusters. The algorithm uses
@@ -644,12 +642,21 @@ the standard StarPU greedy algorithm.
 
 \section{Related Work}
 
-A proposed solution for load balancing in distributed systems is to divide the
+The standard approach for load balancing in distributed systems is to divide the
 tasks among CPUs according to a weight factor representing the processing speed
 of each processor. Early approaches used fixed weight factors determined at
 compile time with limited success~\cite{Hummel}. But these weight factors are
-difficult to determine in heterogeneous GPUs, due to the architectural
-differences that affect the performance.
+difficult to determine, specially in heterogeneous scenarios.
+
+On hybrid architectures with $m$ homogeneous CPUs and $k$ homogeneous
+(i.e., the heterogeneity comes only from the different types of
+processors available) the problem is already
+NP-hard. Bleuse~\textit{et al.}~\cite{bleuse2014scheduling} proposed
+an approximation algorithm which achieved a ratio of $\frac{4}{3} +
+\frac{1}{3k} + \epsilon$ using dual approximation with a dynamic
+programming scheme. They have proved that the algorithm takes
+$O(n^2k^3m^2)$ per step of the dual approximation to schedule $n$
+tasks.
 
 The problem of load balancing in heterogeneous GPUs, began to be studied
 recently. One proposal was the usage of a static algorithm that determines the
@@ -665,6 +672,8 @@ execution profiles. Finally, it does not consider the case where application
 behavior changes with the parameters. A dynamic algorithm, like the one that we
 propose, do not have these limitations.
 
+
+
 % RYC1029: Luis -> Não está muito claro como é feita a coordenação aqui. Cada
 % processador realiza sua própria distribuição, mas de algum modo os processos
 % precisam chegar num acordo de qual pedaço vai para qual processador. Precisa
@@ -674,18 +683,18 @@ propose, do not have these limitations.
 % do algoritmo não é clara, a comparação com nosso algoritmo está ruim. Por que
 % é melhor ser centralizado e usar as curvas para fazer o load-balancing? Quais
 % são as desvantagens do algoritmo de Acosta? Veja minha comparação com o HDSS.
-Acosta \emph{et al.}~\cite{acosta} proposed a dynamic load balancing algorithm
+Acosta \textit{et al.}~\cite{acosta} proposed a dynamic load balancing algorithm
 that interactively finds a good distribution of work between GPUs during
 application execution. It uses a decentralized scheme in which synchronizations
-are done at each iteration to determine whether there is a need to rebalance the
+are done at each iteration to determine if there is a need to rebalance the
 load. Each process, representing a single GPU, performs a redistribution of
 workload according to the size of the assigned task and the capabilities of the
-GPU. A vector of time is shared among all processors. Each processor processes the load itself and records the time this vector. The first step of the algorithm is to check whether the threshold defined by user is not being exceeded. If not the processors need not recalculate the load, otherwise the balancing is performed. The algorithm computes a vector called RP (Relative Power), which corresponds to the relationship between time spent to process a certain load versus versus the time taken for a computational unit as a function of the problem size. The processors calculate the SRP (Sum Relative Power) which is the sum of all RP vector calculated for each processor. Finally, each processor calculates the load itself, taking into account the size of the problem, the RP and the SRP. The disadvantage of this algorithm is that the function that calculates the load of each processor does not provide the precision, that generates unnecessary balancing. Our algorithm for generating a curve of execution is able to determine with certain accuracy the optimal size of the load assigned to each processor, preventing balancing unnecessary.
+GPU. A vector of time is shared among all processors. Each processor processes the load itself and records the time on this vector. The first step of the algorithm is to check whether the threshold defined by user is not being exceeded. If not the processors need not recalculate the load, otherwise the balancing is performed. The algorithm computes a vector called RP (Relative Power), which corresponds to the relationship between time spent to process a certain load versus versus the time taken for a computational unit as a function of the problem size. The processors calculate the SRP (Sum Relative Power) which is the sum of all RP vector calculated for each processor. Finally, each processor calculates the load itself, taking into account the size of the problem, the RP and the SRP. The disadvantage of this algorithm is that the function that calculates the load of each processor does not provide the precision, which in turn generates unnecessary balancing. Our algorithm for generating a curve of execution is able to determine with certain accuracy the optimal size of the load assigned to each processor, preventing balancing unnecessary.
 
 The Heterogeneous Dynamic Self-Scheduler (HDSS)~\cite{HDSS} is a dynamic
 load-balancing algorithm for heterogeneous GPU clusters. It is divided in two
 phases. The first is the adaptive phase, where it determines weights that
-reflect the speed of each GPU, similarly to Hummel \emph{et al.}~\cite{Hummel},
+reflect the speed of each GPU, similarly to Hummel~\textit{et al.}~\cite{Hummel},
 but performed dynamically and using profiling data. A performance curve with the
 FLOPs per second for each task size is created for each GPU. The weights is
 determined based on logarithmic fits on the curves.  These weights are used
@@ -709,7 +718,7 @@ performance models of the devices.
 In a typical data-parallel application, the application data is divided among
 the threads in a process called domain decomposition~\cite{Gropp:1992uq}. The
 threads then simultaneously process their part of the data and this processing
-can be on single or multiple steps, depending on the task sizes. After
+can be executed on single or multiple steps, depending on the task sizes. After
 finishing, the threads merge the processed results, and the application
 terminates or continues to the next phase of computing. The task of our
 load-balancing algorithm is determining the size of the data block assigned to
@@ -718,16 +727,16 @@ both CPUs and GPUs.
 
 %RYC1029: Acho que aqui fica melhor se os paragraph forem alterados para
 %subsection -> Alterado, ficou melhor?
-\vspace{0.2cm}
+%\vspace{0.2cm}
 \subsection{Overview}
 %\paragraph*{Overview} 
-The algorithm has three parts, which are: (1) processor 
-performance modeling, where a performance model for each processor is determined
-during application execution based on task execution times; (2) optimal block
-size selection, where, based on the performance model, the algorithm determines
+The proposed algorithm is composed of three phases: (1) processor 
+performance modeling, where a performance model for each processor is devised
+during application execution, based on the tasks' execution times; (2) optimal block
+size selection where, using the computed performance model, the algorithm determines
 the best distribution of block size among the processors; and (3) re-balancing,
 where the algorithm recalculates the optimal block sizes when the difference in
-execution time by different processors is larger than a threshold, the flowchart~\ref{fig: fluxo1} summarizes the layout of the algorithm.
+execution time by different processors is larger than a threshold. Figure~\ref{fig: fluxo1} depicts the flowchart of the algorithm.
 
 % RYC1029: Aqui um figura estilo fluxograma seria interessante -> Adicionado, ficou bom?
 %
@@ -744,7 +753,7 @@ execution time by different processors is larger than a threshold, the flowchart
 %  -- Thresholds checking ----
 \begin{figure}[!t]
 	\centering
-			\includegraphics[scale=0.36]{Fluxo.pdf} 				
+			\includegraphics[width=.8\linewidth]{Fluxo.pdf} 				
 	\caption{Flowchart of the algorithm}
 	\label{fig: fluxo1}
 \end{figure}
@@ -757,20 +766,21 @@ execution time by different processors is larger than a threshold, the flowchart
 \end{figure}
 
 
-\vspace{0.2cm}
+%\vspace{0.2cm}
 % RYC1029: Modifiquei toda a seção. Veja se o que escrevi está correto,
 % especialmente a parte do coeficiente de correlação -> está correto :-)
 %\paragraph*{Processor performance modeling.} 
-\subsection{Processor performance modeling.}
-In this part, the algorithm 
+\subsection{Processor performance modeling}
+
+In this phase, the algorithm devise a performance model for each processor based on some initial benchmarks. The algorithm 
 constructs a function $P_p[x]$, which represents the execution time of a block
 of data of size $x$ on processor $p$. For this, it executes blocks of different
 sizes on each processor and interpolate the curve that better fits these points.
 
-A block of size $initialBlockSize$, defined by the user, is initially allocated
+A block of size $initialBlockSize$, an initial guess defined by the user, is initially allocated
 and executed on each processor. After executing the first block, the algorithm
 selects the processor with the earliest finish time $t_f$ and double the block
-size for this processor. For other processors, with finish times $t_k$, we
+size for this processor. On the other processors, with finish times $t_k$, we
 select blocks of size $initialBlockSize * t_k / t_f$. This procedure is repeated
 until generating four points per curve. This process corresponds to (1) in
 Figure~\ref{fig: algoritmo}, which shows a schematic view of processor
@@ -787,7 +797,7 @@ procedure.
 % RYC1029: Cade o texto onde você explica os tipos de funções e combinações que
 % usadas no fitting??? Não tínhamos discutido este ponto e você incluído na
 % qualificação? -> adicionado
-We find best fit curves by the method of \textit{least squares}, using a
+We devise the fit curves using the well-known method of \textit{least squares}, with a
 function of the form:
 
 \begin{equation}
@@ -795,7 +805,9 @@ function of the form:
 \label{eq: least}
 \end{equation} 
 
-where $ f_i (x) $ corresponds to the following set of functions $x$, $x^2$, $x^3$,  $e^x$, $x$. And the following combinations $xe^x$, $xlnx$. If the model does not fit into one of the functions described, the function that approximates the model is used. The values ​​of $a_i$ are given by the least squares method itself, as set value. The method of least squares tests for each function and the one with the smallest error is selected.
+where $ f_i (x) $ corresponds to the following set of functions $x$, $x^2$, $x^3$,  $e^x$, $x$ and the combinations $xe^x$ and $xlnx$.
+ % If the model does not fit into one of the functions described, the function that approximates the model is used.
+ % The values ​​of $a_i$ are given by the least squares method itself, as set value. The method of least squares tests for each function and the one with the smallest error is selected.
 
 Figure~\ref{fig: CPUVersusGPU1} shows sample processing time measurements for a
 GPU and a CPU for different block sizes and two applications. We can see that
@@ -852,23 +864,23 @@ return $fitValues$;
 % RYC1029: O erro é 0.5 ou 0.7? No texto anterior estava 0.7 e no algoritmo está
 % 0.5 -> 0.7, acertei o valor
 
-The steps of this phase are shown in Algorithm~\ref{algModel}, which is executed
-in a single node, called master node. Variable $blockListSize$ contains the size
+The pseudo-code for this phase is shown in Algorithm~\ref{algModel}. This code is executed
+in a single node, called \emph{master node}. Variable $blockListSize$ contains the size
 of the blocks assigned to each processor and is initialized with an estimation
 ($initialBlockSize$) given by the user. Variable $fitValues$ contains
 results from the last least square fitting, including the $error$ in the
 fitting, which is initialized as $+\infty$. Iteratively, the algorithm sends chunks of data to each processor and measures the time that each one spent to process them.  These results are used to determine the block size for each processor in the next iteration and to calibrate the model. The loop stops when the computed model have a bounded (``good enough'') error. If a function template does not meet the required threshold was established can not exceed 20\% of total application data.
 
-\vspace{0.2cm}
+%\vspace{0.2cm}
 %\paragraph*{Optimal block size selection} 
 \subsection{Optimal block size selection}
-In this part our algorithm determines 
+In this phase our algorithm determines 
 the optimal block size for each processor with the objective of providing blocks
 with the same execution time on each processor.
 
-Consider we have $n$ processors and a input data size $Z$. The algorithm assigns
-a data chunk of size $x^g$ for each processor $g=1,...,n$, corresponding a
-fraction of input data, such that $\sum_{g=1}^n x^g = Z$. We denote as
+Consider that we have $n$ processors and a input data of size $Z$. The algorithm assigns
+a data chunk of size $x^g$ for each processor $g=1,...,n$, corresponding to a
+fraction of the input data, such that $\sum_{g=1}^n x^g = Z$. We denote as
 $E^g(x^g)$ the execution time of task $E$ in the processor $g$, for input of
 size $x^g$. To distribute the work among the processors, we find a set of values
 	
@@ -884,7 +896,7 @@ that minimizes $E_1(x_1)$ while satisfying the constraint
 	\label{eq: Restricao}
 \end{equation}
 
-which represents that all processors should spend the same amount of time
+which indicates that all processors should spend the same amount of time
 performing the processing. To determine the set of values $x$, we solve the
 system of fitted curves for all processors, determined in the performance
 modeling part, and given by:
@@ -912,7 +924,7 @@ feasible region.
 
 %Isso eu tive que definir, baseei-me no algoritmo HDSS. O Z não pode exceder 20\% do tamanho total do problema. 
 
-\vspace{0.2cm}
+%\vspace{0.2cm}
 %\paragraph*{Execution and Rebalancing}  
 \subsection{Execution and Rebalancing}
 After determining the task sizes, the scheduler sends a block of the selected
@@ -925,9 +937,9 @@ The scheduler also monitors the finish time of each task. If the difference in
 finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
 goes above a threshold, the rebalancing process is executed. Small thresholds
 may cause excessive rebalancing while large thresholds may tolerate larger
-imbalances that will cause processor idlenesses. The threshold is determined
-empirically, but values of about 10\% of the execution time of a single value
-resulted in a good trade-off.
+imbalances that will cause processor idlenesses. The threshold must be determined
+empirically; values of about 10\% of the execution time of a single value
+resulted in a good trade-off in practice.
 
 
 During the rebalancing, the scheduler synchronizes the processors and apply the
@@ -959,7 +971,7 @@ reaches a threshold. In this case, all threads are synchronized, and the new
 task sizes are recalculated for each processors. The task executions then
 restart.
 
-\vspace{0.2cm}
+%\vspace{0.2cm}
 %\paragraph*{Complete algorithm} 
 \subsection{Complete algorithm}
 Algorithm~\ref{alg1} shows the pseudo-code of the scheduling algorithm. The
@@ -1004,9 +1016,8 @@ best distribution $X$ of task sizes for each processor.
 
 The main loop repeats while there is still data for processing. It distributes
 tasks of different sizes for each processor in the system, obtaining the finish
-times for each task execution. It then checks if the maximum difference between
-the finish tasks is above a defined threshold. If the threshold is reached, the
-algorithm fits new curves for each processor performance model and solve the
+time of each task execution. If the difference between the finish times exceeds the define threshold,  the
+algorithm devises new curves for each processor performance model and solve the
 system of equations to determine a new distribution of tasks sizes for each
 processor.
 
@@ -1098,7 +1109,7 @@ feature subset is returned, although its computational complexity is unfeasible 
 % DC: corrigir as referências quebradas -> não achei
 We used four machines with different configurations (shown in
 Table~\ref{table:machines}), to evaluate our algorithm. We performed the
-experiments using four scenarios: with one machine (A), two machines (A, B),
+experiments using four scenarios: only one machine (A), two machines (A, B),
 three machines (A, B, C) and four machines (A, B, C and D). Note that some
 boards, such as GTX 295 and GTX 680 have two GPU processors on each.
 
@@ -1133,14 +1144,13 @@ boards, such as GTX 295 and GTX 680 have two GPU processors on each.
 
 
 
-To use all the $k$ SMs (Stream Multiprocessors) from a GPU, it is necessary to
+To use all the $k$ Stream Multiprocessors (SMs) from a GPU, it is necessary to
 create at least $n$ blocks. Moreover, each multiprocessor simultaneously
 executes groups (called warps) of $m$ threads from a single block, and several
 warps should be present on each GPU for efficient usage of its cores. In all
 tests, we used all the SMs of the GPUs, launching kernels with $k$ blocks and
-1024 threads per block. For the used GPUs, $k$ is \textbf{13, 14, 8, 30} in
-Tesla K20c, GTX Titan, GTX 680 and GTX 295 respectively. For the CPUs, we used
-all the CPU cores, launching one task per core.
+1024 threads per block. The number of available Stream Multiprocessors $k$ is \textbf{13, 14, 8, 30} for
+Tesla K20c, GTX Titan, GTX 680 and GTX 295, respectively. When using a CPU, all cores are used and we allocate one task per available core.
 
 % DC: não entendi esse parágrafo. Quais valores foram obtidos com experimentos? O que significa um valor ser "melhor"?
 % RYC: também não entendi. E a linguagem a lot of values were tesed não é apropriada. É preciso ser mais claro e específico. Talvez você possa descrever os parâmetros usados em cada uma das aplicações nas suas respectivas seções. 
@@ -1155,7 +1165,7 @@ all the CPU cores, launching one task per core.
 
 We used the matrix multiplication application to evaluate the execution time
 using different matrix sizes and number of machines of the following scheduling
-algorithms: (1) our algorithm, (2) static, (3) HDSS, and (4) Greedy. Our algorithm was configured with a threshold of 10\% of the execution time and initial block size of 2048 elements. The initial block size of HDSS algorithm was 1024 elements.
+algorithms: (1) our proposed algorithm, (2) static, (3) HDSS, and (4) Greedy. Our algorithm was configured with a threshold of 10\% of the execution time and initial block size of 2048 elements. The initial block size of HDSS algorithm was 1024 elements.
 
 \begin{figure*}[htb]
 	\begin{center}
@@ -1176,19 +1186,19 @@ algorithms: (1) our algorithm, (2) static, (3) HDSS, and (4) Greedy. Our algorit
 % RYC: Você rodou quantas vezes cada experimento? Qual o desvio padrão?
 %10 vezes, desvio de 5.
 
-Figure~\ref{fig:todosJuntos} shows the results for matrices with sizes from 4096
-x 4096 to 65536 x 65536 elements, and with different number of machines, we run each algorithm 10 times, obtaining the standard deviation of 4.87. With
-one machine the difference was small because there is only the selection between
-one CPU and GPU type and, consequently, the impact of the scheduler is smaller.
-With two or more machines our algorithm starts to produce significantly better
-results, since the number of GPU and CPUs types increases. But it is interesting
-to see that the proposed algorithm perform better than the other algorithm under
+Figure~\ref{fig:todosJuntos} shows the results for matrices with sizes varying from $4096 \times 4096$ to $65536 \times 65536$ elements, on the different scenarios (with different number of machines). We present the average execution time of 10 experiments, with a standard deviation of 4.87.
+
+With
+only one machine the influence of the scheduling algorithm was small. The only choice that must be made is the selection between running on a 
+CPU or GPU.
+With more machines our algorithm achieves significantly better
+results, since the number of GPU and CPUs types increases. Note that  the proposed algorithm perform better than the other algorithms on
 all scenarios.
 
 Table~\ref{table: comparativo} shows a more detailed comparison between the
-proposed and the HDSS algorithm for smaller and larger matrix sizes. The
+proposed algorithm and the HDSS algorithm for smaller and larger matrix sizes. The
 difference in execution time varies depending on the matrix size and number of
-machines, but with 2 or more machines it was always above 9\% and up to
+machines, but with 2 or more machines this difference was always above 9\% and up to
 28\%. This variance in the difference can occur due to the variations in the
 selection quality of task sizes in different configurations.
 
@@ -1196,11 +1206,11 @@ selection quality of task sizes in different configurations.
 %
 % RYC: Aqui este tempo de 664 ms foi para quais cenários (tamanho de matriz e de
 % máquinas)? O cenário foi adicionado.
-We should also emphasize that presented execution times include the time spent
+We should also emphasize that the presented execution times include the time spent
 calculating the size of the task sizes for each processor using the interior
-point method. The mean time spent on this calculation was 664.9 ms, for the scenario with 4 machines and 65536 elements, with
+point method. The mean time spent on this calculation was 664.9 ms, for the scenario with 4 machines and matrices of order 65536, with
 standard deviation of 98.3 ms. Although not negligible, the gains obtained with
-the better distribution of tasks sizes compensates this calculation time.
+the better distribution of tasks sizes compensates the overhead caused by the scheduling algorithm.
 
 %For matrices with order 4096, the proposed algorithm used four machines during
 %23.11 seconds, while the HDSS spent 29.91 seconds. Thus, in this case, our
@@ -1255,7 +1265,8 @@ the better distribution of tasks sizes compensates this calculation time.
 
 To better understand these results, we evaluated the time difference between the
 earliest and latest finishing threads, in the scenario with four machines and
-the matrices with 65535 x 65535 elements. Figure~\ref{fig:diferencaThreads}
+matrices with size $65535 \times 65535$.
+Figure~\ref{fig:diferencaThreads}
 shows the results for different number of threads for each algorithms. On the X axis are distributed threads of the same way among machines, including threads on the GPU and CPU. For two threads was used only the CPU for other cases CPU and GPU was used. In the y axis, we presented the maximum difference between the end of the performances of each algorithm for the same scenario. Our algorithm have the smallest amount of difference among all the algorithms implying almost perfect load balancing of processors. Other algorithms show considerable differences mostly because of the idle GPU at the end of execution. 
 
 % DC: "There are big differences among end of threads." Quais?! Escrevi errado.
@@ -1515,7 +1526,7 @@ gene regulatory network application.
 % number - used to balance the columns on the last page
 % adjust value as needed - may need to be readjusted if
 % the document is modified later
-\IEEEtriggeratref{14}  % REAJUSTAR DEPOIS DE TODAS AS MODIFICACOES!
+\IEEEtriggeratref{10}  % REAJUSTAR DEPOIS DE TODAS AS MODIFICACOES!
 % The "triggered" command can be changed if desired:
 %\IEEEtriggercmd{\enlargethispage{-5in}}
 
