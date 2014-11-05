@@ -622,7 +622,7 @@ data-parallel applications in heterogeneous GPU clusters. The algorithm uses
 performance information gathered at runtime in order to create a performance model for each
 device (CPU or GPU). The algorithm dynamically adjust the size of data blocks
 allocated to each device based on this model. We compared the proposed algorithm
-with static~\cite{raphael} and dynamic (HDSS)~\cite{HDSS} algorithms and with
+with Acosta~\cite{acosta} and dynamic (HDSS)~\cite{HDSS} algorithms and with
 the standard StarPU greedy algorithm.
 
 % The very first letter is a 2 line initial drop letter followed
@@ -643,7 +643,7 @@ the standard StarPU greedy algorithm.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Related Work}
+\section{Related Work}\label{sec:ralated}
 
 The standard approach for load balancing in distributed systems is to divide the
 tasks among CPUs according to a weight factor representing the processing speed
@@ -1067,9 +1067,10 @@ for each architecture in which codelet can be performed using specific languages
 and libraries for the target architecture. A StarPU application is described as
 a set of codelets with data dependencies.
 
-The tool offers a set of scheduling policies that the programmer can
-choose according to the characteristics of the application. The most used is the static scheduling algorithm HEFT (Heterogeneous Earliest Finish Time), that
-schedule the tasks based on cost models of task execution.
+%The tool offers a set of scheduling policies that the programmer can choose
+%according to the characteristics of the application. The most used is the static
+%scheduling algorithm HEFT (Heterogeneous Earliest Finish Time), that schedule
+%the tasks based on cost models of task execution.
 
 % DC: o que eh um kernel? O conceito nao foi definido antes.
 % For each device one codelet has been programmed with the characteristics of the
@@ -1081,55 +1082,77 @@ schedule the tasks based on cost models of task execution.
 % the processor weight. Two codelets were implemented one for GPU/CUDA and one for
 % CPU architecture.
 
+<<<<<<< HEAD
 We have evaluated our load-balancing algorithm using the StarPU framework.
 The StarPU framework offers a rich API that allows one to modify and develop new scheduling policies.
+=======
+>>>>>>> FETCH_HEAD
 %
 % DC: acho que a descricao abaixo eh muito baixo nivel e nao auxilia na compreencao do algoritmo.
 %
 % There are data structures and functions that speed up the process of development. For example the function "double starpu\_timing\_now (void)"  return the current date in micro seconds, which makes it easier for the determination of measures runtime. In StarPU there is a data structure called "starpu\_sched\_policy" This structure contains all the methods que Implement a scheduling policy. 
 
+We implemented our load-balancing algorithm in the StarPU framework. The StarPU
+framework offers a rich API that allows one to modify and develop new scheduling
+policies. For comparisons sake, we also implemented three other algorithms:
+\emph{greedy}, \emph{Acosta} algorithm and \emph{HDSS}. The greedy consisted in
+dividing the input set in pieces and assigning each piece of input to any idle
+processor, without any priority assignment. Acosta algorithm~\cite{acosta},
+described in Section~\ref{sec:ralated}, interactively finds a good distribution
+of work between CPUs and GPUs based on the execution of the previous task.
+Finally, The HDSS~\cite{HDSS} was implemented using minimum square estimation to
+estimate the weights and divided into two phases: adaptation phase and
+completion phase.
 
-For comparisons sake, we have implemented three other algorithms:
-\emph{greedy}, \emph{static} and
-\emph{HDSS}. The greedy consisted in dividing the input set in pieces and assigning
-each piece of input to any idle processor, without any priority assignment. The
-static~\cite{raphael}, measures processing speeds before the execution and set
-static block sizes per processor at the beginning of the execution, with the
-block size proportional to the processor speed. Finally, The HDSS~\cite{HDSS}
-was implemented using minimum square estimation to estimate the weights and
-divided into two phases: adaptation phase and completion phase.
-
-We have used the IPOPT~\cite{point} library to solve the equations systems produced by Equation~\ref{eq: system}. IPOPT (Interior Point Optimize) is an open source software package for large-scale nonlinear optimization. It can be used to solve general nonlinear programming problems.
+We used the IPOPT~\cite{point} library to solve the equations systems produced
+by Equation~\ref{eq: system}. IPOPT (Interior Point Optimize) is an open source
+software package for large-scale nonlinear optimization. It can be used to solve
+general nonlinear programming problems.
 
 % DC: cuidado ao usar o termo blackscholes (aplicacao de exemplo) e Black-Scholes (o nome do algoritmo) 
 %=========================================================
 \subsection{Applications}
 
 For evaluating our algorithm, we adapted two applications from the CUDA
-SDK~\cite{cuda} to execute using the StarPU framework, the \emph{blackscholes} and \emph{matrix
-multiplication} applications. We have also evaluated the algorithms using a (more complex) gene regulatory networks (GRN) inference~\cite{borelli2013gene} application.
+SDK~\cite{cuda} to execute using the StarPU framework, the \emph{blackscholes}
+and \emph{matrix multiplication} applications. We have also evaluated the
+algorithms using a (more complex) gene regulatory networks (GRN)
+inference~\cite{borelli2013gene} application. We implemented the applications
+using two codelets for each, containing the GPU and CPU implementations.
 
- A copy of the matrix A was distributed to all processing units and matrix B was divided according to
-the load-balancing scheme, the matrix multiplication version use the shared memory. Matrix multiplication has complexity $O(n^{3/2})$.
+For the matrix multiplication, we distribute a copy of the matrix A to all
+processing units and matrix B is divided according to the load-balancing scheme.
+We used an optimized version of the matrix multiplication, which uses the GPU
+shared memory. Multiplication of two $n \times n$ matrices has complexity
+$O(n^3)$.
 
 Black-Scholes is a popular financial analysis algorithm for calculating prices
-for European style options. The Black-Scholes equation is a differential
-equation that describes how, under a certain set of assumptions, the value of an
-option changes as the price of the underlying asset changes. More precisely, it
-is a stochastic differential equation that includes a random walk term, which
-models the random fluctuation of the price of the underlying asset over time.
-The Black-Scholes equation implies that the value of a European call option.
+for European style options. The Black-Scholes equation is a stochastic
+differential equation that describes how, under a certain set of assumptions,
+the value of an option changes as the price of the underlying asset changes. It
+includes a random walk term, which models the random fluctuation of the price of
+the underlying asset over time. The input is a vector of data that the options
+should be calculated by applying a differential equation. The division of the
+task consists in giving a range of the input vector to each thread. The
+complexity of the algorithm is $O(n)$, where $n$ is the number of options.
+
+%The Black-Scholes equation implies that the value of a European call option.
+%The cumulative normal distribution function gives us the probability that a
+%normally distributed random variable will have a value less than $x$. There is no
+%closed-form expression for this function, and as such it must be evaluated
+%numerically. It is typically approximated using a polynomial function. The idea is to calculate the Black-Scholes the greatest amount of possible options. Thus, the input is a vector of data that the options should be calculated by applying a differential equation. The division of the task is given a position of providing input vector to each thread. The complexity of the algorithm is $O(n)$.
 
 
-The cumulative normal distribution function gives us the probability that a
-normally distributed random variable will have a value less than $x$. There is no
-closed-form expression for this function, and as such it must be evaluated
-numerically. It is typically approximated using a polynomial function. The idea is to calculate the Black-Scholes the greatest amount of possible options. Thus, the input is a vector of data that the options should be calculated by applying a differential equation. The division of the task is given a position of providing input vector to each thread. The complexity of the algorithm is $O(n)$.
-
-
-Gene regulatory networks (GRN) inference is an important bioinformatics problem in which the gene interactions need to be deduced from gene expression data, such as $microarray$ data. Feature selection methods can be applied to this problem. A feature selection technique is composed by two parts: a search algorithm and a criterion function. Among the search algorithms already proposed, there is the exhaustive search where the best
-feature subset is returned, although its computational complexity is unfeasible in almost all situations. This application was developed as a low cost parallel solution based on GPU architectures for exhaustive search with a viable cost-benefit. The complexity of the algorithm is known to be $O(n^3)$. The division of work consisted in distributing genes between processors, and certain steps to synchronize the information search in the solution space, more details of the algorithm can be found in~\cite{borelli2013gene}.
-
+Gene regulatory networks (GRN) inference~\cite{borelli2013gene} is an important
+bioinformatics problem in which the gene interactions need to be deduced from
+gene expression data, such as $microarray$ data. Feature selection methods can
+be applied to this problem and are composed by two parts: a search algorithm and
+a criterion function. This application was developed as a parallel solution
+based on GPU architectures for performing an exhaustive search of the gene
+subset with a given cardinality that best predict a target gene. The division of
+work consisted in distributing the gene sets that are evaluated by each
+processor. The complexity of the algorithm is known to be $O(n^3)$, where $n$ is
+the number of genes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
