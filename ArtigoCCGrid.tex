@@ -1251,7 +1251,7 @@ the better distribution of tasks sizes compensates the overhead caused by the sc
 \begin{table*}[htb]
 \centering
 \caption{Comparative: HDSS x Our Algorithm}
-
+\begin{scriptsize}
 \begin{tabular}{c|c|c|c|c|c|c|}
 \cline{2-7}
 \multicolumn{1}{l|}{}                 & \multicolumn{3}{c|}{4096 elements}                              & \multicolumn{3}{c|}{65536 elements}                                                  \\ \hline
@@ -1265,8 +1265,81 @@ the better distribution of tasks sizes compensates the overhead caused by the sc
 \multicolumn{1}{|c|}{4 }      & 29.91     & 23.11            & 26.09                       
 			    & 488.22                          & 428.01              &     14.02            \\ \hline
 \end{tabular}
+\end{scriptsize}
 \label{table: comparativo}
 \end{table*}
+
+
+\begin{table*}[htb]
+\centering
+\caption{Comparative Algorithms to matrix multiplication}
+\begin{scriptsize}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{Acosta} & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD \\ 
+\hline
+Mac. A & CPU & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.016} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+Mac. B & CPU & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.010} & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+Mac. C & CPU & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.32} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.35} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+Mac. D & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.18} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.22} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.25} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.24} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.31} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.33} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+\end{tabular}
+\end{scriptsize}
+\label{table: comparativoBlocos}
+\end{table*}
+
+In table~\ref{table: comparativoBlocos}  we compare the distribution of blocks among the machines for three algorithms: Acosta, HDSS and our algorithm. The number of threads among the machines was fixed with one thread per core for CPU and thread per GPU. We was tested for two sizes of square matrix, with 4,096 elements  and with 65,536 elements. The values ​​represent the average proportion of the blocks, for ten executions. We used the machines A, B, C and D, and only a GPU used in the case of machines with two GPUs.
+
+\begin{table*}[htb]
+\centering
+\caption{Comparative Idle to matrix multiplication}
+\begin{scriptsize}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD \\ 
+\hline
+Mac A & CPU & \multicolumn{1}{c|}{1.32} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{8.32} & \multicolumn{1}{c|}{0.92} & \multicolumn{1}{c|}{0.62} & \multicolumn{1}{c|}{0.10} & \multicolumn{1}{c|}{1.23} & \multicolumn{1}{c|}{0.14} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.16} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{7.43} & \multicolumn{1}{c|}{0.90} & \multicolumn{1}{c|}{0.92} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.67} & \multicolumn{1}{c|}{0.15} \\ 
+\hline
+Mac B & CPU & \multicolumn{1}{c|}{1.41} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{6.32} & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{0.78} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.88} & \multicolumn{1}{c|}{0.16} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.33} & \multicolumn{1}{c|}{0.20} & \multicolumn{1}{c|}{6.82} & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{0.86} & \multicolumn{1}{c|}{0.10} & \multicolumn{1}{c|}{1.99} & \multicolumn{1}{c|}{0.16} \\ 
+\hline
+Mac C & CPU & \multicolumn{1}{c|}{1.68} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{7.76} & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{0.44} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{1.54} & \multicolumn{1}{c|}{0.16} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.41} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{9.98} & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{0.45} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.34} & \multicolumn{1}{c|}{0.15} \\ 
+\hline
+Mac D & CPU & \multicolumn{1}{c|}{1.72} & \multicolumn{1}{c|}{0.25} & \multicolumn{1}{c|}{7.43} & \multicolumn{1}{c|}{0.92} & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.31} & \multicolumn{1}{c|}{0.14} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.32} & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{9.97} & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{0.74} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.45} & \multicolumn{1}{c|}{0.15} \\ 
+\hline
+\end{tabular}
+\end{scriptsize}
+\label{table: ociosoBlocos}
+\end{table*}
+
+In table\ref{table: ociosoBlocos} we present the time each processor was idle. We use four machines, A, B, C and D, and we fix the number of threads. We tested for extreme cases with square matrices of 4096 elements and 65536 elements.
+
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1370,6 +1443,7 @@ distribution of tasks sizes found compensates this time.
 \begin{table*}[htb]
 \centering
 \caption{Comparative: HDSS x Our Algorithm}
+\begin{scriptsize}
 \begin{tabular}{c|c|c|c|c|c|c|}
 \cline{2-7}
 \multicolumn{1}{l|}{}                 & \multicolumn{3}{c|}{10,000 Options}                              & \multicolumn{3}{c|}{500,000 Options}                                                  \\ \hline
@@ -1383,9 +1457,79 @@ distribution of tasks sizes found compensates this time.
 \multicolumn{1}{|c|}{4 }      & 1.11     & 1.02              & 8.82                       
 			    & 2.93                          & 2.72              &         7.72                  \\ \hline
 \end{tabular}
+\end{scriptsize}
 \label{table: black}
 \end{table*}
 
+\begin{table*}[htb]
+\centering
+\caption{Comparative Algorithms to blackscholes}
+\begin{scriptsize}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{Acosta} & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{10,000 opt} & \multicolumn{2}{c|}{500,000 opt} & \multicolumn{2}{c|}{10,000 opt} & \multicolumn{2}{c|}{500,000 opt} & \multicolumn{2}{c|}{500,000 opt} & \multicolumn{2}{c|}{500,000 opt} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD \\ 
+\hline
+Mac. A & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.016} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+Mac. B & CPU & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.010} & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+Mac. C & CPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.1} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.18} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.35} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.41} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+Mac. D & CPU & \multicolumn{1}{c|}{0.1} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.39} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.36} & \multicolumn{1}{c|}{0.016} \\ 
+\hline
+\end{tabular}
+\end{scriptsize}
+\label{table: comparativoBlack}
+\end{table*}
+
+In table~\ref{table: comparativoBlack} we compare the distribution of blocks among the machines of three algorithms: Acosta, HDSS and our algorithm. The number of threads between machines was fixed with one thread per core CPU and a GPU thread. We was tested for two number of options, with 10,000 options and with 500,000 options. The values ​​represent the average proportion of the blocks, for ten executions. We used the machines A, B, C and D, and only a GPU used in the case of machines with two GPUs.
+
+\begin{table*}[htb]
+\centering
+\caption{Comparative Idle to GRN}
+\begin{scriptsize}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{10,000 options} & \multicolumn{2}{c|}{500,000 options} & \multicolumn{2}{c|}{10,000 options} & \multicolumn{2}{c|}{500,000 options} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD \\ 
+\hline
+Mac A & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} \\ 
+\hline
+Mac B & CPU & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} \\ 
+\hline
+Mac C & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} \\ 
+\hline
+Mac D & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} \\ 
+\hline
+\end{tabular}
+\end{scriptsize}
+\label{table: ociosidadeBlack}
+\end{table*}
+
+In table\ref{table: ociosoBlocos} we present the time each processor was idle. We use four machines, A, B, C and D, and we fix the number of threads. We tested for extreme cases with 10,000 options and 500,000 options.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -1431,7 +1575,7 @@ CPU/GPU interface in larger networks.
 %the communication cost limited the gain. 
 
 The total cost of calculating the distribution of the blocks using our algorithm
-was 821.54 milliseconds with a standard deviation of 142.23 milliseconds. Again,
+was 821.54 milliseconds with a standard deviation of 142.23 milliseconds, to case with four machines and 2,000,000 genes. Again,
 this overhead was compensated by the better distribution of load among
 processors.
 
@@ -1442,7 +1586,7 @@ processors.
 	\begin{center}
 	\centering
 			%\includegraphics[scale=0.4]{GraficoFabrizio4maquinasNOVO.pdf}
-		\includegraphics[scale=0.3]{1machineGenes.pdf} \quad
+		\includegraphics[scale=0.3]{1machineGene.pdf} \quad
 		\includegraphics[scale=0.3]{2machineGenes.pdf} \quad
 		\includegraphics[scale=0.3]{3machineGenes.pdf} \quad
 		\includegraphics[scale=0.3]{4machineGenes.pdf} 
@@ -1455,7 +1599,7 @@ processors.
 \begin{table*}[htb]
 \centering
 \caption{Comparative: HDSS x Our Algorithm}
-
+\begin{scriptsize}
 \begin{tabular}{c|c|c|c|c|c|c|}
 \cline{2-7}
 \multicolumn{1}{l|}{}                 & \multicolumn{3}{c|}{100,000 Genes}                              & \multicolumn{3}{c|}{2,000,000 Genes}                                                  \\ \hline
@@ -1465,8 +1609,79 @@ processors.
 \multicolumn{1}{|c|}{3 }      & 34.76     & 21.39              & 62.50                            & 502.65                          & 432.43             &               16.24                  \\ \hline
 \multicolumn{1}{|c|}{4 }      & 25.91     & 18.54              & 39.75                            & 479.54                          & 411.46             &               16.54  \\ \hline
 \end{tabular}
+\end{scriptsize}
 \label{table: gene}
 \end{table*}
+
+\begin{table*}[htb]
+\centering
+\caption{Comparative Algorithms to GRN}
+\begin{scriptsize}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{Acosta} & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD \\ 
+\hline
+Mac. A & CPU & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.019} \\ 
+\hline
+Mac. B & CPU & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.019} \\ 
+\hline
+Mac. C & CPU & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.34} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.29} & \multicolumn{1}{c|}{0.019} \\ 
+\hline
+Mac. D & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.016} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.24} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.33} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.27} & \multicolumn{1}{c|}{0.019} \\ 
+\hline
+\end{tabular}
+\end{scriptsize}
+\label{table: comparativoGene}
+\end{table*}
+
+In table~\ref{table: comparativoBlack} we compare the distribution of blocks among the machines of three algorithms: Acosta, HDSS and our algorithm. The number of threads between machines was fixed with one thread per core CPU and a GPU thread. We was tested for two number of genes, with 100,000 genes and with 2,000,000 genes. The values ​​represent the average proportion of the blocks, for ten executions. We used the machines A, B, C and D, and only a GPU used in the case of machines with two GPUs.
+
+\begin{table*}[htb]
+\centering
+\caption{Comparative Algorithms to GRN}
+\begin{scriptsize}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD \\ 
+\hline
+Mac A & CPU & \multicolumn{1}{c|}{1.2} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.33} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.25} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.36} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.4} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{7.21} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.22} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{1.67} & \multicolumn{1}{c|}{0.09} \\ 
+\hline
+Mac B & CPU & \multicolumn{1}{c|}{1.2} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{8.98} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.30} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.31} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.8} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{7.39} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.29} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.45} & \multicolumn{1}{c|}{0.09} \\ 
+\hline
+Mac C & CPU & \multicolumn{1}{c|}{1.2} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.21} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.23} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{1.21} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.9} & \multicolumn{1}{c|}{0.18} & \multicolumn{1}{c|}{9.32} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.28} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.64} & \multicolumn{1}{c|}{0.09} \\ 
+\hline
+Mac D & CPU & \multicolumn{1}{c|}{1.3} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.92} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.27} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{1.22} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.1} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.97} & \multicolumn{1}{c|}{0.99} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.55} & \multicolumn{1}{c|}{0.1} \\ 
+\hline
+\end{tabular}
+\end{scriptsize}
+\label{table: ociosidadeGene}
+\end{table*}
+
+In table\ref{table: ociosidadeGene} we present the time each processor was idle. We use four machines, A, B, C and D, and we fix the number of threads. We tested for extreme cases with 100,000 genes and with 2,000,000 genes.
 
 When analyzing the differences with thread finishing time, shown in
 Figure~\ref{fig:GeneDiferenca}, we see that again our algorithm has the smalles
@@ -1499,7 +1714,7 @@ rebalancing process of tasks sizes, which are maintained until the end of the
 execution. 
 
 % RYC: Por que é vantajoso para o HDSS diminuir o tamanho das tarefas? Explicar no texto, Ok.
-In HDSS, we see the the block sizes decrease during the execution until the last
+In HDSS the the block sizes decrease during the execution until the last
 iteration, for all units complete execution at nearly the same time. This
 prevents that unbalances in the final of the execution cause some processors to
 receive large portions data while other remains idle. This decrease in block
@@ -1513,8 +1728,8 @@ distribution of block sizes is maintained during the entire execution.
 \begin{figure}[htb]
 	\begin{center}
 	\centering
-			\includegraphics[scale=0.33]{Block_Comportamento_Nosso.pdf}\quad
-			\includegraphics[scale=0.33]{Block_Comportamento_Deles.pdf}
+			\includegraphics[scale=0.33]{Block_Comportamento_Nosso.pdf}%\quad
+			%\includegraphics[scale=0.33]{Block_Comportamento_Deles.pdf}
 	\caption{Block size evolution for GRN application.}
 	\label{fig:GeneBlocos}
 	\end{center}
