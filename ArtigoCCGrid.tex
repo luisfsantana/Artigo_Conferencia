@@ -477,19 +477,23 @@
 
 \begin{abstract}
 %\boldmath
-The use of GPU clusters for scientific applications is becoming more widespread,
-with applications in areas such as physics, chemistry and bioinformatics. These
-clusters can be highly heterogeneous, composed of several models of CPUs and
-GPUs. To use these heterogeneous devices in an efficient manner, it is necessary
-to balance the computational load among the GPUs and CPUs according to the
-tasks' sizes, minimizing the execution time of the application.
+The use of GPU clusters for scientific applications from areas such as physics,
+chemistry and bioinformatics is becoming more widespread. These clusters
+frequently have different types of processing devices, such as CPUs and GPUs,
+which can themselves be heterogeneous. To use these devices in an efficient
+manner, we can balance the computational load among them. One approach is to
+select task sizes in a way that permits all processors to finish the execution
+of their tasks at the same time.
 
-We propose an algorithm for dynamic load balancing in heterogeneous GPU clusters
-that determines the execution profile of tasks on each device in runtime. This
-profile is used to find the best distribution of task sizes among devices. We
+We propose an algorithm for dynamic load-balancing in heterogeneous GPU clusters
+that performs an online estimation of performance curve models for each
+device. It selects the best data distribution for the processors using an
+interior point method that solves a non-linear system of equations. We
 implemented the algorithm in the StarPU framework and compared its performance
 with existing load-balancing algorithms, using applications from linear algebra,
-stock markets and bioinformatics.
+stock markets and bioinformatics. We show that it reduces the application
+execution times in all scenarios, with the largest improvements in more
+heterogeneous environments.
 
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
