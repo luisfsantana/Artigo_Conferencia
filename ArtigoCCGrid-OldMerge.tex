@@ -196,6 +196,7 @@
 \usepackage{lipsum}
 \usepackage{multirow}
 
+
 % algorithmic.sty was written by Peter Williams and Rogerio Brito.
 % This package provides an algorithmic environment fo describing algorithms.
 % You can use the algorithmic environment in-text or within a figure
@@ -477,23 +478,20 @@
 
 \begin{abstract}
 %\boldmath
-The use of GPU clusters for scientific applications from areas such as physics,
-chemistry and bioinformatics is becoming more widespread. These clusters
-frequently have different types of processing devices, such as CPUs and GPUs,
-which can themselves be heterogeneous. To use these devices in an efficient
-manner, we can balance the computational load among them. One approach is to
-select task sizes in a way that permits all processors to finish the execution
-of their tasks at the same time.
+The use of GPU clusters for scientific applications is becoming more widespread,
+with applications in areas such as physics, chemistry and bioinformatics. These
+clusters can be highly heterogeneous, composed of several models of CPUs and
+GPUs, that could be used together to execute these applications. To use these
+heterogeneous devices in an efficient manner, it is necessary to balance the computational load
+among the GPUs and CPUs according to the tasks' sizes, minimizing the execution
+time of the application.
 
-We propose an algorithm for dynamic load-balancing in heterogeneous GPU clusters
-that performs an online estimation of performance curve models for each
-device. It selects the best data distribution for the processors using an
-interior point method that solves a non-linear system of equations. We
+We propose an algorithm for dynamic load balancing in heterogeneous GPU clusters
+that determines the execution profile of tasks on each device in runtime. This
+profile is used to find the best distribution of task sizes among devices. We
 implemented the algorithm in the StarPU framework and compared its performance
 with existing load-balancing algorithms, using applications from linear algebra,
-stock markets and bioinformatics. We show that it reduces the application
-execution times in all scenarios, with the largest improvements in more
-heterogeneous environments.
+stock markets and bioinformatics.
 
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
@@ -610,7 +608,7 @@ the GPUs, and these CPUs can used by the applications.
 %GPUs.
 
 The main task of the load-balancing mechanism is to devise the best data
-division among the GPUs. A possible approach is to determine the performance
+division amount the GPUs. A possible approach is to determine the performance
 profiles for each GPU type and application task and use it to determine the
 amount of work given to each GPU. This profiling can be statically computed, before the
 execution of the application~\cite{raphael}, or dynamically, at runtime~\cite{acosta, HDSS}. Another solution is to use simple algorithms for
@@ -778,7 +776,7 @@ threshold. Figure~\ref{fig: fluxo1} depicts the flowchart of the algorithm.
 
 \begin{figure}[!t]
 	\centering
-			\includegraphics[scale=0.25]{CPUVersusGPULinear2_Ajustado.pdf} 				
+			\includegraphics[scale=0.29]{CPUVersusGPULinear2_Ajustado.pdf} 				
 	\caption{GPU and CPU processing times for different block sizes.}
 	\label{fig: CPUVersusGPU1}
 \end{figure}
@@ -834,7 +832,7 @@ the curves can be approximated by different types of functions.
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[scale=0.25]{NovaFigura_Algoritmo.pdf} 
+	\includegraphics[scale=0.28]{NovaFigura_Algoritmo.pdf} 
 	\caption{Performance modeling phase.}
 	\label{fig: algoritmo}
 \end{figure}
@@ -961,7 +959,7 @@ The scheduler also monitors the finish time of each task. If the difference in
 finishing times $t_i$ and $t_j$ between any two tasks of processors $i$ and $j$
 goes above a threshold, the rebalancing process is executed. Small thresholds
 may cause excessive rebalancing while large thresholds may tolerate larger
-imbalances that will cause processor idleness. The threshold must be
+imbalances that will cause processor idlenesses. The threshold must be
 determined empirically; values of about 10\% of the execution time of a single
 block resulted in a good trade-off in practice.
 
@@ -1072,14 +1070,14 @@ choose according to the characteristics of the application. The most used is the
 schedule the tasks based on cost models of task execution.
 
 % DC: o que eh um kernel? O conceito nao foi definido antes.
-% For each device one codelet has been programmed with the characteristics of the
-% devices. A codelet is a structure that represents a computational function. Such a
-% codelet may contain an implementation of the same function on different
-% architectures (e.g. CUDA and x86).  The applications were implemented by
-% dividing the data set into tasks, implemented as codelets. The tasks are
-% independent, with each task receiving a part of the input set proportional to
-% the processor weight. Two codelets were implemented one for GPU/CUDA and one for
-% CPU architecture.
+For each device one codelet has been programmed with the characteristics of the
+devices. A codelet is a structure that represents a computational function. Such a
+codelet may contain an implementation of the same function on different
+architectures (e.g. CUDA and x86).  The applications were implemented by
+dividing the data set into tasks, implemented as codelets. The tasks are
+independent, with each task receiving a part of the input set proportional to
+the processor weight. Two codelets were implemented one for GPU/CUDA and one for
+CPU architecture.
 
 We have evaluated our load-balancing algorithm using the StarPU framework.
 The StarPU framework offers a rich API that allows one to modify and develop new scheduling policies.
@@ -1217,8 +1215,8 @@ algorithm was 1024 elements.
 %10 vezes, desvio de 5.
 
 \paragraph{Application execution time} Figure~\ref{fig:todosJuntos} shows the 
-results obtained with matrices of sizes varying from $4096 \times 4096$ to $65536 \times
-65536$ elements, for different number of machines. We present the average
+results for matrices with sizes varying from $4096 \times 4096$ to $65536 \times
+65536$ elements, with different number of machines. We present the average
 execution time of 10 experiments, which resulted in small standard deviation
 values, not shown in the graph for better visualization.
 
@@ -1281,29 +1279,29 @@ the better distribution of tasks sizes compensates the overhead caused by these 
 \centering
 \caption{Distribution of block sizes for Matrix Multiplication application}
 \begin{scriptsize}
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
-\cline{3-8}
-\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{Acosta} & \multicolumn{2}{c|}{HDSS} & \multicolumn{2}{c|}{Our Algorithm} \\ 
-\cline{3-8}
-\multicolumn{1}{l}{} &  & \multicolumn{1}{c|}{4096 elements} & \multicolumn{1}{c|}{65536 elements} & \multicolumn{1}{c|}{4096 elements} & \multicolumn{1}{c|}{65536 elements} & \multicolumn{1}{c|}{4096 elements} & \multicolumn{1}{|c|}{65536 elements} \\ 
-\cline{1-8}
-\multicolumn{1}{|c}{} Machines &  & Size Ratio & Size Ratio & Size Ratio & Size Ratio & Size Ratio  & Size Ratio\\ 
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{Acosta} & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD \\ 
 \hline
-A & CPU & \multicolumn{1}{c|}{$0.09 \pm 0.015$} & \multicolumn{1}{c|}{$0.05\pm 0.011$}  & \multicolumn{1}{c|}{$0.03 \pm 0.011$}  & \multicolumn{1}{c|}{$0.02 \pm 0.017$} & \multicolumn{1}{c|}{$0.04\pm 0.014$} & \multicolumn{1}{c|}{$0.01\pm 0.016$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.14 \pm 0.015$} & \multicolumn{1}{c|}{$0.12 \pm 0.011$} & \multicolumn{1}{c|}{$0.11 \pm 0.011$} & \multicolumn{1}{c|}{$0.13 \pm 0.017$} & \multicolumn{1}{c|}{$0.08 \pm 0.014$} & \multicolumn{1}{c|}{$0.12 \pm 0.016$} \\ 
+Mac. A & CPU & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.016} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
-B & CPU & \multicolumn{1}{c|}{$0.06 \pm 0.014$} & \multicolumn{1}{c|}{$0.06 \pm 0.012$} & \multicolumn{1}{c|}{$0.08 \pm 0.015$} & \multicolumn{1}{c|}{$0.08 \pm 0.017$} & \multicolumn{1}{c|}{$0.04 \pm 0.014$} & \multicolumn{1}{c|}{$0.01 \pm 0.017$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.13\pm 0.010$} & \multicolumn{1}{c|}{$0.14 \pm 0.011$} & \multicolumn{1}{c|}{$0.15\pm 0.015$} & \multicolumn{1}{c|}{$0.16 \pm 0.017$} & \multicolumn{1}{c|}{$0.12 \pm 0.015$} & \multicolumn{1}{c|}{$0.11 \pm 0.016$} \\ 
+Mac. B & CPU & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.010} & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
-C & CPU & \multicolumn{1}{c|}{$0.12 \pm 0.013$} & \multicolumn{1}{c|}{$0.12 \pm 0.012$} & \multicolumn{1}{c|}{$0.08 \pm 0.017$} & \multicolumn{1}{c|}{$0.07 \pm 0.015$} & \multicolumn{1}{c|}{$0.04 \pm 0.014$} & \multicolumn{1}{c|}{$0.03 \pm 0.017$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.21 \pm 0.015$} & \multicolumn{1}{c|}{$0.21 \pm 0.011$} & \multicolumn{1}{c|}{$0.21 \pm 0.017$} & \multicolumn{1}{c|}{$0.21 \pm 0.015$} & \multicolumn{1}{c|}{$0.32 \pm 0.014$} & \multicolumn{1}{c|}{$0.35 \pm 0.016$} \\ 
+Mac. C & CPU & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.32} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.35} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
-D & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.015$} & \multicolumn{1}{c|}{$0.08 \pm 0.011$} & \multicolumn{1}{c|}{$0.09 \pm 0.017$} & \multicolumn{1}{c|}{$0.09 \pm 0.015$} & \multicolumn{1}{c|}{$0.05 \pm 0.013$} & \multicolumn{1}{c|}{$0.04 \pm 0.017$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.18 \pm 0.015$} & \multicolumn{1}{c|}{$0.22 \pm 0.011$} & \multicolumn{1}{c|}{$0.25 \pm 0.017$} & \multicolumn{1}{c|}{$0.24 \pm 0.015$} & \multicolumn{1}{c|}{$0.31 \pm 0.013$} & \multicolumn{1}{c|}{$0.33 \pm 0.016$} \\ 
+Mac. D & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.18} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.22} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.25} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.24} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.31} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.33} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
 \end{tabular}
 \end{scriptsize}
@@ -1326,13 +1324,13 @@ When comparing the block size distributions generated by the three
 load-balancing algorithms, we note that the same algorithm distribute similar
 distributions for the two matrix sizes and that Acost and HDSS algorithms
 produce similar distributions. When comparing to our algorithm, we can see that
-it produces a qualitatively different distribution, with proportionally smaller
+it produces a qualitatively different distribution, with proporcionally smaller
 blocks allocated to CPUs and larger blocks to GPUs from machines C and D, which
 contain the largest number of cores. This difference occurs because HDSS and
 Acost algorithm use simple linear weighted means from a set of performance
 coefficients, one per processor. Our algorithm uses the complete performance
 curve of each processor and solves the resulting system of equations, resulting
-in more precise estimates of the better block division scheme.
+in more precisa estimates of the better block division scheme.
 
 %The greedy algorithm does not directly use information on the processing speeds
 %of the devices and simply provides the tasks to free processors and the
@@ -1357,29 +1355,29 @@ in more precise estimates of the better block division scheme.
 \centering
 \caption{Idle processor times for Matrix Multiplication application}
 \begin{scriptsize}
-\begin{tabular}{|l|l|l|l|l|l|}
-\cline{3-6}
-\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{HDSS} & \multicolumn{2}{c|}{Our Algorithm} \\ 
-\cline{3-6}
-\multicolumn{1}{l}{} &  & \multicolumn{1}{c|}{4096 elements} & \multicolumn{1}{c|}{65536 elements} & \multicolumn{1}{c|}{4096 elements} & \multicolumn{1}{c|}{65536 elements} \\ 
-\cline{1-6}
-\multicolumn{1}{|c}{} Machines &  & Idle Time (s) & Idle Time (s) & Idle Time (s) & Idle Time (s) \\ 
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} & \multicolumn{2}{c|}{4096 elements} & \multicolumn{2}{c|}{65536 elements} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD \\ 
 \hline
-A & CPU & \multicolumn{1}{c|}{$1.32 \pm 0.21$} & \multicolumn{1}{c|}{$8.32  \pm 0.92$} & \multicolumn{1}{c|}{$0.62  \pm 0.10$} & \multicolumn{1}{c|}{$1.23 \pm 0.14$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$1.16 \pm 0.21$} & \multicolumn{1}{c|}{$7.43 \pm 0.90$} & \multicolumn{1}{c|}{$0.92 \pm 0.11$} & \multicolumn{1}{c|}{$1.67 \pm 0.15$} \\ 
+Mac A & CPU & \multicolumn{1}{c|}{1.32} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{8.32} & \multicolumn{1}{c|}{0.92} & \multicolumn{1}{c|}{0.62} & \multicolumn{1}{c|}{0.10} & \multicolumn{1}{c|}{1.23} & \multicolumn{1}{c|}{0.14} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.16} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{7.43} & \multicolumn{1}{c|}{0.90} & \multicolumn{1}{c|}{0.92} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.67} & \multicolumn{1}{c|}{0.15} \\ 
 \hline
-B & CPU & \multicolumn{1}{c|}{$1.41 \pm 0.21$} & \multicolumn{1}{c|}{$6.32 \pm 0.91$} & \multicolumn{1}{c|}{$0.78 \pm 0.11$} & \multicolumn{1}{c|}{$1.88 \pm0.16$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$1.33 \pm 0.20$} & \multicolumn{1}{c|}{$6.82 \pm 0.91$} & \multicolumn{1}{c|}{$0.86 \pm 0.10$} & \multicolumn{1}{c|}{$1.99 \pm 0.16$} \\ 
+Mac B & CPU & \multicolumn{1}{c|}{1.41} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{6.32} & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{0.78} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.88} & \multicolumn{1}{c|}{0.16} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.33} & \multicolumn{1}{c|}{0.20} & \multicolumn{1}{c|}{6.82} & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{0.86} & \multicolumn{1}{c|}{0.10} & \multicolumn{1}{c|}{1.99} & \multicolumn{1}{c|}{0.16} \\ 
 \hline
-C & CPU & \multicolumn{1}{c|}{$1.68 \pm 0.21$} & \multicolumn{1}{c|}{$7.76 \pm 0.91$} & \multicolumn{1}{c|}{$0.44 \pm 0.08$} & \multicolumn{1}{c|}{$1.54 \pm 0.16$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$1.41 \pm 0.21$} & \multicolumn{1}{c|}{$9.98 \pm 0.93$} & \multicolumn{1}{c|}{$0.45 \pm 0.11$} & \multicolumn{1}{c|}{$1.34 \pm 0.15$} \\ 
+Mac C & CPU & \multicolumn{1}{c|}{1.68} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{7.76} & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{0.44} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{1.54} & \multicolumn{1}{c|}{0.16} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.41} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{9.98} & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{0.45} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.34} & \multicolumn{1}{c|}{0.15} \\ 
 \hline
-D & CPU & \multicolumn{1}{c|}{$1.72 \pm 0.25$} & \multicolumn{1}{c|}{$7.43 \pm 0.92$} & \multicolumn{1}{c|}{$0.93 \pm 0.11$} & \multicolumn{1}{c|}{$1.31 \pm 0.14$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$1.32 \pm 0.2$} & \multicolumn{1}{c|}{$9.97 \pm 0.93$} & \multicolumn{1}{c|}{$0.74 \pm 0.11$} & \multicolumn{1}{c|}{$1.45 \pm 0.15$} \\ 
+Mac D & CPU & \multicolumn{1}{c|}{1.72} & \multicolumn{1}{c|}{0.25} & \multicolumn{1}{c|}{7.43} & \multicolumn{1}{c|}{0.92} & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.31} & \multicolumn{1}{c|}{0.14} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.32} & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{9.97} & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{0.74} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{1.45} & \multicolumn{1}{c|}{0.15} \\ 
 \hline
 \end{tabular}
 \end{scriptsize}
@@ -1388,17 +1386,17 @@ D & CPU & \multicolumn{1}{c|}{$1.72 \pm 0.25$} & \multicolumn{1}{c|}{$7.43 \pm 0
 
 \paragraph{Processor Idleness} Table~\ref{table: ociosoBlocos} shows the amount of time each CPU and GPU was
 idle during application execution for our and HDSS algorithms, which resulted in
-the best application execution times. We used the same experimental
+the best applicaiton execution times. We used the same experimental
 configuration from Table~\ref{table: comparativoBlocos}. Acosta algorithm (not
-shown) produces significantly larger idleness, since it synchronizes the block
+shown) produces significantly larger idleness, since it sychronizes the block
 executions multiple times until it reaches an equilibrium.
 
-The idleness occur mainly in the first phase of the algorithm, where
+The idlenesses occur mainly in the first phase of the algorithm, where
 non-optimal block sizes are used to estimate the computational capabilities of
 each processor. Our algorithm starts to adapt the block sizes in this phase
 (Figure~\ref{fig: algoritmo}), causing a reduction in the generated idleness.
 
-There can also be additional idleness in the end of application. HDSS prevents
+There can also be additional idlenesses in the end of application. HDSS prevents
 part of this idleness using decreasing block size values during application
 execution. If some processor is idle at the end, it can receive extra small
 blocks to process. Our algorithm perform the re-balancing process when the
@@ -1494,7 +1492,7 @@ Table~\ref{table: black} compares the execution times of our algorithm and HDSS,
 for the execution with 10,000 and 500,000 options. The largest difference
 occurred with three and four machines, with values between 5\% and 11\%. The
 mean overhead of our algorithm to determine the distribution of block sizes, for
-4 machines and 500,000 options was 201.32ms, with standard deviation of 0.34ms.
+4 machines and 500.000 options, was 201.32ms, with standard deviation of 0.34ms.
 Although not negligible, the best distribution of tasks sizes found compensates
 this overhead.
 
@@ -1534,29 +1532,29 @@ this overhead.
 \centering
 \caption{Distribution of block sizes for Blackscholes application}
 \begin{scriptsize}
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
-\cline{3-8}
-\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{Acosta} & \multicolumn{2}{c|}{HDSS} & \multicolumn{2}{c|}{Our Algorithm} \\ 
-\cline{3-8}
-\multicolumn{1}{l}{} &  & \multicolumn{1}{c|}{10,000 opt} & \multicolumn{1}{c|}{500,000 opt} & \multicolumn{1}{c|}{10,000 opt} & \multicolumn{1}{c|}{500,000 opt} & \multicolumn{1}{c|}{500,000 opt} & \multicolumn{1}{c|}{500,000 opt} \\ 
-\cline{1-8}
-\multicolumn{1}{|c}{} Machine &  & Size Ratio & Size Ratio & Size Ratio & Size Ratio & Size Ratio & Size Ratio \\ 
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{Acosta} & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{10,000 opt} & \multicolumn{2}{c|}{500,000 opt} & \multicolumn{2}{c|}{10,000 opt} & \multicolumn{2}{c|}{500,000 opt} & \multicolumn{2}{c|}{500,000 opt} & \multicolumn{2}{c|}{500,000 opt} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD \\ 
 \hline
-A & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.015$} & \multicolumn{1}{c|}{$0.06 \pm 0.011$} & \multicolumn{1}{c|}{$0.06 \pm 0.011$} & \multicolumn{1}{c|}{$0.06 \pm 0.017$} & \multicolumn{1}{c|}{$0.02 \pm 0.014$} & \multicolumn{1}{c|}{$0.01 \pm 0.016$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.13 \pm 0.015$} & \multicolumn{1}{c|}{$0.16 \pm 0.011$} & \multicolumn{1}{c|}{$0.15  \pm 0.011$} & \multicolumn{1}{c|}{$0.17  \pm 0.017$} & \multicolumn{1}{c|}{$0.03  \pm 0.014$} & \multicolumn{1}{c|}{$0.07  \pm 0.016$} \\ 
+Mac. A & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.016} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
-B & CPU & \multicolumn{1}{c|}{$0.06 \pm 0.014$} & \multicolumn{1}{c|}{$0.06  \pm 0.012$} & \multicolumn{1}{c|}{$0.08 \pm 0.015$} & \multicolumn{1}{c|}{$0.08 \pm 0.017$} & \multicolumn{1}{c|}{$0.02 \pm 0.014$} & \multicolumn{1}{c|}{$0.01 \pm 0.017$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.13 \pm 0.010$} & \multicolumn{1}{c|}{$0.17 \pm 0.011$} & \multicolumn{1}{c|}{$0.15 \pm 0.015$} & \multicolumn{1}{c|}{$0.16 \pm 0.017$} & \multicolumn{1}{c|}{$0.12 \pm 0.015$} & \multicolumn{1}{c|}{$0.07 \pm 0.016$} \\ 
+Mac. B & CPU & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.010} & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
-C & CPU & \multicolumn{1}{c|}{$0.13 \pm 0.013$} & \multicolumn{1}{c|}{$0.1 \pm 0.012$} & \multicolumn{1}{c|}{$0.08 \pm 0.017$} & \multicolumn{1}{c|}{$0.07 \pm 0.015$} & \multicolumn{1}{c|}{$0.02 \pm 0.014$} & \multicolumn{1}{c|}{$0.02 \pm 0.017$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.21  \pm 0.015$} & \multicolumn{1}{c|}{$0.2  \pm 0.011$} & \multicolumn{1}{c|}{$0.19 \pm 0.017$} & \multicolumn{1}{c|}{$0.18  \pm 0.015$} & \multicolumn{1}{c|}{$0.35 \pm 0.014$} & \multicolumn{1}{c|}{$0.41 \pm 0.016$} \\ 
+Mac. C & CPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.1} & \multicolumn{1}{c|}{0.012} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.18} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.35} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.41} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
-D & CPU & \multicolumn{1}{c|}{$0.1  \pm 0.015$} & \multicolumn{1}{c|}{$0.09 \pm 0.011$} & \multicolumn{1}{c|}{$0.09 \pm 0.017$} & \multicolumn{1}{c|}{$0.09 \pm 0.015$} & \multicolumn{1}{c|}{$0.05 \pm 0.013$} & \multicolumn{1}{c|}{$0.05 \pm 0.017$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.17 \pm 0.015$} & \multicolumn{1}{c|}{$0.16 \pm 0.011$} & \multicolumn{1}{c|}{$0.2 \pm 0.017$} & \multicolumn{1}{c|}{$0.19 \pm 0.015$} & \multicolumn{1}{c|}{$0.39 \pm 0.013$} & \multicolumn{1}{c|}{$0.36 \pm 0.016$} \\ 
+Mac. D & CPU & \multicolumn{1}{c|}{0.1} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.017} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.011} & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.39} & \multicolumn{1}{c|}{0.013} & \multicolumn{1}{c|}{0.36} & \multicolumn{1}{c|}{0.016} \\ 
 \hline
 \end{tabular}
 \end{scriptsize}
@@ -1577,29 +1575,29 @@ CPUs.
 \centering
 \caption{Idle processor times for Blackscholes application}
 \begin{scriptsize}
-\begin{tabular}{|l|l|l|l|l|l|}
-\cline{3-6}
-\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{HDSS} & \multicolumn{2}{c|}{Our Algorithm} \\ 
-\cline{3-6}
-\multicolumn{1}{l}{} &  & \multicolumn{1}{c|}{10,000 options} & \multicolumn{1}{c|}{500,000 options} & \multicolumn{1}{c|}{10,000 options} & \multicolumn{1}{c|}{500,000 options} \\ 
-\cline{1-6}
-\multicolumn{1}{|c}{} Machines &  & Idle Time (s) & Idle Time (s) & Idle Time (s) & Idle Time (s) \\ 
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{10,000 options} & \multicolumn{2}{c|}{500,000 options} & \multicolumn{2}{c|}{10,000 options} & \multicolumn{2}{c|}{500,000 options} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD \\ 
 \hline
-A & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.12 \pm 0.01$} & \multicolumn{1}{c|}{$0.03 \pm 0.01$} & \multicolumn{1}{c|}{$0.08 \pm 0.01$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.09 \pm 0.01$} & \multicolumn{1}{c|}{$0.04 \pm 0.01$} & \multicolumn{1}{c|}{$0.05 \pm 0.01$} \\
+Mac A & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} \\ 
 \hline
-B & CPU & \multicolumn{1}{c|}{$0.08 \pm 0.01$} & \multicolumn{1}{c|}{$0.11 \pm 0.01$} & \multicolumn{1}{c|}{$0.06 \pm 0.01$} & \multicolumn{1}{c|}{$0.05 \pm 0.01$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$0.08 \pm 0.01$} & \multicolumn{1}{c|}{$0.08 \pm 0.01$} & \multicolumn{1}{c|}{$0.05 \pm 0.01$} & \multicolumn{1}{c|}{$0.07 \pm 0.01$} \\ 
+Mac B & CPU & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} \\ 
 \hline
-C & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.09 \pm 0.01$} & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.07 \pm 0.01$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.08 \pm 0.01$} & \multicolumn{1}{c|}{$0.09 \pm 0.01$} \\ 
+Mac C & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} \\ 
 \hline
-D & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.13 \pm 0.01$} & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.09 \pm 0.01$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$0.05 \pm 0.01$} & \multicolumn{1}{c|}{$0.11 \pm 0.01$} & \multicolumn{1}{c|}{$0.05 \pm 0.01$} & \multicolumn{1}{c|}{$0.08 \pm 0.01$} \\ 
+Mac D & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.01} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.01} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.01} \\ 
 \hline
 \end{tabular}
 \end{scriptsize}
@@ -1609,7 +1607,7 @@ D & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.01$} & \multicolumn{1}{c|}{$0.13 \pm 0
 Table~\ref{table: ociosidadeBlack} shows the amount of time that each processor
 was idle for each machine using HDSS and our algorithm for the blackscholes
 application with 10,000 and 500,000 options. The idleness periods were smaller
-for our algorithm, although the differences were not as evident as in
+for our algorithm, although the differences were ot as evident as in
 Table~\ref{table: ociosoBlocos}. These smaller differences occur because the
 blackscholes application has an execution time linear with the block size and
 consequently, unbalanced distributions cause smaller effects.
@@ -1698,29 +1696,29 @@ and was compensated by the better distribution of load.
 \centering
 \caption{Distribution of block sizes for GRN inference application}
 \begin{scriptsize}
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
-\cline{3-8}
-\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{Acosta} & \multicolumn{2}{c|}{HDSS} & \multicolumn{2}{c|}{Our Algorithm} \\ 
-\cline{3-8}
-\multicolumn{1}{l}{} &  & \multicolumn{1}{c|}{100,000 genes} & \multicolumn{1}{c|}{2,000,000 genes} & \multicolumn{1}{c|}{100,000 genes} & \multicolumn{1}{c|}{2,000,000 genes} & \multicolumn{1}{c|}{100,000 genes} & \multicolumn{1}{c|}{2,000,000 genes} \\ 
-\cline{1-8}
-\multicolumn{1}{|c}{} Machines &  & Size Ratio & Size Ratio & Size Ratio & Size Ratio & Size Ratio & Size Ratio \\ 
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{Acosta} & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} \\ 
+\cline{3-14}
+\multicolumn{1}{l}{} &  & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD & B. Size Ratio & SD \\ 
 \hline
-A & CPU & \multicolumn{1}{c|}{$0.08 \pm 0.014$} & \multicolumn{1}{c|}{$0.09 \pm 0.014$} & \multicolumn{1}{c|}{$0.05 \pm 0.018$} & \multicolumn{1}{c|}{$0.06 \pm 0.017$}& \multicolumn{1}{c|}{$0.02 \pm 0.018$} & \multicolumn{1}{c|}{$0.05 \pm 0.018$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.14 \pm 0.014$} & \multicolumn{1}{c|}{$0.11 \pm 0.014$} & \multicolumn{1}{c|}{$0.16 \pm 0.017$} & \multicolumn{1}{c|}{$0.14 \pm 0.018$} & \multicolumn{1}{c|}{$0.08 \pm 0.019$} & \multicolumn{1}{c|}{$0.12 \pm 0.019$} \\ 
+Mac. A & CPU & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.02} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.019} \\ 
 \hline
-B & CPU & \multicolumn{1}{c|}{$0.06 \pm 0.014$} & \multicolumn{1}{c|}{$0.08 \pm 0.014$} & \multicolumn{1}{c|}{$0.08 \pm 0.018$} & \multicolumn{1}{c|}{$0.06 \pm 0.018$} & \multicolumn{1}{c|}{$0.03 \pm 0.018$} & \multicolumn{1}{c|}{$0.04 \pm 0.018$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.13 \pm 0.014$} & \multicolumn{1}{c|}{$0.14 \pm 0.014$} & \multicolumn{1}{c|}{$0.15 \pm 0.018$} & \multicolumn{1}{c|}{$0.16 \pm 0.017$} & \multicolumn{1}{c|}{$0.12 \pm 0.018$} & \multicolumn{1}{c|}{$0.11 \pm 0.019$} \\ 
+Mac. B & CPU & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.13} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.14} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.15} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.16} & \multicolumn{1}{c|}{0.017} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.019} \\ 
 \hline
-C & CPU & \multicolumn{1}{c|}{$0.11 \pm 0.014$} & \multicolumn{1}{c|}{$0.12 \pm 0.014$} & \multicolumn{1}{c|}{$0.08 \pm 0.018$} & \multicolumn{1}{c|}{$0.05 \pm 0.018$} & \multicolumn{1}{c|}{$0.04 \pm 0.018$} & \multicolumn{1}{c|}{$0.05 \pm 0.018$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.2 \pm 0.014$} & \multicolumn{1}{c|}{$0.19 \pm 0.014$} & \multicolumn{1}{c|}{$0.21 \pm 0.018$} & \multicolumn{1}{c|}{$0.21 \pm 0.018$} & \multicolumn{1}{c|}{$0.34 \pm 0.019$} & \multicolumn{1}{c|}{$0.29 \pm 0.019$} \\ 
+Mac. C & CPU & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.12} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.05} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.2} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.014} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.34} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.29} & \multicolumn{1}{c|}{0.019} \\ 
 \hline
-D & CPU & \multicolumn{1}{c|}{$0.07 \pm 0.015$} & \multicolumn{1}{c|}{$0.09 \pm 0.015$} & \multicolumn{1}{c|}{$0.08 \pm 0.019$} & \multicolumn{1}{c|}{$0.08 \pm 0.018$} & \multicolumn{1}{c|}{$0.04 \pm 0.018$} & \multicolumn{1}{c|}{$0.07 \pm 0.018$} \\ 
-\cline{2-8}
- & GPU & \multicolumn{1}{c|}{$0.19 \pm 0.015$} & \multicolumn{1}{c|}{$0.17 \pm 0.016$} & \multicolumn{1}{c|}{$0.19 \pm 0.019$} & \multicolumn{1}{c|}{$0.24 \pm 0.018$} & \multicolumn{1}{c|}{$0.33 \pm 0.019$} & \multicolumn{1}{c|}{$0.27 \pm 0.019$} \\ 
+Mac. D & CPU & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.09} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.04} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{0.018} \\ 
+\cline{2-14}
+ & GPU & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.015} & \multicolumn{1}{c|}{0.17} & \multicolumn{1}{c|}{0.016} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.24} & \multicolumn{1}{c|}{0.018} & \multicolumn{1}{c|}{0.33} & \multicolumn{1}{c|}{0.019} & \multicolumn{1}{c|}{0.27} & \multicolumn{1}{c|}{0.019} \\ 
 \hline
 \end{tabular}
 \end{scriptsize}
@@ -1739,29 +1737,29 @@ blocks to the GPUs with larger number of cores and smaller blocks to CPUs.
 \centering
 \caption{Idle processor times for GRN inference application}
 \begin{scriptsize}
-\begin{tabular}{|l|l|l|l|l|l|}
-\cline{3-6}
-\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{HDSS} & \multicolumn{2}{c|}{Our Algorithm} \\ 
-\cline{3-6}
-\multicolumn{1}{l}{} &  & \multicolumn{1}{c|}{100,000 genes} & \multicolumn{1}{c|}{2,000,000 genes} & \multicolumn{1}{c|}{100,000 genes} & \multicolumn{1}{c|}{2,000,000 genes} \\ 
-\cline{1-6}
-\multicolumn{1}{|c}{} Machines &  & Idle Time (s) & Idle Time (s) & Idle Time (s) & Idle Time (s) \\ 
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{4}{c|}{HDSS} & \multicolumn{4}{c|}{Our Algorithm} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} & \multicolumn{2}{c|}{100,000 genes} & \multicolumn{2}{c|}{2,000,000 genes} \\ 
+\cline{3-10}
+\multicolumn{1}{l}{} &  & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD & Idle Time (s) & SD \\ 
 \hline
-A & CPU & \multicolumn{1}{c|}{$1.2 \pm 0.19$} & \multicolumn{1}{c|}{$9.33 \pm 0.98$} & \multicolumn{1}{c|}{$0.25 \pm 0.06$} & \multicolumn{1}{c|}{$1.36 \pm 0.09$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$1.4 \pm 0.19$} & \multicolumn{1}{c|}{$7.21 \pm 0.98$} & \multicolumn{1}{c|}{$0.22 \pm 0.07$} & \multicolumn{1}{c|}{$1.67 \pm 0.09$} \\ 
+Mac A & CPU & \multicolumn{1}{c|}{1.2} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.33} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.25} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.36} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.4} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{7.21} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.22} & \multicolumn{1}{c|}{0.07} & \multicolumn{1}{c|}{1.67} & \multicolumn{1}{c|}{0.09} \\ 
 \hline
-B & CPU & \multicolumn{1}{c|}{$1.2 \pm 0.19$} & \multicolumn{1}{c|}{$8.98 \pm 0.98$} & \multicolumn{1}{c|}{$0.30 \pm 0.06$} & \multicolumn{1}{c|}{$1.31 \pm 0.09$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$0.8 \pm 0.19$} & \multicolumn{1}{c|}{$7.39 \pm 0.98$} & \multicolumn{1}{c|}{$0.29 \pm 0.06$} & \multicolumn{1}{c|}{$1.45 \pm 0.09$} \\ 
+Mac B & CPU & \multicolumn{1}{c|}{1.2} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{8.98} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.30} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.31} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.8} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{7.39} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.29} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.45} & \multicolumn{1}{c|}{0.09} \\ 
 \hline
-C & CPU & \multicolumn{1}{c|}{$1.2 \pm 0.19$} & \multicolumn{1}{c|}{$9.21 \pm 0.98$} & \multicolumn{1}{c|}{$0.23 \pm 0.08$} & \multicolumn{1}{c|}{$1.21 \pm 0.09$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$0.9 \pm 0.18$} & \multicolumn{1}{c|}{$9.32 \pm 0.98$} & \multicolumn{1}{c|}{$0.28 \pm 0.06$} & \multicolumn{1}{c|}{$1.64 \pm 0.09$} \\ 
+Mac C & CPU & \multicolumn{1}{c|}{1.2} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.21} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.23} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{1.21} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{0.9} & \multicolumn{1}{c|}{0.18} & \multicolumn{1}{c|}{9.32} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.28} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.64} & \multicolumn{1}{c|}{0.09} \\ 
 \hline
-D & CPU & \multicolumn{1}{c|}{$1.3 \pm 0.19$} & \multicolumn{1}{c|}{$9.92 \pm 0.98$} & \multicolumn{1}{c|}{$0.27 \pm 0.08$} & \multicolumn{1}{c|}{$1.22 \pm 0.09$} \\ 
-\cline{2-6}
- & GPU & \multicolumn{1}{c|}{$1.1 \pm 0.19$} & \multicolumn{1}{c|}{$9.97 \pm 0.99$} & \multicolumn{1}{c|}{$0.21 \pm 0.06$} & \multicolumn{1}{c|}{$1.55 \pm 0.1$} \\ 
+Mac D & CPU & \multicolumn{1}{c|}{1.3} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.92} & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{0.27} & \multicolumn{1}{c|}{0.08} & \multicolumn{1}{c|}{1.22} & \multicolumn{1}{c|}{0.09} \\ 
+\cline{2-10}
+ & GPU & \multicolumn{1}{c|}{1.1} & \multicolumn{1}{c|}{0.19} & \multicolumn{1}{c|}{9.97} & \multicolumn{1}{c|}{0.99} & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{1.55} & \multicolumn{1}{c|}{0.1} \\ 
 \hline
 \end{tabular}
 \end{scriptsize}
@@ -1771,7 +1769,7 @@ D & CPU & \multicolumn{1}{c|}{$1.3 \pm 0.19$} & \multicolumn{1}{c|}{$9.92 \pm 0.
 Finally, Table~\ref{table: ociosidadeGene} presents the time each processor from
 each machine was idle using the HDSS and our algorithm with 100,000 and
 2,000,000 genes. The idleness periods were significantly superior using the HDSS
-algorithm, which is in accordance with the large difference in the execution time of
+algorithm, which is accordance with the large difference in the exetuion time of
 the GRN application using both algorithms. This application has an execution
 time which has a cubical increase in execution time in relation to the block
 size. In this case, unbalanced block distributions cause a larger impact in the
@@ -1827,31 +1825,26 @@ execution time.
 %-------------------------------------------------------------------------------
 \section{Conclusions and future work}
 
-In this paper we propose a load-balancing algorithm for distributing tasks among
-processors in domain decomposition problems executing on clusters of
-heterogeneous CPUs and GPUs. It outperforms other similar existing algorithms,
-due to the online estimation of performance curve models for each processing
-unit and the selection of the best data distribution for the processors using an
-interior point method for solving a non-linear system of equations. We evaluated
-the algorithms using three types of applications and our load-balancing
-algorithm reduced the execution times in all scenarios, with the largest
-improvements in more heterogeneous environments.
+In this paper we propose an algorithm for scheduling tasks in domain
+decomposition problems executing on clusters of heterogeneous CPUs and GPUs. It
+outperforms other similar existing algorithms, due to the online estimation of
+the performance curve for each processing unit and the selection of the best
+data distribution for the devices. We showed for two applications that our
+algorithm provides the highest gains for more heterogeneous and larger problems
+sizes.
 
-Although we used dedicated clusters in the experiments, we can also consider the
-usage of public clouds or non-dedicated shared machines. In these scenarios, the
-quality of service may change during execution, reducing or increasing the
-amount computational hardware allocated to the application. The usage of a
-re-balancing threshold in our algorithm permits permits readjustments in data
-distributions. But it is necessary to evaluate under what conditions our
-algorithm can successfully compensate this change in the environment. We could
-also consider the scenario with added fault-tolerance, where machines may become
-unavailable during execution. If the application is fault-tolerant, a
-re-balancing of the load among the remaining devices would permit the
-application to execute efficiently on these devices.
+Although we used dedicated clusters, we can also consider the usage of public
+clouds, where the user can request a number of resources allocated in virtual
+machines from shared machines. In this case, the quality of service may change
+during execution, and the addition of the execution time difference threshold
+permits readjustments in data distributions. We can also consider the scenario
+with added fault-tolerance, where machines may become unavailable during
+execution. In this scenario, a simple redistribution of the data among the
+remaining devices would permit the application to re-adapt to this scenario.
 
-Our next step is to include the cost of communication in the load-balancing
-algorithm, which will improve the load-balancing for applications where the time
-spent with information exchange between processors is substantial.
+As ongoing work, we are including the cost of communication in the scheduling
+algorithm, which is essential for applications where the time spent with
+information exchange among the tasks cannot be ignored.
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
