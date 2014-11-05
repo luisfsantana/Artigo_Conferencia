@@ -480,10 +480,9 @@
 The use of GPU clusters for scientific applications is becoming more widespread,
 with applications in areas such as physics, chemistry and bioinformatics. These
 clusters can be highly heterogeneous, composed of several models of CPUs and
-GPUs, that could be used together to execute these applications. To use these
-heterogeneous devices in an efficient manner, it is necessary to balance the computational load
-among the GPUs and CPUs according to the tasks' sizes, minimizing the execution
-time of the application.
+GPUs. To use these heterogeneous devices in an efficient manner, it is necessary
+to balance the computational load among the GPUs and CPUs according to the
+tasks' sizes, minimizing the execution time of the application.
 
 We propose an algorithm for dynamic load balancing in heterogeneous GPU clusters
 that determines the execution profile of tasks on each device in runtime. This
@@ -1834,7 +1833,7 @@ application to execute efficiently on these devices.
 
 Our next step is to include the cost of communication in the load-balancing
 algorithm, which will improve the load-balancing for applications where the time
-spent with information exchange among the tasks is substantial.
+spent with information exchange between processors is substantial.
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
