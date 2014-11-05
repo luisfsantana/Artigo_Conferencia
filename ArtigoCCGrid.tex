@@ -1810,26 +1810,31 @@ execution time.
 %-------------------------------------------------------------------------------
 \section{Conclusions and future work}
 
-In this paper we propose an algorithm for scheduling tasks in domain
-decomposition problems executing on clusters of heterogeneous CPUs and GPUs. It
-outperforms other similar existing algorithms, due to the online estimation of
-the performance curve for each processing unit and the selection of the best
-data distribution for the devices. We showed for two applications that our
-algorithm provides the highest gains for more heterogeneous and larger problems
-sizes.
+In this paper we propose a load-balancing algorithm for distributing tasks among
+processors in domain decomposition problems executing on clusters of
+heterogeneous CPUs and GPUs. It outperforms other similar existing algorithms,
+due to the online estimation of performance curve models for each processing
+unit and the selection of the best data distribution for the processors using an
+interior point method for solving a non-linear system of equations. We evaluated
+the algorithms using three types of applications and our load-balancing
+algorithm reduced the execution times in all scenarios, with the largest
+improvements in more heterogeneous environments.
 
-Although we used dedicated clusters, we can also consider the usage of public
-clouds, where the user can request a number of resources allocated in virtual
-machines from shared machines. In this case, the quality of service may change
-during execution, and the addition of the execution time difference threshold
-permits readjustments in data distributions. We can also consider the scenario
-with added fault-tolerance, where machines may become unavailable during
-execution. In this scenario, a simple redistribution of the data among the
-remaining devices would permit the application to re-adapt to this scenario.
+Although we used dedicated clusters in the experiments, we can also consider the
+usage of public clouds or non-dedicated shared machines. In these scenarios, the
+quality of service may change during execution, reducing or increasing the
+amount computational hardware allocated to the application. The usage of a
+re-balancing threshold in our algorithm permits permits readjustments in data
+distributions. But it is necessary to evaluate under what conditions our
+algorithm can successfully compensate this change in the environment. We could
+also consider the scenario with added fault-tolerance, where machines may become
+unavailable during execution. If the application is fault-tolerant, a
+re-balancing of the load among the remaining devices would permit the
+application to execute efficiently on these devices.
 
-As ongoing work, we are including the cost of communication in the scheduling
-algorithm, which is essential for applications where the time spent with
-information exchange among the tasks cannot be ignored.
+Our next step is to include the cost of communication in the load-balancing
+algorithm, which will improve the load-balancing for applications where the time
+spent with information exchange among the tasks is substantial.
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
