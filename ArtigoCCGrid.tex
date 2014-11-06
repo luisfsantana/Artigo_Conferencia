@@ -1210,7 +1210,7 @@ using different matrix sizes and number of machines of the following scheduling
 algorithms: (1) our proposed algorithm, (2) Acosta algorithm, (3) HDSS, and (4)
 Greedy. Our algorithm was configured with a threshold of 10\% of the execution
 time and initial block size of 2048 elements. The initial block size of HDSS
-algorithm was 1024 elements.
+algorithm was 1024 elements, a submatrix. The difference between the size of the initial block of the algorithms was obtained empirically, with tests, we was considered the best case.
 
 \begin{figure*}[htb]
 	\begin{center}
@@ -1408,20 +1408,23 @@ D & CPU & \multicolumn{1}{c|}{$1.72 \pm 0.25$} & \multicolumn{1}{c|}{$7.43 \pm 0
 \paragraph{Processor Idleness} Table~\ref{table: ociosoBlocos} shows the amount of time each CPU and GPU was
 idle during application execution for our and HDSS algorithms, which resulted in
 the best application execution times. We used the same experimental
-configuration from Table~\ref{table: comparativoBlocos}. Acosta algorithm (not
+configuration from Table~\ref{table: comparativoBlocos}. The table represents the ratio of blocks received by each processor, CPU or GPU. We, at each step of the submission of the tasks we recorded the size of the block sent to each processor. We ran each algorithm 10 times, and perform the calculation of the average block sent to each processor.
+Acosta algorithm (not
 shown) produces significantly larger idleness, since it synchronizes the block
 executions multiple times until it reaches an equilibrium.
 
 The idleness occur mainly in the first phase of the algorithm, where
 non-optimal block sizes are used to estimate the computational capabilities of
 each processor. Our algorithm starts to adapt the block sizes in this phase
-(Figure~\ref{fig: algoritmo}), causing a reduction in the generated idleness.
+(Figure~\ref{fig: algoritmo}), causing a reduction in the generated idleness. Our algorithm 
+spends about 4.23 seconds, while the HDSS spends 43.32 seconds 
+on average for 4 machines and 65536 square matrix elements.
 
 There can also be additional idleness in the end of application. HDSS prevents
 part of this idleness using decreasing block size values during application
 execution. If some processor is idle at the end, it can receive extra small
 blocks to process. Our algorithm perform the re-balancing process when the
-difference in execution time is above a threshold.
+difference in execution time is above a threshold. 
 
 
 %\begin{figure}[htb]
@@ -1523,9 +1526,6 @@ this overhead.
 % grande demais? Por que deu diferente da multiplicação de matrizes?
 
 %Aparentemente está grande, mas devido ao comportamento linear do algoritmo, a parte que gera a aproximação por mínimos quadrados realiza de forma mais rápida, pois testa de primeira as equações lineares, e a solução do sistema se torna simples (todas lineares).
-
-
-
 
 
 \begin{table*}[htb]
